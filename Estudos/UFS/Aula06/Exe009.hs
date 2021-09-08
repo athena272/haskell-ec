@@ -17,5 +17,6 @@ paraMaiusculo c
 
 --minha versao
 paraMaiusculo' :: Char -> Char
-paraMaiusculo' c | c `elem` ['a'..'z'] = (toUpper c)
+--paraMaiusculo' c | c `elem` ['a'..'z'] = (toUpper c)
+paraMaiusculo' c | ehMinusculo' c = (toUpper c)  
                  | otherwise = c       
