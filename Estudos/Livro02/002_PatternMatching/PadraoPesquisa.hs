@@ -22,3 +22,26 @@ factorial n = product [1..n]
 factorial' :: (Integral a) => a -> a
 factorial' 0 = 1
 factorial' n = n * factorial' (n - 1)
+
+--somar vetores, o x com x, e o y com y versao um
+addVector :: (Num a) => (a, a) -> (a, a) -> (a, a)
+addVector x y = (fst x + fst y, snd x + snd y) 
+
+--somar vetores com pattern matching
+addVector' :: (Num a) => (a, a) -> (a, a) -> (a, a)
+addVector' (x1, y1) (x2, y2) = (x1 + x2, y1 + y2)
+
+--Descobrir a posicao de um tripla
+first :: (a, b, c) -> a
+first (a, _, _c) = a
+
+second :: (a, b, c) -> b
+second (_, b, _) = b
+
+third :: (a, b, c) -> c
+third (_, _, c) = c
+
+--Nossa própria versao da funcao head
+head' :: [a] -> a
+head' [] = error "Proibido chamar head em uma lista vazia, amador!"
+head' (x:_) = x
