@@ -45,3 +45,11 @@ third (_, _, c) = c
 head' :: [a] -> a
 head' [] = error "Proibido chamar head em uma lista vazia, amador!"
 head' (x:_) = x
+
+--Quantos elementos na lista?
+quantosElem :: (Show a) => [a] -> String
+quantosElem [] = "A lista esta vazia"
+quantosElem (x:[]) = "A lista tem apenas um elemento: " ++ show x
+quantosElem (x:y:[]) = "A lista tem dois elementos: " ++ show x ++ " e " ++ show y
+quantosElem (x:y:_) = "Esta lista esta longa demais. Veja os dois primeiros elementos: " ++ show x ++ " e " ++ show y  
+
