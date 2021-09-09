@@ -18,3 +18,8 @@ maior3' x y z = let
 
 maior3'' :: Int -> Int -> Int -> Int
 maior3'' x y z = maior2 (maior2 x y) z
+
+maior3Gio :: Int -> Int -> Int -> Int
+maior3Gio x y z 
+        | x >= y && x >= z = x
+        | otherwise = maior2 y z
