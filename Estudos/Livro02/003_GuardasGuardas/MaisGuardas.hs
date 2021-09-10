@@ -48,3 +48,14 @@ bestImcCalcule' weight height
           skinny = 18.5
           normal = 25.0
           fat = 30.0  
+
+--letras inciais de um nome e sobrenome
+initialLetters :: String -> String -> String
+initialLetters firstName lastName = [first] ++ ". " ++ [last] ++"."
+    where (first:_) = firstName
+          (last:_) = lastName 
+
+--Cacular IMC de varios em lista, que esta em uma tupla
+imcVarios :: (RealFloat a) => [(a, a)] -> [a]
+imcVarios listaIMC = [valueIMC peso altura  | (peso, altura) <- listaIMC]   
+    where valueIMC peso altura = (peso / altura ^ 2)
