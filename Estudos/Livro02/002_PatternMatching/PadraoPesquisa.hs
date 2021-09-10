@@ -53,3 +53,17 @@ quantosElem (x:[]) = "A lista tem apenas um elemento: " ++ show x
 quantosElem (x:y:[]) = "A lista tem dois elementos: " ++ show x ++ " e " ++ show y
 quantosElem (x:y:_) = "Esta lista esta longa demais. Veja os dois primeiros elementos: " ++ show x ++ " e " ++ show y  
 
+--minha propria versao do length
+length' :: (Num b) => [a] -> b
+length' [] = 0
+length' (_:lista) = 1 + length' lista
+
+--minha versao da soma
+sum' :: (Num a) => [a] -> a
+sum' [] = 0
+sum' (primeiroElem:restoLista) = primeiroElem + sum' restoLista
+
+--Primeira letra string
+firstLetra :: String -> String 
+firstLetra "" = "String vazia, ops!"
+firstLetra all@(x:xs) = "A primeira letra de " ++ all ++ " ser " ++ [x] 
