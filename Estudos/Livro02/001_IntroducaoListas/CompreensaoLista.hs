@@ -15,9 +15,19 @@ length' xs = sum [1 | _ <- xs]
 removeNonUpperCasse :: String -> String
 removeNonUpperCasse xs = [x | x <- xs, x `elem` ['A'..'Z']]
 
+--Lista em ordem descrescente
+ordemDescrecated :: Int -> Int -> [Int]
+ordemDescrecated start end = reverse [start..end]
+
+--Lista em ordem descrescente versao 02
+ordemDescrecated' :: Int -> Int -> [Int]
+ordemDescrecated' start end = [start,(start -1 )..end]
+
+
 --gerar todos os trinangulos com lados maiores ou iguais a 10
 triangles = [(a, b, c) | a <- [1..10], b <- [1..10], c <- [1..10]]
 --e que seja um triangulo retangulo 
 rightTriangles = [(a, b, c) | a <- [1..10], b <- [1..10], c <- [1..10], a ^ 2 + b ^ 2 == c ^ 2]
 --e que o seu perimetro seja 24
 rightTriangles' = [(a, b, c) | a <- [1..10], b <- [1..a], c <- [1..10], a ^ 2 + b ^ 2 == c ^ 2, a + b+ c == 24]
+
