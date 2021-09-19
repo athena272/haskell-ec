@@ -5,5 +5,5 @@ type Estados = String
 type Capitais = String
 
 
---listaEstadosCapitais :: [Estados] -> [Capitais] -> [(Estados, Capitais)]
+--listaEstadosCapitais :: [Estados] -> [Capitais] -> ([Estados], [Capitais])
 listaEstadosCapitais estados capitais = unzip (zip estados capitais)
