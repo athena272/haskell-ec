@@ -8,7 +8,8 @@ type Emprestimos = [(Pessoa, Livro)]
 
 meuBancoDados :: Emprestimos
 meuBancoDados = [("ivo", "livro A"), ("carlos", "livro B"),("joana", "livro C"),("gui", "livro D"),("pedrino", "livro A"), ("gui", "livro E"), ("gui", "livro F"), ("ivo", "livro G")] 
---Escreva as seguintes funções:
+
+--ESCREVA AS SEGUINTES FUNÇÕES
 
 --Dada uma pessoa, encontre os livros que ela emprestou;
 findLivro :: Pessoa -> Livro
