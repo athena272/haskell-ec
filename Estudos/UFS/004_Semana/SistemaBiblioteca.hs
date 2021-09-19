@@ -1,4 +1,5 @@
 module SistemaBiblioteca where
+import Data.List
 
 --Considere um banco de dados de biblioteca com os seguintes tipos
 type Pessoa = String
@@ -30,6 +31,7 @@ addEmprestimo :: (Pessoa, Livro) -> Emprestimos
 addEmprestimo (pessoa, livro) = (:) (pessoa, livro) meuBancoDados --maneira infixa
 
 --Dado um par (Pessoa, Livro), queremos removê-lo  da lista de emprestados, sinalizando a sua devolução.
-addEmprestimo :: (Pessoa, Livro) -> Emprestimos
-addEmprestimo (pessoa, livro) 
-    | (pessoa, livro) `elem` meuBancoDados -- se estiver no banco, retirar o elemento 
+deleteEmprestimo :: (Pessoa, Livro) -> Emprestimos
+deleteEmprestimo (pessoa, livro) 
+    | (pessoa, livro) `elem` meuBancoDados = (pessoa, livro) `delete` meuBancoDados-- se estiver no banco, retirar o elemento 
+    | otherwise = meuBancoDados --caso não, só imprimir a lista
