@@ -4,6 +4,5 @@ module Exe043 where
 type Nome = String
 type Idade = Int
 
-
 listaNomeIdade :: [Nome] -> [Idade] -> [(Nome, Idade)]
 listaNomeIdade names ages = (zip names ages)
