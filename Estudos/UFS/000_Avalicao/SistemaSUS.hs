@@ -63,11 +63,34 @@ cidadaosPorEstado myDataBase myState = length [(cpf,nome,gender,nasc,adress,muni
 
 --Retorna a quantidade de cidadaoes por Municipio e Idade
 cidadaosPorMunicipioIdade :: CadastroSUS -> Municipio-> FaixaIdade -> Quantidade
-cidadaosPorMunicipioIdade myDataBase myMunicipio (inicial, final) = length [(cpf,nome,gender,nasc,adress,muni,state,tel,email) | (cpf,nome,gender,nasc,adress,muni,state,tel,email) <- myDataBase, myMunicipio == muni, (getIdade nasc) >= (fst (inicial, final)), (getIdade nasc) <= (snd (inicial, final))]
+cidadaosPorMunicipioIdade myDataBase myMunicipio faixasIdade = length [(cpf,nome,gender,nasc,adress,muni,state,tel,email) | (cpf,nome,gender,nasc,adress,muni,state,tel,email) <- myDataBase, myMunicipio == muni, (getIdade nasc) >= (fst faixasIdade), (getIdade nasc) <= (snd faixasIdade)]
 
 --Retorna a quantidade de cidadaoes por Estado
 cidadaosPorEstadoIdade :: CadastroSUS -> Estado -> FaixaIdade -> Quantidade
 cidadaosPorEstadoIdade myDataBase myState (inicial, final) = length [(cpf,nome,gender,nasc,adress,muni,state,tel,email) | (cpf,nome,gender,nasc,adress,muni,state,tel,email) <- myDataBase, myState == state, (getIdade nasc) >= (fst (inicial, final)), (getIdade nasc) <= (snd (inicial, final))]
+
+--item d) Pode ser interessante também gerar uma lista da quantidade de cidadãos por faixas de idade para um dado município ou estado. As faixas de idade inicialmente previstas são:
+---FAIXAS DE IDADE
+--81 - 130
+--71 - 80
+--61 - 70
+--51 - 60
+--41 - 50
+--31 - 40
+--21 - 30
+--12 - 21
+--O gestor pode escolher todas ou algumas destas faixas para gerar a lista. O gestor pode também, a depender das características de seu município, escolher outras faixas, já que a faixa é um parâmetro da função. Caso o gestor decida, por exemplo, coletar dados para uma idade específica, digamos 25 anos, ele deve informar a faixa (25, 25).
+
+--listaMunicipioFaixas :: CadastroSUS -> Municipio -> [FaixaIdade] -> IO()
+--listaMunicipioFaixas myDataBase myMunicipio faixasIdade
+--listaEstadoFaixas :: CadastroSUS -> Estado-> [FaixaIdade] -> IO()
+
+--Estas funções precisam de funções auxiliares para gerar uma lista de quantidades por faixas de idade, para depois gerar a exibição usando as funções do item (f).
+geraListaMunicipioFaixas :: CadastroSUS -> Municipio -> [FaixaIdade] -> [(FaixaIdade, Quantidade)]
+geraListaMunicipioFaixas myDataBase myMunicipio [faixasIdade] = [(faixasIdade, quantidade) | (cpf,nome,gender,nasc,adress,muni,state,tel,email) <- myDataBase, myMunicipio == muni, (getIdade nasc) >= (fst faixasIdade), (getIdade nasc) <= (snd faixasIdade)] 
+    where quantidade = cidadaosPorEstadoIdade myDataBase myMunicipio
+
+--geraListaEstadoFaixas :: CadastroSUS -> Estado -> [FaixaIdade] -> [(FaixaIdade, Quantidade)
 
 --GETS e outras funçoes auxiliares
 getCPF :: Cidadao -> CPF
