@@ -48,7 +48,25 @@ atualizaTelefoneSUS myCPF myDataBase newTel = comeco ++ [(cpf,nome,gender,nasc,a
 cidadaoMortoSUS :: CPF -> CadastroSUS -> CadastroSUS
 cidadaoMortoSUS myCPF myDataBase = [(cpf,nome,gender,nasc,adress,muni,state,tel,email) | (cpf,nome,gender,nasc,adress,muni,state,tel,email) <- myDataBase, myCPF /= cpf]
 
---item d)
+--item d) Um gestor de saúde pode querer pesquisar algumas informações deste cadastro, como por exemplo, quantidade de cidadãos por município, por estado, ou ainda por município e por faixa de idade, ou por estado e por faixa de idade, para ter uma ideia de como planejar as faixas de vacinação. Assim, o sistema deve prever algumas funções de consulta:
+type IdadeInicial = Int
+type IdadeFinal = Int
+type FaixaIdade = (IdadeInicial, IdadeFinal)
+type Quantidade = Int
+--Retornar a quantidade de cidadoes por municicipi
+cidadaosPorMunicipio :: CadastroSUS -> Municipio -> Quantidade
+cidadaosPorMunicipio myDataBase myMunicipio = length [(cpf,nome,gender,nasc,adress,muni,state,tel,email) | (cpf,nome,gender,nasc,adress,muni,state,tel,email) <- myDataBase, myMunicipio == muni]
+
+--Retorna a quantidade de cidadaoes por Estado
+cidadaosPorEstado :: CadastroSUS -> Estado -> Quantidade
+cidadaosPorEstado myDataBase myState = length [(cpf,nome,gender,nasc,adress,muni,state,tel,email) | (cpf,nome,gender,nasc,adress,muni,state,tel,email) <- myDataBase, myState == state]
+
+--Retorn a quantidade de cidadaoes por Municipio e Idade
+cidadaosPorMunicipioIdade :: CadastroSUS -> Municipio-> FaixaIdade -> Quantidade
+cidadaosPorMunicipioIdade myDataBase myMunicipio (inicial, final) = length [(cpf,nome,gender,nasc,adress,muni,state,tel,email) | (cpf,nome,gender,nasc,adress,muni,state,tel,email) <- myDataBase, myMunicipio == muni]
+    
+
+--cidadaosPorEstadoIdade :: CadastroSUS -> Estado -> FaixaIdade -> Quantidade
 
 
 --GETS e outras funçoes auxiliares
@@ -60,6 +78,14 @@ getEndereco (_, _, _, _, myEndereco, _, _, _, _) = myEndereco
 
 getTelefone :: Cidadao -> Telefone
 getTelefone (_, _, _, _, _, _, _, myTelefone, _) = myTelefone
+
+getDataNasc :: Cidadao -> DataNasc
+getDataNasc (_, _, _, myNasci, _, _, _, _, _) = myNasci 
+
+--Subtrair 2021 pela data de Nascimento
+getIdade :: DataNasc -> Int
+getIdade myNasci = 2021 - (third myNasci)
+
 
 ----Para cadastrar um novo cidadão, inicialmente é checado se o CPF já existe ou não no sistema com a função 
 checkCPF :: CPF -> CadastroSUS -> Bool
@@ -76,3 +102,13 @@ findPosElem myCPF myDataBase
     |null posicao = 0
     |otherwise = head posicao
     where posicao = [ position | (position, cidadao) <- (posicionarElementosLista myDataBase), (getCPF cidadao)  == myCPF]
+
+--Descobrir a posicao de um tripla
+first :: (a, b, c) -> a
+first (a, _, _c) = a
+
+second :: (a, b, c) -> b
+second (_, b, _) = b
+
+third :: (a, b, c) -> c
+third (_, _, c) = c
