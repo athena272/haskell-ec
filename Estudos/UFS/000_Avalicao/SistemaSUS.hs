@@ -45,8 +45,8 @@ atualizaTelefoneSUS myCPF myDataBase newTel = comeco ++ [(cpf,nome,gender,nasc,a
           fim = drop position myDataBase
 
 --item c) Quando um cidadão falece, a família tem que notificar o fato em um posto de saúde, para que ele seja retirado do cadastro corrente do SUS. Como há uma verificação do atestado de óbito, isto só pode ser feito no posto. O sistema precisará da função abaixo. Se o CPF existir no cadastro corrente do SUS, o registro do cidadão deve ser completamente excluído, gerando um novo cadastro sem os dados deste cidadão. Se o CPF não existir, uma mensagem de erro, usando error, sinalizando que o cidadão não pertence ao cadastro deve ser exibida.
-cidadaoMortoSUS :: CPF -> CadastroSUS -> CadastroSUS
-cidadaoMortoSUS myCPF myDataBase = [(cpf,nome,gender,nasc,adress,muni,state,tel,email) | (cpf,nome,gender,nasc,adress,muni,state,tel,email) <- myDataBase, myCPF /= cpf]
+removeMortoSUS :: CPF -> CadastroSUS -> CadastroSUS
+removeMortoSUS myCPF myDataBase = [(cpf,nome,gender,nasc,adress,muni,state,tel,email) | (cpf,nome,gender,nasc,adress,muni,state,tel,email) <- myDataBase, myCPF /= cpf]
 
 --item d) Um gestor de saúde pode querer pesquisar algumas informações deste cadastro, como por exemplo, quantidade de cidadãos por município, por estado, ou ainda por município e por faixa de idade, ou por estado e por faixa de idade, para ter uma ideia de como planejar as faixas de vacinação. Assim, o sistema deve prever algumas funções de consulta:
 type IdadeInicial = Int
@@ -71,11 +71,13 @@ cidadaosPorEstadoIdade myDataBase myState faixasIdade = length [(cpf,nome,gender
 
 --item e) Pode ser interessante também gerar uma lista da quantidade de cidadãos por faixas de idade para um dado município ou estado. As faixas de idade inicialmente previstas. O gestor pode escolher todas ou algumas destas faixas para gerar a lista. O gestor pode também, a depender das características de seu município, escolher outras faixas, já que a faixa é um parâmetro da função. Caso o gestor decida, por exemplo, coletar dados para uma idade específica, digamos 25 anos, ele deve informar a faixa (25, 25).
 
+--Retorna a lista do municipio formatada lindamente
 listaMunicipioFaixas :: CadastroSUS -> Municipio -> [FaixaIdade] -> IO()
-listaMunicipioFaixas myDataBase myMunicipio listaFaixasIdade = putStrLn (formataLinhas (geraListaMunicipioFaixas myDataBase myMunicipio listaFaixasIdade))
---listaMunicipioFaixas myDataBase myMunicipio faixasIdade
---listaEstadoFaixas :: CadastroSUS -> Estado-> [FaixaIdade] -> IO()
+listaMunicipioFaixas myDataBase myMunicipio listaFaixasIdade = putStrLn ("MUNICIPIO: " ++  myMunicipio ++ "\n" ++ "FAIXA IDADES        QUANTIDADE\n" ++ (formataLinhas (geraListaMunicipioFaixas myDataBase myMunicipio listaFaixasIdade)) ++ (formataTotal (geraListaMunicipioFaixas myDataBase myMunicipio listaFaixasIdade)))
 
+--Retorna a lista do estado formatada lindamente
+listaEstadoFaixas :: CadastroSUS -> Estado-> [FaixaIdade] -> IO()
+listaEstadoFaixas myDataBase myState listaFaixasIdade = putStrLn ("ESTADO: " ++ myState ++ "\n" ++ "FAIXA IDADES        QUANTIDADE\n" ++ (formataLinhas (geraListaEstadoFaixas myDataBase myState listaFaixasIdade)) ++ (formataTotal (geraListaEstadoFaixas myDataBase myState listaFaixasIdade)))
 --Estas funções precisam de funções auxiliares para gerar uma lista de quantidades por faixas de idade, para depois gerar a exibição usando as funções do item (f).
 geraListaMunicipioFaixas :: CadastroSUS -> Municipio -> [FaixaIdade] -> [(FaixaIdade, Quantidade)]
 geraListaMunicipioFaixas myDataBase myMunicipio listaFaixasIdade = [(faixasIdade, quantidade) | faixasIdade <- listaFaixasIdade, quantidade <- [cidadaosPorMunicipioIdade myDataBase myMunicipio faixasIdade]] 
@@ -89,7 +91,7 @@ geraListaEstadoFaixas myDataBase myState listaFaixasIdade = [(faixasIdade, quant
 --Primeiro Ponto: Formatação do valor inteiro que representa a quantidade para incluir os espaços à esquerda, para que a justificação à direita com a palavra QUANTIDADE ocorra.
 type QuantidadeFormatada = String
 formataQuant :: Quantidade -> QuantidadeFormatada
-formataQuant qtd = "       " ++ show qtd
+formataQuant qtd = "                  " ++ show qtd
 --Segundo Ponto: Formatação de uma linha da faixa de idade. A saída desta função será uma string com o formato de uma linha da tabela anterior.
 type LinhaFormatada = String
 formataUmaLinha :: (FaixaIdade, Quantidade)-> LinhaFormatada
@@ -100,8 +102,13 @@ formataLinhas :: [(FaixaIdade, Quantidade)] -> LinhasFormatadas
 formataLinhas listaFaixasIdadeComQtd = addListaBarraN [formataUmaLinha faixasIdadeComQtd | faixasIdadeComQtd <- listaFaixasIdadeComQtd] 
 --Quarto Ponto: Formatação da linha de totalização
 type TotalFormatado = String
---formataTotal :: [(FaixaIdade,Quantidade)] -> TotalFormatado
+formataTotal :: [(FaixaIdade,Quantidade)] -> TotalFormatado
+formataTotal listaFaixasIdadeComQtd = "\nTOTAL                    " ++ (show (findTotal listaFaixasIdadeComQtd)) 
+--Somar a quantidade de todas as faixas
+findTotal :: [(FaixaIdade,Quantidade)] -> Int
+findTotal listaFaixasIdadeComQtd = sum [qtd |(faixasIdadeComQtd,qtd) <- listaFaixasIdadeComQtd]
 
+--VACINACAO PELO SUS
 type Vacinados = [Vacinado]
 --Cada item desse cadastro, Vacinado, é da forma
 type Vacina = String
@@ -109,6 +116,7 @@ type TipoDose = Int
 type Dose = (Vacina, Data)
 type Doses = [Dose]
 type Vacinado = (CPF, Doses)
+--item g)Para realizar esta aplicação, procede-se da forma descrita a seguir e algumas funções auxiliares são necessárias. Inicialmente é verificado se o cidadão já tomou uma dose de vacina. Em caso afirmativo, usando error, exibe uma mensagem de que a primeira dose já foi aplicada. Caso contrário, é verificado se o usuário está cadastrado no sistema SUS. Se não estiver cadastrado, exibe uma mensagem de erro sinalizando o problema. Se estiver, checa se a idade é consistente com a faixa de idade de vacinação corrente. Se não for, exibe uma mensagem de erro sinalizando o problema. Se for, checa se o município é coerente com o município do cadastro SUS. Se não for, exibe uma mensagem de erro para ele atualizar os dados do SUS, pois só é permitida vacinação para residentes no município. Se for, adiciona o usuário no cadastro de vacinados. No momento da adição serão informados os dados constantes em Vacinado. Quando a vacina for Janssen, a tupla Dose deve vir duplicada na lista Doses, sinalizando que o paciente foi completamente imunizad 
 
 --GETS e outras funçoes auxiliares
 getCPF :: Cidadao -> CPF
