@@ -53,7 +53,7 @@ type IdadeInicial = Int
 type IdadeFinal = Int
 type FaixaIdade = (IdadeInicial, IdadeFinal)
 type Quantidade = Int
---Retornar a quantidade de cidadoes por municicipi
+--Retorna a quantidade de cidadoes por municicipi
 cidadaosPorMunicipio :: CadastroSUS -> Municipio -> Quantidade
 cidadaosPorMunicipio myDataBase myMunicipio = length [(cpf,nome,gender,nasc,adress,muni,state,tel,email) | (cpf,nome,gender,nasc,adress,muni,state,tel,email) <- myDataBase, myMunicipio == muni]
 
@@ -61,13 +61,13 @@ cidadaosPorMunicipio myDataBase myMunicipio = length [(cpf,nome,gender,nasc,adre
 cidadaosPorEstado :: CadastroSUS -> Estado -> Quantidade
 cidadaosPorEstado myDataBase myState = length [(cpf,nome,gender,nasc,adress,muni,state,tel,email) | (cpf,nome,gender,nasc,adress,muni,state,tel,email) <- myDataBase, myState == state]
 
---Retorn a quantidade de cidadaoes por Municipio e Idade
+--Retorna a quantidade de cidadaoes por Municipio e Idade
 cidadaosPorMunicipioIdade :: CadastroSUS -> Municipio-> FaixaIdade -> Quantidade
-cidadaosPorMunicipioIdade myDataBase myMunicipio (inicial, final) = length [(cpf,nome,gender,nasc,adress,muni,state,tel,email) | (cpf,nome,gender,nasc,adress,muni,state,tel,email) <- myDataBase, myMunicipio == muni]
-    
+cidadaosPorMunicipioIdade myDataBase myMunicipio (inicial, final) = length [(cpf,nome,gender,nasc,adress,muni,state,tel,email) | (cpf,nome,gender,nasc,adress,muni,state,tel,email) <- myDataBase, myMunicipio == muni, (getIdade nasc) >= (fst (inicial, final)), (getIdade nasc) <= (snd (inicial, final))]
 
---cidadaosPorEstadoIdade :: CadastroSUS -> Estado -> FaixaIdade -> Quantidade
-
+--Retorna a quantidade de cidadaoes por Estado
+cidadaosPorEstadoIdade :: CadastroSUS -> Estado -> FaixaIdade -> Quantidade
+cidadaosPorEstadoIdade myDataBase myState (inicial, final) = length [(cpf,nome,gender,nasc,adress,muni,state,tel,email) | (cpf,nome,gender,nasc,adress,muni,state,tel,email) <- myDataBase, myState == state, (getIdade nasc) >= (fst (inicial, final)), (getIdade nasc) <= (snd (inicial, final))]
 
 --GETS e outras funçoes auxiliares
 getCPF :: Cidadao -> CPF
@@ -85,7 +85,6 @@ getDataNasc (_, _, _, myNasci, _, _, _, _, _) = myNasci
 --Subtrair 2021 pela data de Nascimento
 getIdade :: DataNasc -> Int
 getIdade myNasci = 2021 - (third myNasci)
-
 
 ----Para cadastrar um novo cidadão, inicialmente é checado se o CPF já existe ou não no sistema com a função 
 checkCPF :: CPF -> CadastroSUS -> Bool
