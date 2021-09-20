@@ -69,20 +69,10 @@ cidadaosPorMunicipioIdade myDataBase myMunicipio faixasIdade = length [(cpf,nome
 cidadaosPorEstadoIdade :: CadastroSUS -> Estado -> FaixaIdade -> Quantidade
 cidadaosPorEstadoIdade myDataBase myState faixasIdade = length [(cpf,nome,gender,nasc,adress,muni,state,tel,email) | (cpf,nome,gender,nasc,adress,muni,state,tel,email) <- myDataBase, myState == state, (getIdade nasc) >= (fst faixasIdade), (getIdade nasc) <= (snd faixasIdade)]
 
---item d) Pode ser interessante também gerar uma lista da quantidade de cidadãos por faixas de idade para um dado município ou estado. As faixas de idade inicialmente previstas são:
----FAIXAS DE IDADE
---81 - 130
---71 - 80
---61 - 70
---51 - 60
---41 - 50
---31 - 40
---21 - 30
---12 - 21
---O gestor pode escolher todas ou algumas destas faixas para gerar a lista. O gestor pode também, a depender das características de seu município, escolher outras faixas, já que a faixa é um parâmetro da função. Caso o gestor decida, por exemplo, coletar dados para uma idade específica, digamos 25 anos, ele deve informar a faixa (25, 25).
+--item e) Pode ser interessante também gerar uma lista da quantidade de cidadãos por faixas de idade para um dado município ou estado. As faixas de idade inicialmente previstas. O gestor pode escolher todas ou algumas destas faixas para gerar a lista. O gestor pode também, a depender das características de seu município, escolher outras faixas, já que a faixa é um parâmetro da função. Caso o gestor decida, por exemplo, coletar dados para uma idade específica, digamos 25 anos, ele deve informar a faixa (25, 25).
 
 listaMunicipioFaixas :: CadastroSUS -> Municipio -> [FaixaIdade] -> IO()
-listaMunicipioFaixas myDataBase myMunicipio listaFaixasIdade = putStrLn (geraListaMunicipioFaixas myDataBase myMunicipio listaFaixasIdade)
+listaMunicipioFaixas myDataBase myMunicipio listaFaixasIdade = putStrLn (formataLinhas (geraListaMunicipioFaixas myDataBase myMunicipio listaFaixasIdade))
 --listaMunicipioFaixas myDataBase myMunicipio faixasIdade
 --listaEstadoFaixas :: CadastroSUS -> Estado-> [FaixaIdade] -> IO()
 
@@ -93,7 +83,25 @@ geraListaMunicipioFaixas myDataBase myMunicipio listaFaixasIdade = [(faixasIdade
 geraListaEstadoFaixas :: CadastroSUS -> Estado -> [FaixaIdade] -> [(FaixaIdade, Quantidade)]
 geraListaEstadoFaixas myDataBase myState listaFaixasIdade = [(faixasIdade, quantidade) | faixasIdade <- listaFaixasIdade,quantidade <- [cidadaosPorEstadoIdade myDataBase myState faixasIdade]]
 
---Além do cadastro no sistema SUS, haverá um cadastro dos cidadãos vacinados. Este cadastro está definido a seguir:
+--item f)A lista do município ou estado deve obedecer à formatação, descrita a seguir. O cabeçalho segue o formato abaixo, onde nome é o nome do município ou estado informado na função
+--Além do cadastro no sistema SUS, haverá um cadastro dos cidadãos vacinados. Este cadastro está definido a seguir
+
+--Primeiro Ponto: Formatação do valor inteiro que representa a quantidade para incluir os espaços à esquerda, para que a justificação à direita com a palavra QUANTIDADE ocorra.
+type QuantidadeFormatada = String
+formataQuant :: Quantidade -> QuantidadeFormatada
+formataQuant qtd = "       " ++ show qtd
+--Segundo Ponto: Formatação de uma linha da faixa de idade. A saída desta função será uma string com o formato de uma linha da tabela anterior.
+type LinhaFormatada = String
+formataUmaLinha :: (FaixaIdade, Quantidade)-> LinhaFormatada
+formataUmaLinha (listaFaixasIdade, qtd) = (show (fst listaFaixasIdade)) ++ " - " ++ (show (snd listaFaixasIdade)) ++ formataQuant qtd
+--Terceiro Ponto: Formatação de todas as linhas das faixas de idade. Esta função usará a função anterior, acrescentará \n ao final de cada linha formatada e concatenará todas as linhas, gerando uma única string.
+type LinhasFormatadas = String
+formataLinhas :: [(FaixaIdade, Quantidade)] -> LinhasFormatadas
+formataLinhas listaFaixasIdadeComQtd = addListaBarraN [formataUmaLinha faixasIdadeComQtd | faixasIdadeComQtd <- listaFaixasIdadeComQtd] 
+--Quarto Ponto: Formatação da linha de totalização
+type TotalFormatado = String
+--formataTotal :: [(FaixaIdade,Quantidade)] -> TotalFormatado
+
 type Vacinados = [Vacinado]
 --Cada item desse cadastro, Vacinado, é da forma
 type Vacina = String
@@ -150,3 +158,11 @@ second (_, b, _) = b
 
 third :: (a, b, c) -> c
 third (_, _, c) = c
+
+--Escreva um função que dada uma string, devolva a mesma string com o caracter \n ao final. Ex: se a entrada for “gato” retornará “gato\n”.
+addBarraN :: String -> String 
+addBarraN palavra = palavra ++ "\n"
+
+--Use a questão anterior, para construir a função que dada uma lista de strings devolve uma única string  contendo a concatenação  das srings da lista fornecida, tal que estas strings estejam separadas por \n. Ex: se a entrada for [“gato”, “e”, “rato”] retornará “gato\ne\nrato\n”
+addListaBarraN :: [String] -> String
+addListaBarraN lista = concat [addBarraN palavra | palavra <- lista]
