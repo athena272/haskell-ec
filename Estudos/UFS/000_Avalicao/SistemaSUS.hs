@@ -1,5 +1,4 @@
 module SistemaSUS where
-import Data.List 
 
 --Tipo mais externo, para cadastro
 type CadastroSUS = [Cidadao]
@@ -117,12 +116,12 @@ type Dose = (Vacina, Data)
 type Doses = [Dose]
 type Vacinado = (CPF, Doses)
 
-cidadosVacinados :: [Vacinados] 
+--cidadosVacinados :: [Vacinados] 
 
 --item g)Para realizar esta aplicação, procede-se da forma descrita a seguir e algumas funções auxiliares são necessárias. Inicialmente é verificado se o cidadão já tomou uma dose de vacina. Em caso afirmativo, usando error, exibe uma mensagem de que a primeira dose já foi aplicada. Caso contrário, é verificado se o usuário está cadastrado no sistema SUS. Se não estiver cadastrado, exibe uma mensagem de erro sinalizando o problema. Se estiver, checa se a idade é consistente com a faixa de idade de vacinação corrente. Se não for, exibe uma mensagem de erro sinalizando o problema. Se for, checa se o município é coerente com o município do cadastro SUS. Se não for, exibe uma mensagem de erro para ele atualizar os dados do SUS, pois só é permitida vacinação para residentes no município. Se for, adiciona o usuário no cadastro de vacinados. No momento da adição serão informados os dados constantes em Vacinado. Quando a vacina for Janssen, a tupla Dose deve vir duplicada na lista Doses, sinalizando que o paciente foi completamente imunizada
 
 --GETS e outras funçoes auxiliares
-getCPF :: Cidadao -> CPF'
+getCPF :: Cidadao -> CPF
 getCPF (myCPF, _, _, _, _, _, _, _, _) = myCPF 
 
 getMunicipio :: Cidadao -> Municipio
