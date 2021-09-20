@@ -67,7 +67,7 @@ cidadaosPorMunicipioIdade myDataBase myMunicipio faixasIdade = length [(cpf,nome
 
 --Retorna a quantidade de cidadaoes por Estado
 cidadaosPorEstadoIdade :: CadastroSUS -> Estado -> FaixaIdade -> Quantidade
-cidadaosPorEstadoIdade myDataBase myState (inicial, final) = length [(cpf,nome,gender,nasc,adress,muni,state,tel,email) | (cpf,nome,gender,nasc,adress,muni,state,tel,email) <- myDataBase, myState == state, (getIdade nasc) >= (fst (inicial, final)), (getIdade nasc) <= (snd (inicial, final))]
+cidadaosPorEstadoIdade myDataBase myState faixasIdade = length [(cpf,nome,gender,nasc,adress,muni,state,tel,email) | (cpf,nome,gender,nasc,adress,muni,state,tel,email) <- myDataBase, myState == state, (getIdade nasc) >= (fst faixasIdade), (getIdade nasc) <= (snd faixasIdade)]
 
 --item d) Pode ser interessante também gerar uma lista da quantidade de cidadãos por faixas de idade para um dado município ou estado. As faixas de idade inicialmente previstas são:
 ---FAIXAS DE IDADE
@@ -87,14 +87,17 @@ cidadaosPorEstadoIdade myDataBase myState (inicial, final) = length [(cpf,nome,g
 
 --Estas funções precisam de funções auxiliares para gerar uma lista de quantidades por faixas de idade, para depois gerar a exibição usando as funções do item (f).
 geraListaMunicipioFaixas :: CadastroSUS -> Municipio -> [FaixaIdade] -> [(FaixaIdade, Quantidade)]
-geraListaMunicipioFaixas myDataBase myMunicipio [faixasIdade] = [(faixasIdade, quantidade) | (cpf,nome,gender,nasc,adress,muni,state,tel,email) <- myDataBase, myMunicipio == muni, (getIdade nasc) >= (fst faixasIdade), (getIdade nasc) <= (snd faixasIdade)] 
-    where quantidade = cidadaosPorEstadoIdade myDataBase myMunicipio
-
---geraListaEstadoFaixas :: CadastroSUS -> Estado -> [FaixaIdade] -> [(FaixaIdade, Quantidade)
+geraListaMunicipioFaixas myDataBase myMunicipio listaFaixasIdade = [(faixasIdade, quantidade) | faixasIdade <- listaFaixasIdade, quantidade <- [cidadaosPorMunicipioIdade myDataBase myMunicipio faixasIdade]] 
+    
+geraListaEstadoFaixas :: CadastroSUS -> Estado -> [FaixaIdade] -> [(FaixaIdade, Quantidade)]
+geraListaEstadoFaixas myDataBase myState listaFaixasIdade = [(faixasIdade, quantidade) | faixasIdade <- listaFaixasIdade,quantidade <- [cidadaosPorEstadoIdade myDataBase myState faixasIdade]]
 
 --GETS e outras funçoes auxiliares
 getCPF :: Cidadao -> CPF
 getCPF (myCPF, _, _, _, _, _, _, _, _) = myCPF 
+
+getMunicipio :: Cidadao -> Municipio
+getMunicipio (_, _, _, _, _, myMunicipio, _, _, _) = myMunicipio
 
 getEndereco :: Cidadao -> Endereco
 getEndereco (_, _, _, _, myEndereco, _, _, _, _) = myEndereco
@@ -106,8 +109,11 @@ getDataNasc :: Cidadao -> DataNasc
 getDataNasc (_, _, _, myNasci, _, _, _, _, _) = myNasci 
 
 --Subtrair 2021 pela data de Nascimento
+--Se a data de nascimento estiver antes(ser menor) do dia 27 e do mes 09, a pessoa ja fez aniversario, se não, ela ainda é um ano mais jovem
 getIdade :: DataNasc -> Int
-getIdade myNasci = 2021 - (third myNasci)
+getIdade myNasci 
+                | (first myNasci) <= 27 && (second myNasci) <= 9 = 2021 - (third myNasci)
+                | otherwise  = 2021 - (third myNasci) - 1
 
 ----Para cadastrar um novo cidadão, inicialmente é checado se o CPF já existe ou não no sistema com a função 
 checkCPF :: CPF -> CadastroSUS -> Bool
