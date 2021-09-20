@@ -81,7 +81,8 @@ cidadaosPorEstadoIdade myDataBase myState faixasIdade = length [(cpf,nome,gender
 --12 - 21
 --O gestor pode escolher todas ou algumas destas faixas para gerar a lista. O gestor pode também, a depender das características de seu município, escolher outras faixas, já que a faixa é um parâmetro da função. Caso o gestor decida, por exemplo, coletar dados para uma idade específica, digamos 25 anos, ele deve informar a faixa (25, 25).
 
---listaMunicipioFaixas :: CadastroSUS -> Municipio -> [FaixaIdade] -> IO()
+listaMunicipioFaixas :: CadastroSUS -> Municipio -> [FaixaIdade] -> IO()
+listaMunicipioFaixas myDataBase myMunicipio listaFaixasIdade = putStrLn (geraListaMunicipioFaixas myDataBase myMunicipio listaFaixasIdade)
 --listaMunicipioFaixas myDataBase myMunicipio faixasIdade
 --listaEstadoFaixas :: CadastroSUS -> Estado-> [FaixaIdade] -> IO()
 
@@ -91,6 +92,15 @@ geraListaMunicipioFaixas myDataBase myMunicipio listaFaixasIdade = [(faixasIdade
     
 geraListaEstadoFaixas :: CadastroSUS -> Estado -> [FaixaIdade] -> [(FaixaIdade, Quantidade)]
 geraListaEstadoFaixas myDataBase myState listaFaixasIdade = [(faixasIdade, quantidade) | faixasIdade <- listaFaixasIdade,quantidade <- [cidadaosPorEstadoIdade myDataBase myState faixasIdade]]
+
+--Além do cadastro no sistema SUS, haverá um cadastro dos cidadãos vacinados. Este cadastro está definido a seguir:
+type Vacinados = [Vacinado]
+--Cada item desse cadastro, Vacinado, é da forma
+type Vacina = String
+type TipoDose = Int
+type Dose = (Vacina, Data)
+type Doses = [Dose]
+type Vacinado = (CPF, Doses)
 
 --GETS e outras funçoes auxiliares
 getCPF :: Cidadao -> CPF
