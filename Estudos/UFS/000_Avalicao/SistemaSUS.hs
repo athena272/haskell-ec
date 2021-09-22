@@ -21,7 +21,7 @@ type Cidadao = (CPF, Nome, Genero, DataNasc, Endereco, Municipio, Estado, Telefo
 
 --Meus cadastros pre-existentes no banco de dados 
 bancoDeCadastros :: CadastroSUS
-bancoDeCadastros = [(26716347665, "Paulo Souza", 'M', (11,10,1996),"Rua A, 202","Muribeca", "SE", "999997000", "psouza@gmail.com"),(87717347115, "Ana Reis",'F', (5,4,1970), "Rua B, 304","Aracaju", "SE", "999826004", "areis@gmail.com")]
+bancoDeCadastros = [(26716347665, "Paulo Souza", 'M', (11,10,1996),"Rua A, 202","Muribeca", "SE", "999997000", "psouza@gmail.com"),(87717347115, "Ana Reis",'F', (5,4,1970), "Rua B, 304","Aracaju", "SE", "999826004", "areis@gmail.com"), (99999999999, "Paulo Souza", 'M', (11,10,1996),"Rua A, 202","Muribeca", "SE", "999997000", "psouza@gmail.com")]
 
 -- item a) Cadastramento de um cidadão no sistema. 
 --Para cadastrar um novo cidadão, inicialmente é checado se o CPF já existe ou não no sistema com a função 
@@ -124,7 +124,8 @@ bancoDeVacinados :: Vacinados --CPF, [(Vacina, Data)]
 bancoDeVacinados = [(26716347665, [("AstraZeneca", (02, 07, 2021))]), (87717347115, [("Pfizer", (09, 09, 2021))])]
 --item g)Para realizar esta aplicação, procede-se da forma descrita a seguir e algumas funções auxiliares são necessárias. Inicialmente é verificado se o cidadão já tomou uma dose de vacina. Em caso afirmativo, usando error, exibe uma mensagem de que a primeira dose já foi aplicada. Caso contrário, é verificado se o usuário está cadastrado no sistema SUS. Se não estiver cadastrado, exibe uma mensagem de erro sinalizando o problema. Se estiver, checa se a idade é consistente com a faixa de idade de vacinação corrente. Se não for, exibe uma mensagem de erro sinalizando o problema. Se for, checa se o município é coerente com o município do cadastro SUS. Se não for, exibe uma mensagem de erro para ele atualizar os dados do SUS, pois só é permitida vacinação para residentes no município. Se for, adiciona o usuário no cadastro de vacinados. No momento da adição serão informados os dados constantes em Vacinado. Quando a vacina for Janssen, a tupla Dose deve vir duplicada na lista Doses, sinalizando que o paciente foi completamente imunizada
 --aplicaPrimDose:: CPF -> CadastroSUS -> FaixaIdade -> Municipio -> Vacina -> Data -> Vacinados -> Vacinados
---aplicaPrimDose myCPF myDataBase faixasIdade myMunicipio myVacina myDate myVacinados = 
+--aplicaPrimDose myCPF myDataBase faixasIdade myMunicipio myVacina myDateVacina myVacinados   
+    
 
 
 --GETS e outras funçoes auxiliares
