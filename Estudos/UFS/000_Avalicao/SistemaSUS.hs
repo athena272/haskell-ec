@@ -190,3 +190,8 @@ addListaBarraN lista = concat [addBarraN palavra | palavra <- lista]
 --Primeiro ver se a lista veio vazio, se nao veio(False), eh porque a primeira dose foi tomada, entao inverto o bool para True
 tomouPriDose :: CPF -> Vacinados -> Bool
 tomouPriDose myCPF myVacinados = not (null [doses | (cpf, doses) <- myVacinados, myCPF == cpf])
+
+--Verificar se a idade para vacina eh adequada
+---Primeiro ver se a lista veio vazio, se nao veio(False), eh porque a pessoa esta apata a receber a dose, entao inverto o bool (True)
+idadeAdequada :: CPF -> CadastroSUS -> FaixaIdade -> Bool
+idadeAdequada myCPF myDataBase faixasIdade = not (null [cidado | cidado <- myDataBase, (getCPF cidado) == myCPF, (getIdade (getDataNasc cidado)) >= (fst faixasIdade), (getIdade (getDataNasc cidado)) <= (snd faixasIdade)])
