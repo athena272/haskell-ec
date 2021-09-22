@@ -126,9 +126,11 @@ bancoDeVacinados = [(26716347665, [("AstraZeneca", (02, 07, 2021))]), (877173471
 aplicaPrimDose:: CPF -> CadastroSUS -> FaixaIdade -> Municipio -> Vacina -> Data -> Vacinados -> Vacinados
 aplicaPrimDose myCPF myDataBase faixasIdade myMunicipio myVacina myDateVacina myVacinados 
     | not (checkCPF myCPF myDataBase) = error "Cidadao NAO existente para esse banco"
-    | not (jaTomouPriDose myCPF myVacinados) = error "cidadao JAH tomou a primeira dose"
-    | idadeAdequada myCPF myDataBase faixasIdade = error "cidadao com idade nao compativel para essa faixa"
-    |
+    | (jaTomouPriDose myCPF myVacinados) = error "cidadao JAH tomou a primeira dose"
+    | not (idadeAdequada myCPF myDataBase faixasIdade) = error "Cidadao com idade nao compativel para essa faixa"
+    | not (checkMunicipioVacinacao myCPF myDataBase myMunicipio) = error "Cidado nao pertence ao municipio para a vacinacao"
+    | "Janssen" == myVacina = (:) (myCPF, [(myVacina, myDateVacina), (myVacina, myDateVacina)]) myVacinados
+    | otherwise = (:) (myCPF, [(myVacina, myDateVacina)]) myVacinados
     
 
 
@@ -200,5 +202,6 @@ idadeAdequada :: CPF -> CadastroSUS -> FaixaIdade -> Bool
 idadeAdequada myCPF myDataBase faixasIdade = not (null [cidadao | cidadao <- myDataBase, (getCPF cidadao) == myCPF, (getIdade (getDataNasc cidadao)) >= (fst faixasIdade), (getIdade (getDataNasc cidadao)) <= (snd faixasIdade)])
 
 --Verificar se o municipio da vacinacao esta certo
+-----Primeiro ver se a lista veio vazio, se nao veio(False), eh porque a pessoa esta no Municipio e esta apata a receber a dose, entao inverto o bool (True)
 checkMunicipioVacinacao :: CPF -> CadastroSUS -> Municipio -> Bool
-checkMunicipioVacinacao myCPF myDataBase myMunicipio = not (null [cidadao | cidadao <- myDataBase, (getCPF cidadao) == myCPF, (getMunicipio) == myMunicipio])
+checkMunicipioVacinacao myCPF myDataBase myMunicipio = not (null [cidadao | cidadao <- myDataBase, (getCPF cidadao) == myCPF, (getMunicipio cidadao) == myMunicipio])
