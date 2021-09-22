@@ -205,3 +205,12 @@ idadeAdequada myCPF myDataBase faixasIdade = not (null [cidadao | cidadao <- myD
 -----Primeiro ver se a lista veio vazio, se nao veio(False), eh porque a pessoa esta no Municipio e esta apata a receber a dose, entao inverto o bool (True)
 checkMunicipioVacinacao :: CPF -> CadastroSUS -> Municipio -> Bool
 checkMunicipioVacinacao myCPF myDataBase myMunicipio = not (null [cidadao | cidadao <- myDataBase, (getCPF cidadao) == myCPF, (getMunicipio cidadao) == myMunicipio])
+
+--Cadastros pre-definidos para teste no cadastroSUS
+maria :: Cidadao
+maria = (53471688765, "Maria Silva", 'F', (21,12,1984),"Rua A, 202","Gloria", "SE", "999880300", "msilva@gmail.com")
+
+marcos :: Cidadao
+marcos = (53499988765, "Marcos Santos", 'M', (25,10,1994),"Rua D, 202","Aracaju", "SE", "999880501","msilva@gmail.com")
+
+
