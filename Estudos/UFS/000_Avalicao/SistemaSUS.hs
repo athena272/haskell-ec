@@ -125,7 +125,7 @@ bancoDeVacinados = [(26716347665, [("AstraZeneca", (02, 07, 2021))]), (877173471
 --item g)Para realizar esta aplicação, procede-se da forma descrita a seguir e algumas funções auxiliares são necessárias. Inicialmente é verificado se o cidadão já tomou uma dose de vacina. Em caso afirmativo, usando error, exibe uma mensagem de que a primeira dose já foi aplicada. Caso contrário, é verificado se o usuário está cadastrado no sistema SUS. Se não estiver cadastrado, exibe uma mensagem de erro sinalizando o problema. Se estiver, checa se a idade é consistente com a faixa de idade de vacinação corrente. Se não for, exibe uma mensagem de erro sinalizando o problema. Se for, checa se o município é coerente com o município do cadastro SUS. Se não for, exibe uma mensagem de erro para ele atualizar os dados do SUS, pois só é permitida vacinação para residentes no município. Se for, adiciona o usuário no cadastro de vacinados. No momento da adição serão informados os dados constantes em Vacinado. Quando a vacina for Janssen, a tupla Dose deve vir duplicada na lista Doses, sinalizando que o paciente foi completamente imunizada
 aplicaPrimDose:: CPF -> CadastroSUS -> FaixaIdade -> Municipio -> Vacina -> Data -> Vacinados -> Vacinados
 aplicaPrimDose myCPF myDataBase faixasIdade myMunicipio myVacina myDateVacina myVacinados 
-    | (checkCPF myCPF myDataBase) = error ""
+    | not (checkCPF myCPF myDataBase) = error "Usuario NAO existente para esse banco"
     
 
 
@@ -185,3 +185,8 @@ addBarraN palavra = palavra ++ "\n"
 --Use a questão anterior, para construir a função que dada uma lista de strings devolve uma única string  contendo a concatenação  das srings da lista fornecida, tal que estas strings estejam separadas por \n. Ex: se a entrada for [“gato”, “e”, “rato”] retornará “gato\ne\nrato\n”
 addListaBarraN :: [String] -> String
 addListaBarraN lista = concat [addBarraN palavra | palavra <- lista]
+
+--Verificar se usuario ja tomou primeiro dose
+--Primeiro ver se a lista veio vazio, se nao veio(False), eh porque a primeira dose foi tomada, entao inverto o bool para True
+tomouPriDose :: CPF -> Vacinados -> Bool
+tomouPriDose myCPF myVacinados = not (null [doses | (cpf, doses) <- myVacinados, myCPF == cpf])
