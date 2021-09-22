@@ -27,7 +27,7 @@ bancoDeCadastros = [(26716347665, "Paulo Souza", 'M', (11,10,1996),"Rua A, 202",
 --Para cadastrar um novo cidadão, inicialmente é checado se o CPF já existe ou não no sistema com a função 
 addCadastroSUS :: Cidadao -> CadastroSUS -> CadastroSUS
 addCadastroSUS myCidadao myDataBase
-    | checkCPF (getCPF myCidadao) myDataBase = error "Cidadao  jah existente nesse banco"
+    | checkCPFSUS (getCPF myCidadao) myDataBase = error "Cidadao  jah existente nesse banco"
     | otherwise = (:) myCidadao myDataBase
     
 --item b)O cidadão pode querer modificar algum desses dados, por exemplo, o número de telefone ou endereço. Para isto, precisamos de funções de atualização dos dados no cadastro, passando os novos dados. Para simplificar o sistema, vamos supor apenas as funções de atualização do endereço e do telefone, já que as demais atualizações seguiriam o mesmo princípio. No processo de atualização, o cadastro SUS informado será copiado para um novo cadastro SUS. Neste novo cadastro, os registros de outros cidadãos permanecerão inalterados e somente os dados do cidadão que está sendo atualizado sofrerão modificações.
@@ -125,7 +125,7 @@ bancoDeVacinados = [(26716347665, [("AstraZeneca", (02, 07, 2021))]), (877173471
 --item g)Para realizar esta aplicação, procede-se da forma descrita a seguir e algumas funções auxiliares são necessárias. Inicialmente é verificado se o cidadão já tomou uma dose de vacina. Em caso afirmativo, usando error, exibe uma mensagem de que a primeira dose já foi aplicada. Caso contrário, é verificado se o usuário está cadastrado no sistema SUS. Se não estiver cadastrado, exibe uma mensagem de erro sinalizando o problema. Se estiver, checa se a idade é consistente com a faixa de idade de vacinação corrente. Se não for, exibe uma mensagem de erro sinalizando o problema. Se for, checa se o município é coerente com o município do cadastro SUS. Se não for, exibe uma mensagem de erro para ele atualizar os dados do SUS, pois só é permitida vacinação para residentes no município. Se for, adiciona o usuário no cadastro de vacinados. No momento da adição serão informados os dados constantes em Vacinado. Quando a vacina for Janssen, a tupla Dose deve vir duplicada na lista Doses, sinalizando que o paciente foi completamente imunizada
 aplicaPrimDose:: CPF -> CadastroSUS -> FaixaIdade -> Municipio -> Vacina -> Data -> Vacinados -> Vacinados
 aplicaPrimDose myCPF myDataBase faixasIdade myMunicipio myVacina myDateVacina myVacinados 
-    | not (checkCPF myCPF myDataBase) = error "Cidadao NAO existente para esse banco"
+    | not (checkCPFSUS myCPF myDataBase) = error "Cidadao NAO existente para esse banco"
     | (jaTomouPriDose myCPF myVacinados) = error "cidadao JAH tomou a primeira dose"
     | not (idadeAdequada myCPF myDataBase faixasIdade) = error "Cidadao com idade nao compativel para essa faixa"
     | not (checkMunicipioVacinacao myCPF myDataBase myMunicipio) = error "Cidado nao pertence ao municipio para a vacinacao"
@@ -133,7 +133,10 @@ aplicaPrimDose myCPF myDataBase faixasIdade myMunicipio myVacina myDateVacina my
     | otherwise = (:) (myCPF, [(myVacina, myDateVacina)]) myVacinados
 
 --item h)Para realizar a segunda dose, faz-se necessário checar se o CPF consta do cadastro de vacinados. Se não estiver, usando error, exibe uma mensagem de erro reportando o problema. Se estiver, é verificado se o cidadão já tomou a segunda dose. Se já  tomou, exibe uma mensagem de erro. Caso contrário, checa se a data informada é maior que a da primeira dose. Se não for, exibe uma mensagem de erro. Se for, o cadastro de vacinados é atualizado e um novo cadastro é gerado, inserindo-se a tupla Dose no final da lista Doses, para um dado cidadão. Os dados dos demais cidadãos permanecem inalterados.    
-
+aplicaSeguDose :: CPF -> Data -> Vacinados -> Vacinados
+aplicaSeguDose myCPF myDateVacina myVacinados
+    | not (checkCPFVacinados myCPF myVacinados) = error "Cidadao NAO existente no banco de vacinados"
+    | (jaTomouPriDose myCPF myVacinados) = error "cidadao JAH tomou a primeira dose"
 
 --GETS e outras funçoes auxiliares
 getCPF :: Cidadao -> CPF
@@ -159,8 +162,12 @@ getIdade myNasci
                 | otherwise  = 2021 - (third myNasci) - 1
 
 ----Para cadastrar um novo cidadão, inicialmente é checado se o CPF já existe ou não no sistema com a função 
-checkCPF :: CPF -> CadastroSUS -> Bool
-checkCPF myCPF myDataBase = or [myCPF == cpfDataBase| (cpfDataBase, _, _, _, _, _, _, _, _) <- myDataBase] --Se pelo menos um for verdadeiro na lista, já é o bastante, por isso a funcao "or"
+checkCPFSUS :: CPF -> CadastroSUS -> Bool
+checkCPFSUS myCPF myDataBase = or [myCPF == cpfDataBase| (cpfDataBase, _, _, _, _, _, _, _, _) <- myDataBase] --Se pelo menos um for verdadeiro na lista, já é o bastante, por isso a funcao "or"
+
+----Para cadastrar um novo cidadao para vacinar, inicialmente é checado se o CPF já existe ou não no sistema com a função 
+checkCPFVacinados :: CPF -> Vacinados -> Bool
+checkCPFVacinados myCPF myVacinados = or [myCPF == cpfMyVacinados | (cpfMyVacinados, _) <- myVacinados]
 
 --Atribuir um valor(indixe) para cada cidadao que exisitir no "banco de dados"
 posicionarElementosLista :: CadastroSUS -> [(Int, Cidadao)]
@@ -193,7 +200,7 @@ addListaBarraN :: [String] -> String
 addListaBarraN lista = concat [addBarraN palavra | palavra <- lista]
 
 --Verificar se usuario ja tomou primeiro dose
---Primeiro ver se a lista veio vazio, se nao veio(False), eh porque a primeira dose foi tomada, entao inverto o bool para True
+--Primeiro ver se a lista veio vazio, se nao veio(False), eh porque a primeira dose foi tomada, entao inverto o bool para True athena
 jaTomouPriDose :: CPF -> Vacinados -> Bool
 jaTomouPriDose myCPF myVacinados = not (null [doses | (cpf, doses) <- myVacinados, myCPF == cpf])
 
