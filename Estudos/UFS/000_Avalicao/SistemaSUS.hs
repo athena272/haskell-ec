@@ -28,7 +28,7 @@ bancoDeCadastros = [(26716347665, "Paulo Souza", 'M', (11,10,1996),"Rua A, 202",
 addCadastroSUS :: Cidadao -> CadastroSUS -> CadastroSUS
 addCadastroSUS myCidadao myDataBase
     | checkCPF (getCPF myCidadao) myDataBase = error "Cidadao  jah existente nesse banco"
-    | otherwise = myCidadao : myDataBase
+    | otherwise = (:) myCidadao myDataBase
     
 --item b)O cidadão pode querer modificar algum desses dados, por exemplo, o número de telefone ou endereço. Para isto, precisamos de funções de atualização dos dados no cadastro, passando os novos dados. Para simplificar o sistema, vamos supor apenas as funções de atualização do endereço e do telefone, já que as demais atualizações seguiriam o mesmo princípio. No processo de atualização, o cadastro SUS informado será copiado para um novo cadastro SUS. Neste novo cadastro, os registros de outros cidadãos permanecerão inalterados e somente os dados do cidadão que está sendo atualizado sofrerão modificações.
 atualizaEnderecoSUS :: CPF -> CadastroSUS -> Endereco -> CadastroSUS
@@ -128,6 +128,7 @@ aplicaPrimDose myCPF myDataBase faixasIdade myMunicipio myVacina myDateVacina my
     | not (checkCPF myCPF myDataBase) = error "Cidadao NAO existente para esse banco"
     | not (jaTomouPriDose myCPF myVacinados) = error "cidadao JAH tomou a primeira dose"
     | idadeAdequada myCPF myDataBase faixasIdade = error "cidadao com idade nao compativel para essa faixa"
+    |
     
 
 
@@ -197,3 +198,7 @@ jaTomouPriDose myCPF myVacinados = not (null [doses | (cpf, doses) <- myVacinado
 ---Primeiro ver se a lista veio vazio, se nao veio(False), eh porque a pessoa esta apata a receber a dose, entao inverto o bool (True)
 idadeAdequada :: CPF -> CadastroSUS -> FaixaIdade -> Bool
 idadeAdequada myCPF myDataBase faixasIdade = not (null [cidadao | cidadao <- myDataBase, (getCPF cidadao) == myCPF, (getIdade (getDataNasc cidadao)) >= (fst faixasIdade), (getIdade (getDataNasc cidadao)) <= (snd faixasIdade)])
+
+--Verificar se o municipio da vacinacao esta certo
+checkMunicipioVacinacao :: CPF -> CadastroSUS -> Municipio -> Bool
+checkMunicipioVacinacao myCPF myDataBase myMunicipio = not (null [cidadao | cidadao <- myDataBase, (getCPF cidadao) == myCPF, (getMunicipio) == myMunicipio])
