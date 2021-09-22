@@ -131,12 +131,14 @@ aplicaPrimDose myCPF myDataBase faixasIdade myMunicipio myVacina myDateVacina my
     | not (checkMunicipioVacinacao myCPF myDataBase myMunicipio) = error "Cidado nao pertence ao municipio para a vacinacao"
     | "Janssen" == myVacina = (:) (myCPF, [(myVacina, myDateVacina), (myVacina, myDateVacina)]) myVacinados
     | otherwise = (:) (myCPF, [(myVacina, myDateVacina)]) myVacinados
+     
 
 --item h)Para realizar a segunda dose, faz-se necessário checar se o CPF consta do cadastro de vacinados. Se não estiver, usando error, exibe uma mensagem de erro reportando o problema. Se estiver, é verificado se o cidadão já tomou a segunda dose. Se já  tomou, exibe uma mensagem de erro. Caso contrário, checa se a data informada é maior que a da primeira dose. Se não for, exibe uma mensagem de erro. Se for, o cadastro de vacinados é atualizado e um novo cadastro é gerado, inserindo-se a tupla Dose no final da lista Doses, para um dado cidadão. Os dados dos demais cidadãos permanecem inalterados.    
 aplicaSeguDose :: CPF -> Data -> Vacinados -> Vacinados
 aplicaSeguDose myCPF myDateVacina myVacinados
     | not (checkCPFVacinados myCPF myVacinados) = error "Cidadao NAO existente no banco de vacinados"
     | (jaTomouPriDose myCPF myVacinados) = error "cidadao JAH tomou a primeira dose"
+    | 
 
 --GETS e outras funçoes auxiliares
 getCPF :: Cidadao -> CPF
