@@ -27,7 +27,7 @@ bancoDeCadastros = [(26716347665, "Paulo Souza", 'M', (11,10,1996),"Rua A, 202",
 --Para cadastrar um novo cidadão, inicialmente é checado se o CPF já existe ou não no sistema com a função 
 addCadastroSUS :: Cidadao -> CadastroSUS -> CadastroSUS
 addCadastroSUS myCidadao myDataBase
-    | checkCPF (getCPF myCidadao) myDataBase = error "Usuario  jah existente"
+    | checkCPF (getCPF myCidadao) myDataBase = error "Cidadao  jah existente nesse banco"
     | otherwise = myCidadao : myDataBase
     
 --item b)O cidadão pode querer modificar algum desses dados, por exemplo, o número de telefone ou endereço. Para isto, precisamos de funções de atualização dos dados no cadastro, passando os novos dados. Para simplificar o sistema, vamos supor apenas as funções de atualização do endereço e do telefone, já que as demais atualizações seguiriam o mesmo princípio. No processo de atualização, o cadastro SUS informado será copiado para um novo cadastro SUS. Neste novo cadastro, os registros de outros cidadãos permanecerão inalterados e somente os dados do cidadão que está sendo atualizado sofrerão modificações.
@@ -125,7 +125,9 @@ bancoDeVacinados = [(26716347665, [("AstraZeneca", (02, 07, 2021))]), (877173471
 --item g)Para realizar esta aplicação, procede-se da forma descrita a seguir e algumas funções auxiliares são necessárias. Inicialmente é verificado se o cidadão já tomou uma dose de vacina. Em caso afirmativo, usando error, exibe uma mensagem de que a primeira dose já foi aplicada. Caso contrário, é verificado se o usuário está cadastrado no sistema SUS. Se não estiver cadastrado, exibe uma mensagem de erro sinalizando o problema. Se estiver, checa se a idade é consistente com a faixa de idade de vacinação corrente. Se não for, exibe uma mensagem de erro sinalizando o problema. Se for, checa se o município é coerente com o município do cadastro SUS. Se não for, exibe uma mensagem de erro para ele atualizar os dados do SUS, pois só é permitida vacinação para residentes no município. Se for, adiciona o usuário no cadastro de vacinados. No momento da adição serão informados os dados constantes em Vacinado. Quando a vacina for Janssen, a tupla Dose deve vir duplicada na lista Doses, sinalizando que o paciente foi completamente imunizada
 aplicaPrimDose:: CPF -> CadastroSUS -> FaixaIdade -> Municipio -> Vacina -> Data -> Vacinados -> Vacinados
 aplicaPrimDose myCPF myDataBase faixasIdade myMunicipio myVacina myDateVacina myVacinados 
-    | not (checkCPF myCPF myDataBase) = error "Usuario NAO existente para esse banco"
+    | not (checkCPF myCPF myDataBase) = error "Cidadao NAO existente para esse banco"
+    | not (jaTomouPriDose myCPF myVacinados) = error "cidadao JAH tomou a primeira dose"
+    | idadeAdequada myCPF myDataBase faixasIdade = error "cidadao com idade nao compativel para essa faixa"
     
 
 
@@ -188,10 +190,10 @@ addListaBarraN lista = concat [addBarraN palavra | palavra <- lista]
 
 --Verificar se usuario ja tomou primeiro dose
 --Primeiro ver se a lista veio vazio, se nao veio(False), eh porque a primeira dose foi tomada, entao inverto o bool para True
-tomouPriDose :: CPF -> Vacinados -> Bool
-tomouPriDose myCPF myVacinados = not (null [doses | (cpf, doses) <- myVacinados, myCPF == cpf])
+jaTomouPriDose :: CPF -> Vacinados -> Bool
+jaTomouPriDose myCPF myVacinados = not (null [doses | (cpf, doses) <- myVacinados, myCPF == cpf])
 
 --Verificar se a idade para vacina eh adequada
 ---Primeiro ver se a lista veio vazio, se nao veio(False), eh porque a pessoa esta apata a receber a dose, entao inverto o bool (True)
 idadeAdequada :: CPF -> CadastroSUS -> FaixaIdade -> Bool
-idadeAdequada myCPF myDataBase faixasIdade = not (null [cidado | cidado <- myDataBase, (getCPF cidado) == myCPF, (getIdade (getDataNasc cidado)) >= (fst faixasIdade), (getIdade (getDataNasc cidado)) <= (snd faixasIdade)])
+idadeAdequada myCPF myDataBase faixasIdade = not (null [cidadao | cidadao <- myDataBase, (getCPF cidadao) == myCPF, (getIdade (getDataNasc cidadao)) >= (fst faixasIdade), (getIdade (getDataNasc cidadao)) <= (snd faixasIdade)])
