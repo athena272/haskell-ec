@@ -33,14 +33,14 @@ addCadastroSUS myCidadao myDataBase
 --item b)O cidadão pode querer modificar algum desses dados, por exemplo, o número de telefone ou endereço. Para isto, precisamos de funções de atualização dos dados no cadastro, passando os novos dados. Para simplificar o sistema, vamos supor apenas as funções de atualização do endereço e do telefone, já que as demais atualizações seguiriam o mesmo princípio. No processo de atualização, o cadastro SUS informado será copiado para um novo cadastro SUS. Neste novo cadastro, os registros de outros cidadãos permanecerão inalterados e somente os dados do cidadão que está sendo atualizado sofrerão modificações.
 atualizaEnderecoSUS :: CPF -> CadastroSUS -> Endereco -> CadastroSUS
 atualizaEnderecoSUS myCPF myDataBase newAdress = comeco ++ dadoAtualizado ++ fim
-    where position = findPosElem myCPF myDataBase
+    where position = findPosCidadao myCPF myDataBase
           comeco = take (position - 1) myDataBase
           fim = drop position myDataBase
           dadoAtualizado = [(cpf,nome,gender,nasc,newAdress,muni,state,tel,email)| (cpf,nome,gender,nasc,newAdress,muni,state,tel,email) <- myDataBase, cpf == myCPF]
 
 atualizaTelefoneSUS :: CPF -> CadastroSUS -> Telefone -> CadastroSUS
 atualizaTelefoneSUS myCPF myDataBase newTel = comeco ++ dadoAtualizado ++ fim
-    where position = findPosElem myCPF myDataBase
+    where position = findPosCidadao myCPF myDataBase
           comeco = take (position - 1) myDataBase
           fim = drop position myDataBase
           dadoAtualizado = [(cpf,nome,gender,nasc,adress,muni,state,newTel,email) |  (cpf,nome,gender,nasc,adress,muni,state,newTel,email) <- myDataBase, cpf == myCPF]
@@ -143,6 +143,12 @@ aplicaSeguDose myCPF myDateVacina myVacinados
     | ((getDosesTomadas myCPF myVacinados) > 2) = error "Como tu tomou mais de duas vacinas?"
     -- | otherwise = 
 
+posicionarVacinadosLista :: Vacinados -> [(Int, Vacinado)]
+posicionarVacinadosLista myVacinados = zip posicioes myVacinados 
+    where posicioes = [1..(length myVacinados)]
+
+
+
 --GETS e outras funçoes auxiliares
 getCPF :: Cidadao -> CPF
 getCPF (myCPF, _, _, _, _, _, _, _, _) = myCPF 
@@ -175,16 +181,16 @@ checkCPFVacinados :: CPF -> Vacinados -> Bool
 checkCPFVacinados myCPF myVacinados = or [myCPF == cpfMyVacinados | (cpfMyVacinados, _) <- myVacinados]
 
 --Atribuir um valor(indixe) para cada cidadao que exisitir no "banco de dados"
-posicionarElementosLista :: CadastroSUS -> [(Int, Cidadao)]
-posicionarElementosLista myDataBase = zip posicoes myDataBase
+posicionarCidadaoLista :: CadastroSUS -> [(Int, Cidadao)]
+posicionarCidadaoLista myDataBase = zip posicoes myDataBase
     where posicoes = [1..(length myDataBase)]
 
 --Encontrar a posicao do cidadao com base no seu CPF
-findPosElem :: CPF -> CadastroSUS -> Int
-findPosElem myCPF myDataBase
+findPosCidadao :: CPF -> CadastroSUS -> Int
+findPosCidadao myCPF myDataBase
     |posicao == [] = 0
     |otherwise = head posicao
-    where posicao = [ position | (position, cidadao) <- (posicionarElementosLista myDataBase), (getCPF cidadao)  == myCPF]
+    where posicao = [ position | (position, cidadao) <- (posicionarCidadaoLista myDataBase), (getCPF cidadao)  == myCPF]
 
 --Descobrir a posicao de um tripla
 first :: (a, b, c) -> a

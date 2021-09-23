@@ -12,8 +12,8 @@ meuBancoDados = [("ivo", "livro A"), ("carlos", "livro B"),("joana", "livro C"),
 --ESCREVA AS SEGUINTES FUNÇÕES
 
 --Dada uma pessoa, encontre os livros que ela emprestou;
-findLivro :: Pessoa -> Livro
-findLivro nome = head [livro | (pessoaComLivro,livro) <- meuBancoDados, pessoaComLivro == nome]
+findLivro :: Pessoa -> [Livro]
+findLivro nome =  [livro | (pessoaComLivro,livro) <- meuBancoDados, pessoaComLivro == nome]
 
 --Dado um livro, encontre quem emprestou este livro, assumindo que o livro pode ter mais de um exemplar;
 finPessoaEmprestou :: Livro -> [Pessoa] 
