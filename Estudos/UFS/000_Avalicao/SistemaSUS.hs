@@ -152,7 +152,7 @@ findPosVacinado :: CPF -> Vacinados -> Int
 findPosVacinado myCPF myVacinados 
     | posicao == [] = 0
     | otherwise = head posicao
-    where posicao = [1.)]
+    where posicao = [position | (position, vacinado) <- (posicionarVacinadosLista myVacinados), (fst vacinado) == myCPF]
 
 
 --GETS e outras funçoes auxiliares
