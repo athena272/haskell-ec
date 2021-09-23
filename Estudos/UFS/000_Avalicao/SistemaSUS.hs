@@ -143,10 +143,16 @@ aplicaSeguDose myCPF myDateVacina myVacinados
     | ((getDosesTomadas myCPF myVacinados) > 2) = error "Como tu tomou mais de duas vacinas?"
     -- | otherwise = 
 
+
 posicionarVacinadosLista :: Vacinados -> [(Int, Vacinado)]
 posicionarVacinadosLista myVacinados = zip posicioes myVacinados 
     where posicioes = [1..(length myVacinados)]
 
+findPosVacinado :: CPF -> Vacinados -> Int
+findPosVacinado myCPF myVacinados 
+    | posicao == [] = 0
+    | otherwise = head posicao
+    where posicao = [1.)]
 
 
 --GETS e outras funçoes auxiliares
