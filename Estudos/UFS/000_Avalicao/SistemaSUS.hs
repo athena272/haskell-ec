@@ -121,7 +121,7 @@ bancoDeVacinas = ["AstraZeneca", "CoronaVac", "Janssen", "Pfizer"]
 
 --                                          Dose
 bancoDeVacinados :: Vacinados --CPF, [(Vacina, Data)]
-bancoDeVacinados = [(26716347665, [("AstraZeneca", (02, 07, 2021))]), (87717347115, [("Pfizer", (09, 09, 2021))])]
+bancoDeVacinados = [(26716347665, [("AstraZeneca", (02, 07, 2021)), ("AstraZeneca", (01, 08, 2021))]), (87717347115, [("Pfizer", (09, 09, 2021))])]
 --item g)Para realizar esta aplicação, procede-se da forma descrita a seguir e algumas funções auxiliares são necessárias. Inicialmente é verificado se o cidadão já tomou uma dose de vacina. Em caso afirmativo, usando error, exibe uma mensagem de que a primeira dose já foi aplicada. Caso contrário, é verificado se o usuário está cadastrado no sistema SUS. Se não estiver cadastrado, exibe uma mensagem de erro sinalizando o problema. Se estiver, checa se a idade é consistente com a faixa de idade de vacinação corrente. Se não for, exibe uma mensagem de erro sinalizando o problema. Se for, checa se o município é coerente com o município do cadastro SUS. Se não for, exibe uma mensagem de erro para ele atualizar os dados do SUS, pois só é permitida vacinação para residentes no município. Se for, adiciona o usuário no cadastro de vacinados. No momento da adição serão informados os dados constantes em Vacinado. Quando a vacina for Janssen, a tupla Dose deve vir duplicada na lista Doses, sinalizando que o paciente foi completamente imunizada
 aplicaPrimDose:: CPF -> CadastroSUS -> FaixaIdade -> Municipio -> Vacina -> Data -> Vacinados -> Vacinados
 aplicaPrimDose myCPF myDataBase faixasIdade myMunicipio myVacina myDateVacina myVacinados 
@@ -137,8 +137,9 @@ aplicaPrimDose myCPF myDataBase faixasIdade myMunicipio myVacina myDateVacina my
 aplicaSeguDose :: CPF -> Data -> Vacinados -> Vacinados
 aplicaSeguDose myCPF myDateVacina myVacinados
     | not (checkCPFVacinados myCPF myVacinados) = error "Cidadao NAO existente no banco de vacinados"
-    | (jaTomouPriDose myCPF myVacinados) = error "cidadao JAH tomou a primeira dose"
-    | 
+    | ((getDosesTomadas myCPF myVacinados) == 2) = error "cidadao JAH tomou DUAS doses"
+    | ((getDosesTomadas myCPF myVacinados) > 2) = error "Como tu tomou mais de duas vacinas?"
+    | otherwise = (:) (, [(myVacina, myDateVacina)]) myVacinados
 
 --GETS e outras funçoes auxiliares
 getCPF :: Cidadao -> CPF
@@ -202,7 +203,7 @@ addListaBarraN :: [String] -> String
 addListaBarraN lista = concat [addBarraN palavra | palavra <- lista]
 
 --Verificar se usuario ja tomou primeiro dose
---Primeiro ver se a lista veio vazio, se nao veio(False), eh porque a primeira dose foi tomada, entao inverto o bool para True athena
+--Primeiro ver se a lista veio vazio, se nao veio(False) eh porque a primeira dose foi tomada, entao inverto o bool para True athena
 jaTomouPriDose :: CPF -> Vacinados -> Bool
 jaTomouPriDose myCPF myVacinados = not (null [doses | (cpf, doses) <- myVacinados, myCPF == cpf])
 
@@ -215,6 +216,16 @@ idadeAdequada myCPF myDataBase faixasIdade = not (null [cidadao | cidadao <- myD
 -----Primeiro ver se a lista veio vazio, se nao veio(False), eh porque a pessoa esta no Municipio e esta apata a receber a dose, entao inverto o bool (True)
 checkMunicipioVacinacao :: CPF -> CadastroSUS -> Municipio -> Bool
 checkMunicipioVacinacao myCPF myDataBase myMunicipio = not (null [cidadao | cidadao <- myDataBase, (getCPF cidadao) == myCPF, (getMunicipio cidadao) == myMunicipio])
+
+--Verificar se usuario ja tomou primeiro dose
+--Primeiro pega a lista que possuia como unico elemento(por isso o head, já que é so um elemento) uma lista que tem tuplas de vacinas e datas
+
+getVacinaData :: CPF -> Vacinados -> Doses
+getVacinaData myCPF myVacinados =  head [dosesTomadas | (cpf, dosesTomadas) <- myVacinados, myCPF == cpf]
+
+--Ai eu conto quantas vacinas tem nessa lista
+getDosesTomadas :: CPF -> Vacinados -> Int
+getDosesTomadas myCPF myVacinados = length (getVacinaData myCPF myVacinados)
 
 --Cadastros pre-definidos para teste no cadastroSUS
 maria :: Cidadao
