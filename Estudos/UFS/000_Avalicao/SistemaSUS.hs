@@ -74,11 +74,11 @@ cidadaosPorEstadoIdade myDataBase myState faixasIdade = length [(cpf,nome,gender
 
 --Retorna a lista do municipio formatada lindamente
 listaMunicipioFaixas :: CadastroSUS -> Municipio -> [FaixaIdade] -> IO()
-listaMunicipioFaixas myDataBase myMunicipio listaFaixasIdade = putStrLn ("MUNICIPIO: " ++  myMunicipio ++ "\n" ++ "FAIXA IDADES        QUANTIDADE\n" ++ (formataLinhas (geraListaMunicipioFaixas myDataBase myMunicipio listaFaixasIdade)) ++ (formataTotal (geraListaMunicipioFaixas myDataBase myMunicipio listaFaixasIdade)))
+listaMunicipioFaixas myDataBase myMunicipio listaFaixasIdade = putStrLn ("MUNICIPIO: " ++  myMunicipio ++ "\nFAIXA IDADES        QUANTIDADE\n" ++ (formataLinhas (geraListaMunicipioFaixas myDataBase myMunicipio listaFaixasIdade)) ++ (formataTotal (geraListaMunicipioFaixas myDataBase myMunicipio listaFaixasIdade)))
 
 --Retorna a lista do estado formatada lindamente
 listaEstadoFaixas :: CadastroSUS -> Estado-> [FaixaIdade] -> IO()
-listaEstadoFaixas myDataBase myState listaFaixasIdade = putStrLn ("ESTADO: " ++ myState ++ "\n" ++ "FAIXA IDADES        QUANTIDADE\n" ++ (formataLinhas (geraListaEstadoFaixas myDataBase myState listaFaixasIdade)) ++ (formataTotal (geraListaEstadoFaixas myDataBase myState listaFaixasIdade)))
+listaEstadoFaixas myDataBase myState listaFaixasIdade = putStrLn ("ESTADO: " ++ myState ++ "\nFAIXA IDADES        QUANTIDADE\n" ++ (formataLinhas (geraListaEstadoFaixas myDataBase myState listaFaixasIdade)) ++ (formataTotal (geraListaEstadoFaixas myDataBase myState listaFaixasIdade)))
 --Estas funções precisam de funções auxiliares para gerar uma lista de quantidades por faixas de idade, para depois gerar a exibição usando as funções do item (f).
 geraListaMunicipioFaixas :: CadastroSUS -> Municipio -> [FaixaIdade] -> [(FaixaIdade, Quantidade)]
 geraListaMunicipioFaixas myDataBase myMunicipio listaFaixasIdade = [(faixasIdade, quantidade) | faixasIdade <- listaFaixasIdade, quantidade <- [cidadaosPorMunicipioIdade myDataBase myMunicipio faixasIdade]] 
