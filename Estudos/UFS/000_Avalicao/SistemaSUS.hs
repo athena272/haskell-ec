@@ -21,7 +21,7 @@ type Cidadao = (CPF, Nome, Genero, DataNasc, Endereco, Municipio, Estado, Telefo
 
 --Meus cadastros pre-existentes no banco de dados 
 bancoDeCadastros :: CadastroSUS
-bancoDeCadastros = [(26716347665, "Paulo Souza", 'M', (11,10,1996),"Rua A, 202","Muribeca", "SE", "999997000", "psouza@gmail.com"), (15616115611, "Melissa Alves", 'F', (10,11,2006),"Rua K, 606","Muribeca", "SE", "999668000", "melissa@gmail.com"),(87717347115, "Ana Reis",'F', (5,4,1970), "Rua B, 304","Aracaju", "SE", "999826004", "areis@gmail.com"),(99999999999, "Guilherme Alves", 'M', (02,07,2002),"Rua C, 405","Salgado", "SE", "999997044", "guilherme@gmail.com"), (88888888888, "Esmeralda Oliveira", 'F', (09,09,2003),"Rua D, 506","Lagarto", "SE", "999996025", "esmeralda@gmail.com")]
+bancoDeCadastros = [(26716347665, "Paulo Souza", 'M', (11,10,1996),"Rua A, 202","Muribeca", "SE", "999997000", "psouza@gmail.com"),(87717347115, "Ana Reis",'F', (5,4,1970), "Rua B, 304","Aracaju", "SE", "999826004", "areis@gmail.com"),(99999999999, "Guilherme Alves", 'M', (02,07,2002),"Rua C, 405","Salgado", "SE", "999997044", "guilherme@gmail.com"), (88888888888, "Esmeralda Oliveira", 'F', (09,09,2003),"Rua D, 506","Lagarto", "SE", "999996025", "esmeralda@gmail.com"), (10101010101, "Fernanda Menezes", 'F', (01,04,2000),"Rua E, 506","Lagarto", "SE", "999996025", "esmeralda@gmail.com")]
 
 -- item a) Cadastramento de um cidadão no sistema. 
 --Para cadastrar um novo cidadão, inicialmente é checado se o CPF já existe ou não no sistema com a função 
@@ -129,7 +129,7 @@ bancoDeVacinas = ["AstraZeneca", "CoronaVac", "Janssen", "Pfizer"]
 
 --                                          Dose
 bancoDeVacinados :: Vacinados --CPF, [(Vacina, Data)]
-bancoDeVacinados = [(26716347665, [("AstraZeneca", (02, 07, 2021)), ("AstraZeneca", (01, 08, 2021))]), (87717347115, [("Pfizer", (09, 09, 2021))])]
+bancoDeVacinados = [(26716347665, [("AstraZeneca", (02, 07, 2021)), ("AstraZeneca", (01, 08, 2021))]), (87717347115, [("Pfizer", (09, 09, 2021))]), (10101010101, [("CoronaVac", (01, 01, 2021)), ("CoronaVac", (01, 02, 2021))]), (99999999999, [("Janssen", (01, 08, 2021)), ("Janssen", (01, 08, 2021))])]
 --item g)Para realizar esta aplicação, procede-se da forma descrita a seguir e algumas funções auxiliares são necessárias. Inicialmente é verificado se o cidadão já tomou uma dose de vacina. Em caso afirmativo, usando error, exibe uma mensagem de que a primeira dose já foi aplicada. Caso contrário, é verificado se o usuário está cadastrado no sistema SUS. Se não estiver cadastrado, exibe uma mensagem de erro sinalizando o problema. Se estiver, checa se a idade é consistente com a faixa de idade de vacinação corrente. Se não for, exibe uma mensagem de erro sinalizando o problema. Se for, checa se o município é coerente com o município do cadastro SUS. Se não for, exibe uma mensagem de erro para ele atualizar os dados do SUS, pois só é permitida vacinação para residentes no município. Se for, adiciona o usuário no cadastro de vacinados. No momento da adição serão informados os dados constantes em Vacinado. Quando a vacina for Janssen, a tupla Dose deve vir duplicada na lista Doses, sinalizando que o paciente foi completamente imunizada
 aplicaPrimDose:: CPF -> CadastroSUS -> FaixaIdade -> Municipio -> Vacina -> Data -> Vacinados -> Vacinados
 aplicaPrimDose myCPF myDataBase faixasIdade myMunicipio myVacina myDateVacina myVacinados 
@@ -178,14 +178,19 @@ atualizaVacina myCPF myTipoDose myVacina myVacinados
         
 
 -- item j) Quantidade de pessoas no município/estado vacinadas com uma dada dose. Para isso, para cada cidadão no cadastro de vacinados, é verificado se ele já tomou a dose informada no argumento da função. Em caso afirmativo, verifica-se se ele pertence ao município/estado informado, acessando-se o cadastro do SUS, e em caso afirmativo, o cidadão é considerado para o cômputo. 
-quantidadeDoseMun :: Vacinados -> TipoDose -> Municipio -> CadastroSUS -> Quantidade 
+quantidadeDoseMun :: Vacinados -> TipoDose -> Estado -> CadastroSUS -> Quantidade 
 quantidadeDoseMun myVacinados myTipoDose myMunicipio myDataBase
-      | myTipoDose == 1 = length [(vacina1, data1) | (cpf, [(vacina1, data1), (vacina2, data2)]) <- myVacinados, myMunicipio == (getMunicipio (getCidadao cpf myDataBase))]
+      | myTipoDose == 1 = length [(vacina1, data1) | (cpf, [(vacina1, data1), _]) <- myVacinados, myMunicipio == (getMunicipio (getCidadao cpf myDataBase))]
       | myTipoDose == 2 = length [(vacina2, data2) | (cpf, [(vacina1, data1), (vacina2, data2)]) <- myVacinados, myMunicipio == (getMunicipio (getCidadao cpf myDataBase))]
-      | otherwise = error "Informacoes relevantes ou suficientes foram encontradas"
+      | otherwise = error "Informacoes relevantes ou suficientes NAO foram encontradas"
+
+quantidadeDoseEst :: Vacinados -> TipoDose -> Estado -> CadastroSUS -> Quantidade 
+quantidadeDoseEst myVacinados myTipoDose myState myDataBase
+      | myTipoDose == 1 = length [(vacina1, data1) | (cpf, [(vacina1, data1), _]) <- myVacinados, myState == (getEstado (getCidadao cpf myDataBase))]
+      | myTipoDose == 2 = length [(vacina2, data2) | (cpf, [(vacina1, data1), (vacina2, data2)]) <- myVacinados, myState == (getEstado (getCidadao cpf myDataBase))]
+      | otherwise = error "Informacoes relevantes ou suficientes NAO foram encontradas"
 
 
---quantidadeDoseEst :: Vacinados -> TipoDose -> Estado -> CadastroSUS -> Quantidade
 getCidadao :: CPF -> CadastroSUS -> Cidadao
 getCidadao myCPF myDataBase 
     | cidadaoEncontrado == [] = error "Cidadao nao encontrado"
@@ -197,6 +202,9 @@ getCPF (myCPF, _, _, _, _, _, _, _, _) = myCPF
 
 getMunicipio :: Cidadao -> Municipio
 getMunicipio (_, _, _, _, _, myMunicipio, _, _, _) = myMunicipio
+
+getEstado :: Cidadao -> Estado
+getEstado (_, _, _, _, _, _, myState, _, _) = myState
 
 getEndereco :: Cidadao -> Endereco
 getEndereco (_, _, _, _, myEndereco, _, _, _, _) = myEndereco
