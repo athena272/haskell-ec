@@ -21,7 +21,7 @@ type Cidadao = (CPF, Nome, Genero, DataNasc, Endereco, Municipio, Estado, Telefo
 
 --Meus cadastros pre-existentes no banco de dados 
 bancoDeCadastros :: CadastroSUS
-bancoDeCadastros = [(26716347665, "Paulo Souza", 'M', (11,10,1996),"Rua A, 202","Muribeca", "SE", "999997000", "psouza@gmail.com"),(87717347115, "Ana Reis",'F', (5,4,1970), "Rua B, 304","Aracaju", "SE", "999826004", "areis@gmail.com"),(99999999999, "Guilherme Alves", 'M', (02,07,2002),"Rua C, 405","Salgado", "SE", "999997044", "guilherme@gmail.com"), (88888888888, "Esmeralda Oliveira", 'F', (09,09,2003),"Rua D, 506","Lagarto", "SE", "999996025", "esmeralda@gmail.com")]
+bancoDeCadastros = [(26716347665, "Paulo Souza", 'M', (11,10,1996),"Rua A, 202","Muribeca", "SE", "999997000", "psouza@gmail.com"), (15616115611, "Melissa Alves", 'F', (10,11,2006),"Rua K, 606","Muribeca", "SE", "999668000", "melissa@gmail.com"),(87717347115, "Ana Reis",'F', (5,4,1970), "Rua B, 304","Aracaju", "SE", "999826004", "areis@gmail.com"),(99999999999, "Guilherme Alves", 'M', (02,07,2002),"Rua C, 405","Salgado", "SE", "999997044", "guilherme@gmail.com"), (88888888888, "Esmeralda Oliveira", 'F', (09,09,2003),"Rua D, 506","Lagarto", "SE", "999996025", "esmeralda@gmail.com")]
 
 -- item a) Cadastramento de um cidadão no sistema. 
 --Para cadastrar um novo cidadão, inicialmente é checado se o CPF já existe ou não no sistema com a função 
@@ -179,13 +179,18 @@ atualizaVacina myCPF myTipoDose myVacina myVacinados
 
 -- item j) Quantidade de pessoas no município/estado vacinadas com uma dada dose. Para isso, para cada cidadão no cadastro de vacinados, é verificado se ele já tomou a dose informada no argumento da função. Em caso afirmativo, verifica-se se ele pertence ao município/estado informado, acessando-se o cadastro do SUS, e em caso afirmativo, o cidadão é considerado para o cômputo. 
 quantidadeDoseMun :: Vacinados -> TipoDose -> Municipio -> CadastroSUS -> Quantidade 
-quantidadeDoseMun myVacinados myTipoDose myMunicipio myDataBase = length qtdDoseMun
-      | myTipoDose == 1 = length [qtd | (cpf, [])]
-    
+quantidadeDoseMun myVacinados myTipoDose myMunicipio myDataBase
+      | myTipoDose == 1 = length [(vacina1, data1) | (cpf, [(vacina1, data1), (vacina2, data2)]) <- myVacinados, myMunicipio == (getMunicipio (getCidadao cpf myDataBase))]
+      | myTipoDose == 2 = length [(vacina2, data2) | (cpf, [(vacina1, data1), (vacina2, data2)]) <- myVacinados, myMunicipio == (getMunicipio (getCidadao cpf myDataBase))]
+      | otherwise = error "Informacoes relevantes ou suficientes foram encontradas"
+
 
 --quantidadeDoseEst :: Vacinados -> TipoDose -> Estado -> CadastroSUS -> Quantidade
-
-
+getCidadao :: CPF -> CadastroSUS -> Cidadao
+getCidadao myCPF myDataBase 
+    | cidadaoEncontrado == [] = error "Cidadao nao encontrado"
+    | otherwise = head cidadaoEncontrado 
+    where cidadaoEncontrado = [cidadao | cidadao <- myDataBase, myCPF == (getCPF cidadao)]
 --GETS e outras funçoes auxiliares
 getCPF :: Cidadao -> CPF
 getCPF (myCPF, _, _, _, _, _, _, _, _) = myCPF 
