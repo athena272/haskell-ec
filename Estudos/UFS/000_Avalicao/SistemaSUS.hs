@@ -153,15 +153,18 @@ aplicaSeguDose myCPF myDateVacina myVacinados
 atualizaVacina:: CPF -> TipoDose -> Vacina -> Vacinados -> Vacinados
 atualizaVacina myCPF myTipoDose myVacina myVacinados 
     | not (checkCPFVacinados myCPF myVacinados) = error "Cidadao NAO existente no banco de vacinados"
-    |((getDosesTomadas myCPF myVacinados) == 1) = error "cidadao so tomou UMA dose"
-    |otherwise = comeco ++ dadoAtualizado++ fim
+    |((getDosesTomadas myCPF myVacinados) == 1) = 
+        come
+    |otherwise = comeco ++ dadoAtualizadoDuasDozes ++ fim
         where 
         position = (findPosVacinado myCPF myVacinados)
         comeco = take (position - 1) myVacinados
         fim = drop position myVacinados 
-        dadoAtualizado 
+        --Caso so tenha tomado uma dose
+        dadoAtualizadoUmaDose = [(cpf), [(myVacina, data)]]
+        --Caso tenha sido duas doses, escolhe uma delas
+        dadoAtualizadoDuasDozes 
             | myTipoDose == 1 = [(cpf, [(myVacina, data1), (vacina2, data2)]) | (cpf, [(vacina1, data1), (vacina2, data2)]) <- myVacinados, cpf == myCPF]
-            
             
             | otherwise = [(cpf, [(vacina1, data1), (myVacina, data2)]) | (cpf, [(vacina1, data1), (myVacina, data2)]) <- myVacinados, cpf == myCPF]            
         
