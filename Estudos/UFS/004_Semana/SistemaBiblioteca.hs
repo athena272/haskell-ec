@@ -36,3 +36,6 @@ deleteEmprestimo :: (Pessoa, Livro) -> Emprestimos
 deleteEmprestimo (pessoa, livro) 
     | (pessoa, livro) `elem` meuBancoDados = (pessoa, livro) `delete` meuBancoDados-- se estiver no banco, retirar o elemento 
     | otherwise = meuBancoDados --caso não, só imprimir a lista
+
+deleteEmprestimo' :: (Pessoa, Livro) -> Emprestimos
+deleteEmprestimo' (pessoa, livro) = [(pessoaBanco, livroBanco) | (pessoaBanco, livroBanco) <- meuBancoDados, (pessoa, livro) /= (pessoaBanco, livroBanco)]

@@ -47,7 +47,9 @@ atualizaTelefoneSUS myCPF myDataBase newTel = comeco ++ dadoAtualizado ++ fim
 
 --item c) Quando um cidadão falece, a família tem que notificar o fato em um posto de saúde, para que ele seja retirado do cadastro corrente do SUS. Como há uma verificação do atestado de óbito, isto só pode ser feito no posto. O sistema precisará da função abaixo. Se o CPF existir no cadastro corrente do SUS, o registro do cidadão deve ser completamente excluído, gerando um novo cadastro sem os dados deste cidadão. Se o CPF não existir, uma mensagem de erro, usando error, sinalizando que o cidadão não pertence ao cadastro deve ser exibida.
 removeMortoSUS :: CPF -> CadastroSUS -> CadastroSUS
-removeMortoSUS myCPF myDataBase = [(cpf,nome,gender,nasc,adress,muni,state,tel,email) | (cpf,nome,gender,nasc,adress,muni,state,tel,email) <- myDataBase, myCPF /= cpf]
+removeMortoSUS myCPF myDataBase 
+    | not (checkCPFSUS myCPF myDataBase) = error "Esse cidadao morto nao existente nesse banco"  --verificar se o CPF da pessoa morta existe
+    | otherwise = [(cpf,nome,gender,nasc,adress,muni,state,tel,email) | (cpf,nome,gender,nasc,adress,muni,state,tel,email) <- myDataBase, myCPF /= cpf]
 
 --item d) Um gestor de saúde pode querer pesquisar algumas informações deste cadastro, como por exemplo, quantidade de cidadãos por município, por estado, ou ainda por município e por faixa de idade, ou por estado e por faixa de idade, para ter uma ideia de como planejar as faixas de vacinação. Assim, o sistema deve prever algumas funções de consulta:
 type IdadeInicial = Int
@@ -172,7 +174,11 @@ atualizaVacina myCPF myTipoDose myVacina myVacinados
         
 
 -- item j) Quantidade de pessoas no município/estado vacinadas com uma dada dose. Para isso, para cada cidadão no cadastro de vacinados, é verificado se ele já tomou a dose informada no argumento da função. Em caso afirmativo, verifica-se se ele pertence ao município/estado informado, acessando-se o cadastro do SUS, e em caso afirmativo, o cidadão é considerado para o cômputo. 
+--quantidadeDoseMun :: Vacinados -> TipoDose -> Municipio -> CadastroSUS -> Quantidade 
+--quantidadeDoseMun myVacinados myTipoDose myMunicipio myDataBase = length qtdDoseMun
+  --  where qtdDoseMun = [qtd | (cpf, [])]
 
+--quantidadeDoseEst :: Vacinados -> TipoDose -> Estado -> CadastroSUS -> Quantidade
 
 
 --GETS e outras funçoes auxiliares
