@@ -33,7 +33,7 @@ addCadastroSUS myCidadao myDataBase
 --item b)O cidadão pode querer modificar algum desses dados, por exemplo, o número de telefone ou endereço. Para isto, precisamos de funções de atualização dos dados no cadastro, passando os novos dados. Para simplificar o sistema, vamos supor apenas as funções de atualização do endereço e do telefone, já que as demais atualizações seguiriam o mesmo princípio. No processo de atualização, o cadastro SUS informado será copiado para um novo cadastro SUS. Neste novo cadastro, os registros de outros cidadãos permanecerão inalterados e somente os dados do cidadão que está sendo atualizado sofrerão modificações.
 atualizaEnderecoSUS :: CPF -> CadastroSUS -> Endereco -> CadastroSUS
 atualizaEnderecoSUS myCPF myDataBase newAdress 
-    | not (checkCPFSUS myCPF myDataBase) = error "Esse nao existe nesse banco"
+    | not (checkCPFSUS myCPF myDataBase) = error "Esse cidadao nao existe nesse banco"
     | otherwise = comeco ++ dadoAtualizado ++ fim
     where position = findPosCidadao myCPF myDataBase
           comeco = take (position - 1) myDataBase
@@ -42,6 +42,7 @@ atualizaEnderecoSUS myCPF myDataBase newAdress
 
 atualizaTelefoneSUS :: CPF -> CadastroSUS -> Telefone -> CadastroSUS
 atualizaTelefoneSUS myCPF myDataBase newTel     
+    | not (checkCPFSUS myCPF myDataBase) = error "Esse cidadao nao existe nesse banco"
     | otherwise = comeco ++ dadoAtualizado ++ fim
     where position = findPosCidadao myCPF myDataBase
           comeco = take (position - 1) myDataBase
