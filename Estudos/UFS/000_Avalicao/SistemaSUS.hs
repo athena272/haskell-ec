@@ -153,19 +153,21 @@ aplicaSeguDose myCPF myDateVacina myVacinados
 atualizaVacina:: CPF -> TipoDose -> Vacina -> Vacinados -> Vacinados
 atualizaVacina myCPF myTipoDose myVacina myVacinados 
     | not (checkCPFVacinados myCPF myVacinados) = error "Cidadao NAO existente no banco de vacinados"
+    --Caso so tenha tomado uma dose, atualiza ela
     |((getDosesTomadas myCPF myVacinados) == 1) = 
-        come
+        comeco ++ dadoAtualizadoUmaDose ++ fim
+    --Caso tenha tomado as duas, escolhe uma das duas para atualizar
     |otherwise = comeco ++ dadoAtualizadoDuasDozes ++ fim
         where 
         position = (findPosVacinado myCPF myVacinados)
         comeco = take (position - 1) myVacinados
         fim = drop position myVacinados 
         --Caso so tenha tomado uma dose
-        dadoAtualizadoUmaDose = [(cpf), [(myVacina, data)]]
+        dadoAtualizadoUmaDose = [(cpf, [(myVacina, data0)]) | (cpf, [(vacina0, data0)]) <- myVacinados, cpf == myCPF]
         --Caso tenha sido duas doses, escolhe uma delas
         dadoAtualizadoDuasDozes 
             | myTipoDose == 1 = [(cpf, [(myVacina, data1), (vacina2, data2)]) | (cpf, [(vacina1, data1), (vacina2, data2)]) <- myVacinados, cpf == myCPF]
-            
+
             | otherwise = [(cpf, [(vacina1, data1), (myVacina, data2)]) | (cpf, [(vacina1, data1), (myVacina, data2)]) <- myVacinados, cpf == myCPF]            
         
 
@@ -216,7 +218,7 @@ posicionarCidadaoLista myDataBase = zip posicoes myDataBase
 findPosCidadao :: CPF -> CadastroSUS -> Int
 findPosCidadao myCPF myDataBase
     |posicao == [] = 0
-    |otherwise =  posicao
+    |otherwise =  head posicao
     where posicao = [ position | (position, cidadao) <- (posicionarCidadaoLista myDataBase), (getCPF cidadao)  == myCPF]
 
 ----Atribuir um valor(indixe) para cada cidadao que foi vacinado no "banco de dados" que tem os usuarios vacinados
