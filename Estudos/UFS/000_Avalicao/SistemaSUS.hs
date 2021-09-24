@@ -36,14 +36,14 @@ atualizaEnderecoSUS myCPF myDataBase newAdress = comeco ++ dadoAtualizado ++ fim
     where position = findPosCidadao myCPF myDataBase
           comeco = take (position - 1) myDataBase
           fim = drop position myDataBase
-          dadoAtualizado = [(cpf,nome,gender,nasc,newAdress,muni,state,tel,email)| (cpf,nome,gender,nasc,newAdress,muni,state,tel,email) <- myDataBase, cpf == myCPF]
+          dadoAtualizado = [(cpf,nome,gender,nasc,newAdress,muni,state,tel,email)| (cpf,nome,gender,nasc,adress,muni,state,tel,email) <- myDataBase, cpf == myCPF]
 
 atualizaTelefoneSUS :: CPF -> CadastroSUS -> Telefone -> CadastroSUS
 atualizaTelefoneSUS myCPF myDataBase newTel = comeco ++ dadoAtualizado ++ fim
     where position = findPosCidadao myCPF myDataBase
           comeco = take (position - 1) myDataBase
           fim = drop position myDataBase
-          dadoAtualizado = [(cpf,nome,gender,nasc,adress,muni,state,newTel,email) |  (cpf,nome,gender,nasc,adress,muni,state,newTel,email) <- myDataBase, cpf == myCPF]
+          dadoAtualizado = [(cpf,nome,gender,nasc,adress,muni,state,newTel,email) |  (cpf,nome,gender,nasc,adress,muni,state,tel,email) <- myDataBase, cpf == myCPF]
 
 --item c) Quando um cidadão falece, a família tem que notificar o fato em um posto de saúde, para que ele seja retirado do cadastro corrente do SUS. Como há uma verificação do atestado de óbito, isto só pode ser feito no posto. O sistema precisará da função abaixo. Se o CPF existir no cadastro corrente do SUS, o registro do cidadão deve ser completamente excluído, gerando um novo cadastro sem os dados deste cidadão. Se o CPF não existir, uma mensagem de erro, usando error, sinalizando que o cidadão não pertence ao cadastro deve ser exibida.
 removeMortoSUS :: CPF -> CadastroSUS -> CadastroSUS
@@ -141,18 +141,33 @@ aplicaSeguDose myCPF myDateVacina myVacinados
     | not (checkCPFVacinados myCPF myVacinados) = error "Cidadao NAO existente no banco de vacinados"
     | ((getDosesTomadas myCPF myVacinados) == 2) = error "cidadao JAH tomou DUAS doses"
     | ((getDosesTomadas myCPF myVacinados) > 2) = error "Como tu tomou mais de duas vacinas?"
-    -- | otherwise = 
+    | not (dataSeguDoseValida myCPF myDateVacina myVacinados) = error "Datas nao fazem sentidos" 
+    | otherwise = comeco ++ dadoNovaVacina ++ fim
+    where 
+        position = (findPosVacinado myCPF myVacinados)
+        comeco = take (position - 1) myVacinados
+        fim = drop position myVacinados 
+        dadoNovaVacina = [(cpf, [(vacina, novaData), (vacina, myDateVacina)]) | (cpf, [(vacina, novaData)]) <- myVacinados, myCPF == cpf]
+
+-- item i) Pode ser necessária alguma atualização no cadastro de vacinados. Por exemplo, pode ser necessário consertar o nome da vacina que foi informada incorretamente. Para isso, seria necessária a função abaixo onde o nome correto da vacina é informado, para um dado CPF, numa dada dose. Caso o CPF não conste do cadastro de vacinados, exibe uma mensagem de erro. Caso contrário, se o número da dose informado for superior ao tamanho da lista Doses, uma mensagem de erro deve ser exibida sinalizando que aquela dose ainda não foi ministrada para aquele cidadão. 
+atualizaVacina:: CPF -> TipoDose -> Vacina -> Vacinados -> Vacinados
+atualizaVacina myCPF myTipoDose myVacina myVacinados 
+    | not (checkCPFVacinados myCPF myVacinados) = error "Cidadao NAO existente no banco de vacinados"
+    |((getDosesTomadas myCPF myVacinados) == 1) = error "cidadao so tomou UMA dose"
+    |otherwise = comeco ++ dadoAtualizado++ fim
+        where 
+        position = (findPosVacinado myCPF myVacinados)
+        comeco = take (position - 1) myVacinados
+        fim = drop position myVacinados 
+        dadoAtualizado 
+            | myTipoDose == 1 = [(cpf, [(myVacina, data1), (vacina2, data2)]) | (cpf, [(vacina1, data1), (vacina2, data2)]) <- myVacinados, cpf == myCPF]
+            
+            
+            | otherwise = [(cpf, [(vacina1, data1), (myVacina, data2)]) | (cpf, [(vacina1, data1), (myVacina, data2)]) <- myVacinados, cpf == myCPF]            
+        
 
 
-posicionarVacinadosLista :: Vacinados -> [(Int, Vacinado)]
-posicionarVacinadosLista myVacinados = zip posicioes myVacinados 
-    where posicioes = [1..(length myVacinados)]
 
-findPosVacinado :: CPF -> Vacinados -> Int
-findPosVacinado myCPF myVacinados 
-    | posicao == [] = 0
-    | otherwise = head posicao
-    where posicao = [position | (position, vacinado) <- (posicionarVacinadosLista myVacinados), (fst vacinado) == myCPF]
 
 
 --GETS e outras funçoes auxiliares
@@ -175,9 +190,12 @@ getDataNasc (_, _, _, myNasci, _, _, _, _, _) = myNasci
 --Se a data de nascimento estiver antes(ser menor) do dia 27 e do mes 09, a pessoa ja fez aniversario, se não, ela ainda é um ano mais jovem
 getIdade :: DataNasc -> Int
 getIdade myNasci 
-                | (first myNasci) <= 27 && (second myNasci) <= 9 = 2021 - (third myNasci)
-                | otherwise  = 2021 - (third myNasci) - 1
-
+                | myDia <= 27 || myMes <= 9 = 2021 - myAno --dia menor que dia 27, e mes menor que mes 9, faz um calculo normal de idade
+                | otherwise  = 2021 - myAno - 1
+                where
+                    myDia = (first myNasci)
+                    myMes = (second myNasci)
+                    myAno = (third myNasci)
 ----Para cadastrar um novo cidadão, inicialmente é checado se o CPF já existe ou não no sistema com a função 
 checkCPFSUS :: CPF -> CadastroSUS -> Bool
 checkCPFSUS myCPF myDataBase = or [myCPF == cpfDataBase| (cpfDataBase, _, _, _, _, _, _, _, _) <- myDataBase] --Se pelo menos um for verdadeiro na lista, já é o bastante, por isso a funcao "or"
@@ -195,8 +213,32 @@ posicionarCidadaoLista myDataBase = zip posicoes myDataBase
 findPosCidadao :: CPF -> CadastroSUS -> Int
 findPosCidadao myCPF myDataBase
     |posicao == [] = 0
-    |otherwise = head posicao
+    |otherwise =  posicao
     where posicao = [ position | (position, cidadao) <- (posicionarCidadaoLista myDataBase), (getCPF cidadao)  == myCPF]
+
+----Atribuir um valor(indixe) para cada cidadao que foi vacinado no "banco de dados" que tem os usuarios vacinados
+posicionarVacinadosLista :: Vacinados -> [(Int, Vacinado)]
+posicionarVacinadosLista myVacinados = zip posicioes myVacinados 
+    where posicioes = [1..(length myVacinados)]
+
+--Encontrar a posicao do cidadao vacinado com base no seu CPF
+findPosVacinado :: CPF -> Vacinados -> Int
+findPosVacinado myCPF myVacinados 
+    | posicao == [] = 0
+    | otherwise = head posicao
+    where posicao = [position | (position, vacinado) <- (posicionarVacinadosLista myVacinados), (fst vacinado) == myCPF]
+
+--Verificar se data de aplicacao da segunda dose vem depois da segunda
+dataSeguDoseValida :: CPF -> Data -> Vacinados -> Bool
+dataSeguDoseValida myCPF myDateVacina myVacinados = not (null [dataNova | (cpf, [(vacina, dataNova)]) <- myVacinados, myCPF == cpf, dataDepois myDateVacina dataNova])
+
+--Verificar se uma data venho depois da outra
+dataDepois :: Data -> Data -> Bool
+dataDepois data1 data2 
+    | (third data1) > (third data2) = True --Primeiro compara os anos
+    | (third data1 == third data2) && (second data1 > second data2) = True --Verifica os meses com data de mesmo ano
+    | (third data1 == third data2) && (second data1 == second data2) && (first data1 > first data2) = True --Verifica os dias e os meses iguais,  
+    | otherwise = False 
 
 --Descobrir a posicao de um tripla
 first :: (a, b, c) -> a
