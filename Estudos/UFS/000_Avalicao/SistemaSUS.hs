@@ -178,9 +178,10 @@ atualizaVacina myCPF myTipoDose myVacina myVacinados
         
 
 -- item j) Quantidade de pessoas no município/estado vacinadas com uma dada dose. Para isso, para cada cidadão no cadastro de vacinados, é verificado se ele já tomou a dose informada no argumento da função. Em caso afirmativo, verifica-se se ele pertence ao município/estado informado, acessando-se o cadastro do SUS, e em caso afirmativo, o cidadão é considerado para o cômputo. 
---quantidadeDoseMun :: Vacinados -> TipoDose -> Municipio -> CadastroSUS -> Quantidade 
---quantidadeDoseMun myVacinados myTipoDose myMunicipio myDataBase = length qtdDoseMun
-  --  where qtdDoseMun = [qtd | (cpf, [])]
+quantidadeDoseMun :: Vacinados -> TipoDose -> Municipio -> CadastroSUS -> Quantidade 
+quantidadeDoseMun myVacinados myTipoDose myMunicipio myDataBase = length qtdDoseMun
+      | myTipoDose == 1 = length [qtd | (cpf, [])]
+    
 
 --quantidadeDoseEst :: Vacinados -> TipoDose -> Estado -> CadastroSUS -> Quantidade
 
