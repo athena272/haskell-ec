@@ -227,6 +227,12 @@ quantidadeEstVacDose myVacinados myState myVacina myTipoDose myDataBase
     | myTipoDose == 2 = length [(vacina2, data2) | (cpf, [(vacina1, data1), (vacina2, data2)]) <- myVacinados, myState == (getEstado (getCidadao cpf myDataBase)), myVacina == vacina2]
     | otherwise = error "Informacoes relevantes ou suficientes NAO foram encontradas"
 
+-- item m) Quantidade de pessoas atrasadas na segunda dose no município/estado, dentre os cidadãos que pertencem ao cadastro de vacinados. Considere que a segunda dose da  CoronaVac deve ser aplicada 21 dias após a primeira dose e a da Pfizer e AstraZeneca 90 dias após a primeira dose.
+quantidadeMunAtrasados :: Vacinados -> CadastroSUS -> Municipio -> Quantidade
+quantidadeMunAtrasados myVacinados myDataBase myMunicipio 
+
+quantidadeEstAtrasados :: Vacinados -> CadastroSUS -> Estado ->
+ Quantidade
 
 
 
