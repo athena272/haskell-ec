@@ -289,7 +289,7 @@ findPosVacinado myCPF myVacinados
 
 --Verificar se data de aplicacao da segunda dose vem depois da segunda
 dataSeguDoseValida :: CPF -> Data -> Vacinados -> Bool
-dataSeguDoseValida myCPF myDateVacina myVacinados = not (null [dataNova | (cpf, [(vacina, dataNova)]) <- myVacinados, myCPF == cpf, dataDepois myDateVacina dataNova])
+dataSeguDoseValida myCPF myDateVacina myVacinados = not ([] ==  [dataNova | (cpf, [(vacina, dataNova)]) <- myVacinados, myCPF == cpf, dataDepois myDateVacina dataNova])
 
 --Verificar se uma data venho depois da outra
 dataDepois :: Data -> Data -> Bool
@@ -325,12 +325,12 @@ jaTomouPriDose myCPF myVacinados = not ([] == [doses | (cpf, doses) <- myVacinad
 --Verificar se a idade para vacina eh adequada
 ---Primeiro ver se a lista veio vazio, se nao veio(False), eh porque a pessoa esta apata a receber a dose, entao inverto o bool (True)
 idadeAdequada :: CPF -> CadastroSUS -> FaixaIdade -> Bool
-idadeAdequada myCPF myDataBase faixasIdade = not (null [cidadao | cidadao <- myDataBase, (getCPF cidadao) == myCPF, (getIdade (getDataNasc cidadao)) >= (fst faixasIdade), (getIdade (getDataNasc cidadao)) <= (snd faixasIdade)])
+idadeAdequada myCPF myDataBase faixasIdade = not ([] ==  [cidadao | cidadao <- myDataBase, (getCPF cidadao) == myCPF, (getIdade (getDataNasc cidadao)) >= (fst faixasIdade), (getIdade (getDataNasc cidadao)) <= (snd faixasIdade)])
 
 --Verificar se o municipio da vacinacao esta certo
 -----Primeiro ver se a lista veio vazio, se nao veio(False), eh porque a pessoa esta no Municipio e esta apata a receber a dose, entao inverto o bool (True)
 checkMunicipioVacinacao :: CPF -> CadastroSUS -> Municipio -> Bool
-checkMunicipioVacinacao myCPF myDataBase myMunicipio = not (null [cidadao | cidadao <- myDataBase, (getCPF cidadao) == myCPF, (getMunicipio cidadao) == myMunicipio])
+checkMunicipioVacinacao myCPF myDataBase myMunicipio = not ([] ==  [cidadao | cidadao <- myDataBase, (getCPF cidadao) == myCPF, (getMunicipio cidadao) == myMunicipio])
 
 --Verificar se usuario ja tomou primeiro dose
 --Primeiro pega a lista que possuia como unico elemento(por isso o head, já que é so um elemento) uma lista que tem tuplas de vacinas e datas
