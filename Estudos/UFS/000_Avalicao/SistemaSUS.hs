@@ -213,7 +213,9 @@ quantidadeMunVacDose myVacinados myMunicipio myVacina myTipoDose myDataBase
     | otherwise = error "Informacoes relevantes ou suficientes NAO foram encontradas" 
 quantidadeEstVacDose :: Vacinados -> Estado -> Vacina -> TipoDose -> CadastroSUS -> Quantidade
 quantidadeEstVacDose myVacinados myState myVacina myTipoDose myDataBase    
-    | myTipoDose == 1 = length [(vacina1, data1) | (cpf, [(vacina1, data1), _]) <- myVacinados, myState == (getEstado (getCidadao cpf myDataBase)), myVacina == vacina1] 
+    | myTipoDose == 1 
+        | (getDosesTomadas (getCPF (getCidadao' myDataBase) )
+        | otherwise = length [(vacina1, data1) | (cpf, [(vacina1, data1)]) <- myVacinados, myState == (getEstado (getCidadao cpf myDataBase)), myVacina == vacina1] 
     | myTipoDose == 2 = length [(vacina2, data2) | (cpf, [(vacina1, data1), (vacina2, data2)]) <- myVacinados, myState == (getEstado (getCidadao cpf myDataBase)), myVacina == vacina2]
     | otherwise = error "Informacoes relevantes ou suficientes NAO foram encontradas"
 
@@ -226,6 +228,9 @@ getCidadao myCPF myDataBase
     | cidadaoEncontrado == [] = error "Cidadao nao encontrado"
     | otherwise = head cidadaoEncontrado 
     where cidadaoEncontrado = [cidadao | cidadao <- myDataBase, myCPF == (getCPF cidadao)]
+
+getCidadao' :: CadastroSUS -> Cidadao
+getCidadao' myDataBase = [cidadao | cidadao <- myDataBase]
 
 getCPF :: Cidadao -> CPF
 getCPF (myCPF, _, _, _, _, _, _, _, _) = myCPF 
