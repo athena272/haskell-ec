@@ -228,10 +228,11 @@ quantidadeEstVacDose myVacinados myState myVacina myTipoDose myDataBase
     | otherwise = error "Informacoes relevantes ou suficientes NAO foram encontradas"
 
 -- item m) Quantidade de pessoas atrasadas na segunda dose no município/estado, dentre os cidadãos que pertencem ao cadastro de vacinados. Considere que a segunda dose da  CoronaVac deve ser aplicada 21 dias após a primeira dose e a da Pfizer e AstraZeneca 90 dias após a primeira dose.
---quantidadeMunAtrasados :: Vacinados -> CadastroSUS -> Municipio -> Quantidade
---quantidadeMunAtrasados myVacinados myDataBase myMunicipio 
+quantidadeMunAtrasados :: Vacinados -> CadastroSUS -> Municipio -> Quantidade
+quantidadeMunAtrasados myVacinados myDataBase myMunicipio 
 
---quantidadeEstAtrasados :: Vacinados -> CadastroSUS -> Estado ->Quantidade
+quantidadeEstAtrasados :: Vacinados -> CadastroSUS -> Estado ->
+ Quantidade
 
 
 
@@ -272,13 +273,10 @@ getIdade myNasci
                     myAno = (third myNasci)
 ----Para cadastrar um novo cidadão, inicialmente é checado se o CPF já existe ou não no sistema com a função 
 checkCPFSUS :: CPF -> CadastroSUS -> Bool
+,
 checkCPFSUS myCPF myDataBase = or [myCPF == cpfDataBase| (cpfDataBase, _, _, _, _, _, _, _, _) <- myDataBase] --Se pelo menos um for verdadeiro na lista, já é o bastante, por isso a funcao "or"
 
-checkCPF :: CPF -> CadastroSUS -> Bool
-checkCPF cpfInformado cadastro = or [cpfInformado == (getCPF cidadao) | cidadao <- cadastro]
-
 ----Para cadastrar um novo cidadao para vacinar, inicialmente é checado se o CPF já existe ou não no sistema com a função 
-
 
 checkCPFVacinados :: CPF -> Vacinados -> Bool
 checkCPFVacinados myCPF myVacinados = or [myCPF == cpfMyVacinados | (cpfMyVacinados, _) <- myVacinados]
