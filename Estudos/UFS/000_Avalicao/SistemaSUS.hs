@@ -190,13 +190,22 @@ quantidadeDoseEst myVacinados myTipoDose myState myDataBase
       | myTipoDose == 2 = length [(vacina2, data2) | (cpf, [(vacina1, data1), (vacina2, data2)]) <- myVacinados, myState == (getEstado (getCidadao cpf myDataBase))]
       | otherwise = error "Informacoes relevantes ou suficientes NAO foram encontradas"
 
+-- item k) Quantidade de pessoas no município/estado vacinadas por faixa etária e por dose. Procede-se como nos itens anteriores, mas agora se checa, além da dose e do município, a faixa de idade.
+quantidadeMunIdDose :: Vacinados -> Municipio -> FaixaIdade -> TipoDose -> CadastroSUS -> Quantidade
+quantidadeMunIdDose myVacinados myMunicipio (inicial, final) myTipoDose myDataBase 
+    | myTipoDose == 1 = length [(vacina1, data1) | (cpf, [(vacina1, data1), _]) <- myVacinados, myMunicipio == (getMunicipio (getCidadao cpf myDataBase))] 
+    | myTipoDose == 2 = length [(vacina2, data2) | (cpf, [(vacina1, data1), (vacina2, data2)]) <- myVacinados, myMunicipio == (getMunicipio (getCidadao cpf myDataBase))]
 
+
+--quantidadeEstIdDose :: Vacinados -> Estado -> FaixaIdade -> TipoDose -> CadastroSUS -> Quantidade
+
+--GETS e outras funçoes auxiliares
 getCidadao :: CPF -> CadastroSUS -> Cidadao
 getCidadao myCPF myDataBase 
     | cidadaoEncontrado == [] = error "Cidadao nao encontrado"
     | otherwise = head cidadaoEncontrado 
     where cidadaoEncontrado = [cidadao | cidadao <- myDataBase, myCPF == (getCPF cidadao)]
---GETS e outras funçoes auxiliares
+
 getCPF :: Cidadao -> CPF
 getCPF (myCPF, _, _, _, _, _, _, _, _) = myCPF 
 
