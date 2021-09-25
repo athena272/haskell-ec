@@ -198,6 +198,11 @@ quantidadeMunIdDose myVacinados myMunicipio (inicial, final) myTipoDose myDataBa
     | myTipoDose == 1 = length [(vacina1, data1) | (cpf, [(vacina1, data1), _]) <- myVacinados, myMunicipio == (getMunicipio (getCidadao cpf myDataBase)), inicial <= (getIdade (getDataNasc (getCidadao cpf myDataBase))), final >= (getIdade (getDataNasc (getCidadao cpf myDataBase)))] 
     | myTipoDose == 2 = length [(vacina2, data2) | (cpf, [(vacina1, data1), (vacina2, data2)]) <- myVacinados, myMunicipio == (getMunicipio (getCidadao cpf myDataBase)), inicial <= (getIdade (getDataNasc (getCidadao cpf myDataBase))), final >= (getIdade (getDataNasc (getCidadao cpf myDataBase)))]
 
+quantidadeEstIdDose :: Vacinados -> Municipio -> FaixaIdade -> TipoDose -> CadastroSUS -> Quantidade
+quantidadeEstIdDose myVacinados myState (inicial, final) myTipoDose myDataBase 
+    | myTipoDose == 1 = length [(vacina1, data1) | (cpf, [(vacina1, data1), _]) <- myVacinados, myState == (getEstado (getCidadao cpf myDataBase)), inicial <= (getIdade (getDataNasc (getCidadao cpf myDataBase))), final >= (getIdade (getDataNasc (getCidadao cpf myDataBase)))] 
+    | myTipoDose == 2 = length [(vacina2, data2) | (cpf, [(vacina1, data1), (vacina2, data2)]) <- myVacinados, myState == (getEstado (getCidadao cpf myDataBase)), inicial <= (getIdade (getDataNasc (getCidadao cpf myDataBase))), final >= (getIdade (getDataNasc (getCidadao cpf myDataBase)))]
+
 
 --quantidadeEstIdDose :: Vacinados -> Estado -> FaixaIdade -> TipoDose -> CadastroSUS -> Quantidade
 
