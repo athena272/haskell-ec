@@ -197,11 +197,22 @@ quantidadeMunIdDose :: Vacinados -> Municipio -> FaixaIdade -> TipoDose -> Cadas
 quantidadeMunIdDose myVacinados myMunicipio (inicial, final) myTipoDose myDataBase 
     | myTipoDose == 1 = length [(vacina1, data1) | (cpf, [(vacina1, data1), _]) <- myVacinados, myMunicipio == (getMunicipio (getCidadao cpf myDataBase)), inicial <= (getIdade (getDataNasc (getCidadao cpf myDataBase))), final >= (getIdade (getDataNasc (getCidadao cpf myDataBase)))] 
     | myTipoDose == 2 = length [(vacina2, data2) | (cpf, [(vacina1, data1), (vacina2, data2)]) <- myVacinados, myMunicipio == (getMunicipio (getCidadao cpf myDataBase)), inicial <= (getIdade (getDataNasc (getCidadao cpf myDataBase))), final >= (getIdade (getDataNasc (getCidadao cpf myDataBase)))]
+    | otherwise = error "Informacoes relevantes ou suficientes NAO foram encontradas"
 
 quantidadeEstIdDose :: Vacinados -> Municipio -> FaixaIdade -> TipoDose -> CadastroSUS -> Quantidade
 quantidadeEstIdDose myVacinados myState (inicial, final) myTipoDose myDataBase 
     | myTipoDose == 1 = length [(vacina1, data1) | (cpf, [(vacina1, data1), _]) <- myVacinados, myState == (getEstado (getCidadao cpf myDataBase)), inicial <= (getIdade (getDataNasc (getCidadao cpf myDataBase))), final >= (getIdade (getDataNasc (getCidadao cpf myDataBase)))] 
     | myTipoDose == 2 = length [(vacina2, data2) | (cpf, [(vacina1, data1), (vacina2, data2)]) <- myVacinados, myState == (getEstado (getCidadao cpf myDataBase)), inicial <= (getIdade (getDataNasc (getCidadao cpf myDataBase))), final >= (getIdade (getDataNasc (getCidadao cpf myDataBase)))]
+    | otherwise = error "Informacoes relevantes ou suficientes NAO foram encontradas"
+
+-- item l)Quantidade de pessoas no município/estado vacinadas por tipo de vacina e por dose
+quantidadeMunVacDose :: Vacinados -> Municipio -> Vacina -> TipoDose -> CadastroSUS -> Quantidade
+quantidadeMunVacDose myVacinados myMunicipio myVacina myTipoDose myDataBase
+    | myTipoDose == 1 = length [(vacina1, data1) | (cpf, [(vacina1, data1), _]) <- myVacinados, myMunicipio == (getMunicipio (getCidadao cpf myDataBase)), myVacina == vacina1]
+    | myTipoDose == 2 = length [(vacina2, data2) | (cpf, [(vacina1, data1), (vacina2, data2)]) <- myVacinados, myMunicipio == (getMunicipio (getCidadao cpf myDataBase)), myVacina == vacina2]
+    | otherwise = error "Informacoes relevantes ou suficientes NAO foram encontradas" 
+quantidadeEstVacDose :: Vacinados -> Estado -> Vacina -> TipoDose -> CadastroSUS -> Quantidade
+    |
 
 
 --quantidadeEstIdDose :: Vacinados -> Estado -> FaixaIdade -> TipoDose -> CadastroSUS -> Quantidade
