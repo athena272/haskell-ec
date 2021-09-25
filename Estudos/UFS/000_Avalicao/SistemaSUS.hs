@@ -159,6 +159,8 @@ aplicaSeguDose myCPF myDateVacina myVacinados
 atualizaVacina:: CPF -> TipoDose -> Vacina -> Vacinados -> Vacinados
 atualizaVacina myCPF myTipoDose myVacina myVacinados 
     | not (checkCPFVacinados myCPF myVacinados) = error "Cidadao NAO existente no banco de vacinados"
+    --Caso nao tenha aplica nenhuma dose
+    | ((getDosesTomadas myCPF myVacinados) < 1) = error "Cidadao NAO TOMOU NENHUMA vacina ainda"
     --Caso so tenha tomado uma dose, atualiza ela
     |((getDosesTomadas myCPF myVacinados) == 1) = 
         comeco ++ dadoAtualizadoUmaDose ++ fim
