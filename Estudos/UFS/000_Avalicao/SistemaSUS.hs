@@ -195,7 +195,7 @@ quantidadeDoseEst myVacinados myTipoDose myState myDataBase
 -- item k) Quantidade de pessoas no município/estado vacinadas por faixa etária e por dose. Procede-se como nos itens anteriores, mas agora se checa, além da dose e do município, a faixa de idade.
 quantidadeMunIdDose :: Vacinados -> Municipio -> FaixaIdade -> TipoDose -> CadastroSUS -> Quantidade
 quantidadeMunIdDose myVacinados myMunicipio (inicial, final) myTipoDose myDataBase 
-    | myTipoDose == 1 = length [(vacina1, data1) | (cpf, [(vacina1, data1), _]) <- myVacinados, myMunicipio == (getMunicipio (getCidadao cpf myDataBase))] 
+    | myTipoDose == 1 = length [(vacina1, data1) | (cpf, [(vacina1, data1), _]) <- myVacinados, myMunicipio == (getMunicipio (getCidadao cpf myDataBase)), inicial <= , final >= f'] 
     | myTipoDose == 2 = length [(vacina2, data2) | (cpf, [(vacina1, data1), (vacina2, data2)]) <- myVacinados, myMunicipio == (getMunicipio (getCidadao cpf myDataBase))]
 
 
