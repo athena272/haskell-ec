@@ -203,3 +203,17 @@ idadeAdequada myCPF myDataBase dataAtual faixasIdade = not ([] ==  [humanoSUS | 
 -----Primeiro ver se a lista veio vazio, se nao veio(False), eh porque a pessoa esta no Municipio e esta apata a receber a dose, entao inverto o bool (True)
 checkMunicipioVacinacao :: CPF -> CadastroSUS -> Municipio -> Bool
 checkMunicipioVacinacao myCPF myDataBase myMunicipio = not ([] ==  [cidadao | cidadao <- myDataBase, (getCPF cidadao) == myCPF, (getMunicipio cidadao) == myMunicipio])
+
+--item h)Para realizar a segunda dose, faz-se necessário checar se o CPF consta do cadastro de vacinados. Se não estiver, usando error, exibe uma mensagem de erro reportando o problema. Se estiver, é verificado se o cidadão já tomou a segunda dose. Se já  tomou, exibe uma mensagem de erro. Caso contrário, checa se a data informada é maior que a da primeira dose. Se não for, exibe uma mensagem de erro. Se for, o cadastro de vacinados é atualizado e um novo cadastro é gerado, inserindo-se a tupla Dose no final da lista Doses, para um dado cidadão. Os dados dos demais cidadãos permanecem inalterados.    
+aplicaSeguDose :: CPF -> Data -> Vacinados -> Vacinados
+aplicaSeguDose myCPF myDateVacina myVacinados
+    | not (checkCPFVacinados myCPF myVacinados) = error "Cidadao NAO existente no banco de vacinados"
+    | ((getDosesTomadas myCPF myVacinados) == 2) = error "cidadao JAH tomou DUAS doses"
+    | ((getDosesTomadas myCPF myVacinados) > 2) = error "Como tu tomou mais de duas vacinas?"
+    | not (dataSeguDoseValida myCPF myDateVacina myVacinados) = error "Datas nao fazem sentidos" 
+    | otherwise = comeco ++ dadoNovaVacina ++ fim
+    where 
+        position = (findPosVacinado myCPF myVacinados)
+        comeco = take (position - 1) myVacinados
+        fim = drop position myVacinados 
+        dadoNovaVacina = [(cpf, [(vacina, novaData), (vacina, myDateVacina)]) | (cpf, [(vacina, novaData)]) <- myVacinados, myCPF == cpf]
