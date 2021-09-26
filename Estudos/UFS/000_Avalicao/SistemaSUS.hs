@@ -23,7 +23,8 @@ type Cidadao = (CPF, Nome, Genero, DataNasc, Endereco, Municipio, Estado, Telefo
 bancoDeCadastros :: CadastroSUS
 bancoDeCadastros = [(26716347665, "Paulo Souza", 'M', (11,10,1996),"Rua A, 202","Muribeca", "SE", "999997000", "psouza@gmail.com"),(87717347115, "Ana Reis",'F', (5,4,1970), "Rua B, 304","Aracaju", "SE", "999826004", "areis@gmail.com"),(99999999999, "Guilherme Alves", 'M', (02,07,2002),"Rua C, 405","Salgado", "SE", "999997044", "guilherme@gmail.com"), (88888888888, "Esmeralda Oliveira", 'F', (09,09,2003),"Rua D, 506","Lagarto", "SE", "999996025", "esmeralda@gmail.com"), (10101010101, "Fernanda Menezes", 'F', (01,04,2000),"Rua E, 506","Lagarto", "SE", "999996025", "esmeralda@gmail.com")]
 
--- item a) Cadastramento de um cidadão no sistema.  Para cadastrar um novo cidadão, inicialmente é checado se o CPF já existe ou não no sistema com a função 
+-- item a) Cadastramento de um cidadão no sistema. 
+--Para cadastrar um novo cidadão, inicialmente é checado se o CPF já existe ou não no sistema com a função 
 addCadastroSUS :: Cidadao -> CadastroSUS -> CadastroSUS
 addCadastroSUS myCidadao myDataBase
     | checkCPFSUS (getCPF myCidadao) myDataBase = error "Cidadao  jah existente nesse banco"
@@ -73,7 +74,7 @@ cidadaosPorMunicipioIdade myDataBase myMunicipio dataAtual faixasIdade = length 
 
 --Retorna a quantidade de cidadaoes por Estado
 cidadaosPorEstadoIdade :: CadastroSUS -> Estado -> FaixaIdade -> Quantidade
-cidadaosPorEstadoIdade myDataBase myState faixasIdade = length [humanoSUS | humanoSUS <- myDataBase, myState == (getState humanoSUS), (getIdade humanoSUS dataAtual) >= (fst faixasIdade), (getIdade humanoSUS dataAtual) <= (snd faixasIdade)]
+cidadaosPorEstadoIdade myDataBase myState faixasIdade = length [humanoSUS | humanoSUS <- myDataBase, myState == (getState humanoSUS), (getIdade humanoSUS dataAtual) >= (fst faixasIdade), (getIdade humanoSUS dataAtaual) <= (snd faixasIdade)]
 
 --item e) Pode ser interessante também gerar uma lista da quantidade de cidadãos por faixas de idade para um dado município ou estado. As faixas de idade inicialmente previstas. O gestor pode escolher todas ou algumas destas faixas para gerar a lista. O gestor pode também, a depender das características de seu município, escolher outras faixas, já que a faixa é um parâmetro da função. Caso o gestor decida, por exemplo, coletar dados para uma idade específica, digamos 25 anos, ele deve informar a faixa (25, 25).
 
@@ -249,12 +250,6 @@ getMunicipio (_, _, _, _, _, myMunicipio, _, _, _) = myMunicipio
 
 getEstado :: Cidadao -> Estado
 getEstado (_, _, _, _, _, _, myState, _, _) = myState
-
-getEndereco :: Cidadao -> Endereco
-getEndereco (_, _, _, _, myEndereco, _, _, _, _) = myEndereco
-
-getTelefone :: Cidadao -> Telefone
-getTelefone (_, _, _, _, _, _, _, myTelefone, _) = myTelefone
 
 getDataNasc :: Cidadao -> DataNasc
 getDataNasc (_, _, _, myNasci, _, _, _, _, _) = myNasci 
