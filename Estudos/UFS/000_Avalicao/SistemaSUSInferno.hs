@@ -1,4 +1,4 @@
-module SistemaSUS where
+module SistemaSUSInferno where
 
 --Tipo mais externo, para cadastro
 type CadastroSUS = [Cidadao]
@@ -92,19 +92,19 @@ cidadaosPorMunicipioIdade myDataBase myMunicipio dataAtual faixasIdade = length 
 
 --Retorna a quantidade de cidadaoes por Estado
 cidadaosPorEstadoIdade :: CadastroSUS -> Estado -> Data -> FaixaIdade -> Quantidade
-cidadaosPorEstadoIdade myDataBase myState dataAtual faixasIdade = length [humanoSUS | humanoSUS <- myDataBase, myState == (getState humanoSUS), (getIdade humanoSUS dataAtual) >= (fst faixasIdade), (getIdade humanoSUS dataAtaual) <= (snd faixasIdade)]
+cidadaosPorEstadoIdade myDataBase myState dataAtual faixasIdade = length [humanoSUS | humanoSUS <- myDataBase, myState == (getState humanoSUS), (getIdade humanoSUS dataAtual) >= (fst faixasIdade), (getIdade humanoSUS dataAtual) <= (snd faixasIdade)]
 
 --Gets e Sets auxiliares
 getMunicipio :: Cidadao -> Municipio
 getMunicipio (_, _, _, _, _, myMunicipio, _, _, _) = myMunicipio
 
-getEstado :: Cidadao -> Estado
-getEstado (_, _, _, _, _, _, myState, _, _) = myState
+getState :: Cidadao -> Estado
+getState (_, _, _, _, _, _, myState, _, _) = myState
 
 getDataNasc :: Cidadao -> DataNasc
 getDataNasc (_, _, _, myNasci, _, _, _, _, _) = myNasci 
 
---Subtrair 2021 pela data de Nascimento
+--Subtrair DataAtual pela Data de Nascimento
 --Se a data de nascimento estiver antes(ser menor) do dia 27 e do mes 09, a pessoa ja fez aniversario, se não, ela ainda é um ano mais jovem
 getIdade :: Cidadao -> Data ->Int
 getIdade cidadao dataAtual 
