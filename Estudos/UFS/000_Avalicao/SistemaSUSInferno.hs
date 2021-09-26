@@ -282,7 +282,7 @@ atualizaVacina myCPF myTipoDose myVacina myVacinados
         position = (findPosVacinado myCPF myVacinados)
         comeco = take (position - 1) myVacinados
         fim = drop position myVacinados 
-        --Caso so tenha tomado uma dose
+        --Caso so tenha tomado uma dose, atualiza essa uma dose
         dadoAtualizadoUmaDose = [(cpf, [(myVacina, data0)]) | (cpf, [(vacina0, data0)]) <- myVacinados, cpf == myCPF]
-        --Caso tenha sido duas doses, escolhe uma delas
+        --Caso tenha sido duas doses, atualiza as duas doses
         dadoAtualizadoDuasDozes  = [(cpf, [(myVacina, data1), (myVacina, data2)]) | (cpf, [(vacina1, data1), (vacina2, data2)]) <- myVacinados, cpf == myCPF]   
