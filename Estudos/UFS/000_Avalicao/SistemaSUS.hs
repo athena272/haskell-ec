@@ -173,7 +173,10 @@ atualizaVacina myCPF myTipoDose myVacina myVacinados
         --Caso so tenha tomado uma dose
         dadoAtualizadoUmaDose = [(cpf, [(myVacina, data0)]) | (cpf, [(vacina0, data0)]) <- myVacinados, cpf == myCPF]
         --Caso tenha sido duas doses, escolhe uma delas
-        dadoAtualizadoDuasDozes = [(cpf, [(vacina1, data1), (myVacina, data2)]) | (cpf, [(vacina1, data1), (myVacina, data2)]) <- myVacinados, cpf == myCPF]            
+        dadoAtualizadoDuasDozes 
+            | myTipoDose == 1 = [(cpf, [(myVacina, data1), (vacina2, data2)]) | (cpf, [(vacina1, data1), (vacina2, data2)]) <- myVacinados, cpf == myCPF]
+
+            | otherwise = [(cpf, [(vacina1, data1), (myVacina, data2)]) | (cpf, [(vacina1, data1), (myVacina, data2)]) <- myVacinados, cpf == myCPF]            
         
 
 -- item j) Quantidade de pessoas no município/estado vacinadas com uma dada dose. Para isso, para cada cidadão no cadastro de vacinados, é verificado se ele já tomou a dose informada no argumento da função. Em caso afirmativo, verifica-se se ele pertence ao município/estado informado, acessando-se o cadastro do SUS, e em caso afirmativo, o cidadão é considerado para o cômputo. 

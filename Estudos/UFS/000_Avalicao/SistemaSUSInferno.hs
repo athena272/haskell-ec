@@ -248,8 +248,6 @@ findPosVacinado myCPF myVacinados
 getVacinaData :: CPF -> Vacinados -> Doses
 getVacinaData myCPF myVacinados =  head [dosesTomadas | (cpf, dosesTomadas) <- myVacinados, myCPF == cpf]
 
-
-
 --Verificar se uma data venho depois da outra
 dataDepois :: Data -> Data -> Bool
 dataDepois data1 data2 
@@ -268,3 +266,23 @@ second (_, b, _) = b
 third :: (a, b, c) -> c
 third (_, _, c) = c
 
+-- item i) Pode ser necessária alguma atualização no cadastro de vacinados. Por exemplo, pode ser necessário consertar o nome da vacina que foi informada incorretamente. Para isso, seria necessária a função abaixo onde o nome correto da vacina é informado, para um dado CPF, numa dada dose. Caso o CPF não conste do cadastro de vacinados, exibe uma mensagem de erro. Caso contrário, se o número da dose informado for superior ao tamanho da lista Doses, uma mensagem de erro deve ser exibida sinalizando que aquela dose ainda não foi ministrada para aquele cidadão. 
+atualizaVacina:: CPF -> TipoDose -> Vacina -> Vacinados -> Vacinados
+atualizaVacina myCPF myTipoDose myVacina myVacinados 
+    --Verificar se CPF existe no banco de Cadastros
+    | not (checkCPFVacinados myCPF myVacinados) = error "Cidadao NAO existente no banco de vacinados"
+    --Caso nao tenha aplica nenhuma dose
+    | ((getDosesTomadas myCPF myVacinados) < 1) = error "Cidadao NAO TOMOU NENHUMA vacina ainda"
+    --Caso so tenha tomado uma dose, atualiza ela
+    |((getDosesTomadas myCPF myVacinados) == 1) = 
+        comeco ++ dadoAtualizadoUmaDose ++ fim
+    --Caso tenha tomado as duas, escolhe uma das duas para atualizar
+    |otherwise = comeco ++ dadoAtualizadoDuasDozes ++ fim
+        where 
+        position = (findPosVacinado myCPF myVacinados)
+        comeco = take (position - 1) myVacinados
+        fim = drop position myVacinados 
+        --Caso so tenha tomado uma dose
+        dadoAtualizadoUmaDose = [(cpf, [(myVacina, data0)]) | (cpf, [(vacina0, data0)]) <- myVacinados, cpf == myCPF]
+        --Caso tenha sido duas doses, escolhe uma delas
+        dadoAtualizadoDuasDozes  = [(cpf, [(myVacina, data1), (myVacina, data2)]) | (cpf, [(vacina1, data1), (vacina2, data2)]) <- myVacinados, cpf == myCPF]   
