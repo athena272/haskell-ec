@@ -165,3 +165,41 @@ addBarraN palavra = palavra ++ "\n"
 --Use a questão anterior, para construir a função que dada uma lista de strings devolve uma única string  contendo a concatenação  das srings da lista fornecida, tal que estas strings estejam separadas por \n. Ex: se a entrada for [“gato”, “e”, “rato”] retornará “gato\ne\nrato\n”
 addListaBarraN :: [String] -> String
 addListaBarraN lista = concat [addBarraN palavra | palavra <- lista]
+
+----------------------VACINACAO PELO SUS
+type Vacinados = [Vacinado]
+--Cada item desse cadastro, Vacinado, é da forma
+type Vacina = String
+type TipoDose = Int
+type Dose = (Vacina, Data)
+type Doses = [Dose]
+type Vacinado = (CPF, Doses)
+
+bancoDeVacinados :: Vacinados --CPF, [(Vacina, Data)]
+bancoDeVacinados = [(26716347665, [("AstraZeneca", (02, 07, 2021)), ("AstraZeneca", (01, 08, 2021))]), (88888888888, [("Pfizer", (09, 09, 2021))]), (10101010101, [("CoronaVac", (01, 01, 2021)), ("CoronaVac", (01, 02, 2021))]),(87717347115, [("CoronaVac", (01, 01, 2021)), ("CoronaVac", (01, 02, 2021))]), (99999999999, [("Janssen", (01, 08, 2021)), ("Janssen", (01, 08, 2021))])]
+
+--item g)Para realizar esta aplicação, procede-se da forma descrita a seguir e algumas funções auxiliares são necessárias. Inicialmente é verificado se o cidadão já tomou uma dose de vacina. Em caso afirmativo, usando error, exibe uma mensagem de que a primeira dose já foi aplicada. Caso contrário, é verificado se o usuário está cadastrado no sistema SUS. Se não estiver cadastrado, exibe uma mensagem de erro sinalizando o problema. Se estiver, checa se a idade é consistente com a faixa de idade de vacinação corrente. Se não for, exibe uma mensagem de erro sinalizando o problema. Se for, checa se o município é coerente com o município do cadastro SUS. Se não for, exibe uma mensagem de erro para ele atualizar os dados do SUS, pois só é permitida vacinação para residentes no município. Se for, adiciona o usuário no cadastro de vacinados. No momento da adição serão informados os dados constantes em Vacinado. Quando a vacina for Janssen, a tupla Dose deve vir duplicada na lista Doses, sinalizando que o paciente foi completamente imunizada
+aplicaPrimDose:: CPF -> CadastroSUS -> FaixaIdade -> Municipio -> Data -> Vacina -> Data -> Vacinados -> Vacinados
+aplicaPrimDose myCPF myDataBase faixasIdade myMunicipio dataAtual myVacina myDateVacina myVacinados 
+    | not (checkCPFSUS myCPF myDataBase) = error "Cidadao NAO existente para esse banco"
+    | (jaTomouPriDose myCPF myVacinados) = error "cidadao JAH tomou a primeira dose"
+    | not (idadeAdequada myCPF myDataBase dataAtual faixasIdade) = error "Cidadao com idade nao compativel para essa faixa"
+    | not (checkMunicipioVacinacao myCPF myDataBase myMunicipio) = error "Cidado nao pertence ao municipio para a vacinacao"
+    | "Janssen" == myVacina = (:) (myCPF, [(myVacina, myDateVacina), (myVacina, myDateVacina)]) myVacinados
+    | otherwise = (:) (myCPF, [(myVacina, myDateVacina)]) myVacinados
+
+----------------------Funcoes Auxiliares
+--Verificar se usuario ja tomou primeiro dose
+--Primeiro ver se a lista veio vazio, se nao veio(False) eh porque a primeira dose foi tomada, entao inverto o bool para True athena
+jaTomouPriDose :: CPF -> Vacinados -> Bool
+jaTomouPriDose myCPF myVacinados = not ([] == [doses | (cpf, doses) <- myVacinados, myCPF == cpf])
+
+--Verificar se a idade para vacina eh adequada
+---Primeiro ver se a lista veio vazio, se nao veio(False), eh porque a pessoa esta apata a receber a dose, entao inverto o bool (True)
+idadeAdequada :: CPF -> CadastroSUS -> Data -> FaixaIdade -> Bool
+idadeAdequada myCPF myDataBase dataAtual faixasIdade = not ([] ==  [humanoSUS | humanoSUS <- myDataBase, (getCPF humanoSUS) == myCPF, (getIdade humanoSUS dataAtual) >= (fst faixasIdade), (getIdade humanoSUS dataAtual) <= (snd faixasIdade)])
+
+--Verificar se o municipio da vacinacao esta certo
+-----Primeiro ver se a lista veio vazio, se nao veio(False), eh porque a pessoa esta no Municipio e esta apata a receber a dose, entao inverto o bool (True)
+checkMunicipioVacinacao :: CPF -> CadastroSUS -> Municipio -> Bool
+checkMunicipioVacinacao myCPF myDataBase myMunicipio = not ([] ==  [cidadao | cidadao <- myDataBase, (getCPF cidadao) == myCPF, (getMunicipio cidadao) == myMunicipio])
