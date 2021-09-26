@@ -222,3 +222,42 @@ aplicaSeguDose myCPF myDateVacina myVacinados
 ----Para cadastrar um novo cidadao para vacinar, inicialmente é checado se o CPF já existe ou não no sistema com a função 
 checkCPFVacinados :: CPF -> Vacinados -> Bool
 checkCPFVacinados myCPF myVacinados = or [myCPF == cpfMyVacinados | (cpfMyVacinados, _) <- myVacinados]
+
+--Ai eu conto quantas vacinas tem nessa lista
+getDosesTomadas :: CPF -> Vacinados -> Int
+getDosesTomadas myCPF myVacinados = length (getVacinaData myCPF myVacinados)
+
+--Verificar se usuario ja tomou primeiro dose
+--Primeiro pega a lista que possuia como unico elemento(por isso o head, já que é so um elemento) uma lista que tem tuplas de vacinas e datas
+getVacinaData :: CPF -> Vacinados -> Doses
+getVacinaData myCPF myVacinados =  head [dosesTomadas | (cpf, dosesTomadas) <- myVacinados, myCPF == cpf]
+
+--Verificar se data de aplicacao da segunda dose vem depois da segunda
+dataSeguDoseValida :: CPF -> Data -> Vacinados -> Bool
+dataSeguDoseValida myCPF myDateVacina myVacinados = not ([] ==  [dataNova | (cpf, [(vacina, dataNova)]) <- myVacinados, myCPF == cpf, dataDepois myDateVacina dataNova])
+
+--Encontrar a posicao do cidadao com base no seu CPF
+findPosCidadao :: CPF -> CadastroSUS -> Int
+findPosCidadao myCPF myDataBase
+    |posicao == [] = 0
+    |otherwise =  head posicao
+    where posicao = [ position | (position, cidadao) <- (posicionarCidadaoLista myDataBase), (getCPF cidadao)  == myCPF]
+
+--Verificar se uma data venho depois da outra
+dataDepois :: Data -> Data -> Bool
+dataDepois data1 data2 
+    | (third data1) > (third data2) = True --Primeiro compara os anos
+    | (third data1 == third data2) && (second data1 > second data2) = True --Verifica os meses com data de mesmo ano
+    | (third data1 == third data2) && (second data1 == second data2) && (first data1 > first data2) = True --Verifica os dias e os meses iguais,  
+    | otherwise = False 
+
+--Descobrir a posicao de um tripla
+first :: (a, b, c) -> a
+first (a, _, _c) = a
+
+second :: (a, b, c) -> b
+second (_, b, _) = b
+
+third :: (a, b, c) -> c
+third (_, _, c) = c
+
