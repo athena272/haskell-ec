@@ -23,8 +23,7 @@ type Cidadao = (CPF, Nome, Genero, DataNasc, Endereco, Municipio, Estado, Telefo
 bancoDeCadastros :: CadastroSUS
 bancoDeCadastros = [(26716347665, "Paulo Souza", 'M', (11,10,1996),"Rua A, 202","Muribeca", "SE", "999997000", "psouza@gmail.com"),(87717347115, "Ana Reis",'F', (5,4,1970), "Rua B, 304","Aracaju", "SE", "999826004", "areis@gmail.com"),(99999999999, "Guilherme Alves", 'M', (02,07,2002),"Rua C, 405","Salgado", "SE", "999997044", "guilherme@gmail.com"), (88888888888, "Esmeralda Oliveira", 'F', (09,09,2003),"Rua D, 506","Lagarto", "SE", "999996025", "esmeralda@gmail.com"), (10101010101, "Fernanda Menezes", 'F', (01,04,2000),"Rua E, 506","Lagarto", "SE", "999996025", "esmeralda@gmail.com")]
 
--- item a) Cadastramento de um cidadão no sistema. 
---Para cadastrar um novo cidadão, inicialmente é checado se o CPF já existe ou não no sistema com a função 
+-- item a) Cadastramento de um cidadão no sistema.  Para cadastrar um novo cidadão, inicialmente é checado se o CPF já existe ou não no sistema com a função 
 addCadastroSUS :: Cidadao -> CadastroSUS -> CadastroSUS
 addCadastroSUS myCidadao myDataBase
     | checkCPFSUS (getCPF myCidadao) myDataBase = error "Cidadao  jah existente nesse banco"
@@ -53,7 +52,7 @@ atualizaTelefoneSUS myCPF myDataBase newTel
 removeSUS :: CPF -> CadastroSUS -> CadastroSUS
 removeSUS myCPF myDataBase 
     | not (checkCPFSUS myCPF myDataBase) = error "Esse cidadao morto nao existe nesse banco"  --verificar se o CPF da pessoa morta existe
-    | otherwise = [(cpf,nome,gender,nasc,adress,muni,state,tel,email) | (cpf,nome,gender,nasc,adress,muni,state,tel,email) <- myDataBase, myCPF /= cpf]
+    | otherwise = [humanoSUS | humanoSUS <- myDataBase, myCPF /= (getCPF humanoSUS)]
 
 --item d) Um gestor de saúde pode querer pesquisar algumas informações deste cadastro, como por exemplo, quantidade de cidadãos por município, por estado, ou ainda por município e por faixa de idade, ou por estado e por faixa de idade, para ter uma ideia de como planejar as faixas de vacinação. Assim, o sistema deve prever algumas funções de consulta:
 type IdadeInicial = Int
@@ -69,12 +68,12 @@ cidadaosPorEstado :: CadastroSUS -> Estado -> Quantidade
 cidadaosPorEstado myDataBase myState = length [(cpf,nome,gender,nasc,adress,muni,state,tel,email) | (cpf,nome,gender,nasc,adress,muni,state,tel,email) <- myDataBase, myState == state]
 
 --Retorna a quantidade de cidadaoes por Municipio e Idade
-cidadaosPorMunicipioIdade :: CadastroSUS -> Municipio-> FaixaIdade -> Quantidade
-cidadaosPorMunicipioIdade myDataBase myMunicipio faixasIdade = length [(cpf,nome,gender,nasc,adress,muni,state,tel,email) | (cpf,nome,gender,nasc,adress,muni,state,tel,email) <- myDataBase, myMunicipio == muni, (getIdade nasc) >= (fst faixasIdade), (getIdade nasc) <= (snd faixasIdade)]
+cidadaosPorMunicipioIdade :: CadastroSUS -> Municipio-> Data ->FaixaIdade -> Quantidade
+cidadaosPorMunicipioIdade myDataBase myMunicipio dataAtual faixasIdade = length [humanoSUS | humanoSUS <- myDataBase, myMunicipio == (getMunicipio humanoSUS), (getIdade humanoSUS dataAtual) >= (fst faixasIdade), (getIdade humanoSUS dataAtual) <= (snd faixasIdade)]
 
 --Retorna a quantidade de cidadaoes por Estado
 cidadaosPorEstadoIdade :: CadastroSUS -> Estado -> FaixaIdade -> Quantidade
-cidadaosPorEstadoIdade myDataBase myState faixasIdade = length [(cpf,nome,gender,nasc,adress,muni,state,tel,email) | (cpf,nome,gender,nasc,adress,muni,state,tel,email) <- myDataBase, myState == state, (getIdade nasc) >= (fst faixasIdade), (getIdade nasc) <= (snd faixasIdade)]
+cidadaosPorEstadoIdade myDataBase myState faixasIdade = length [humanoSUS | humanoSUS <- myDataBase, myState == (getState humanoSUS), (getIdade humanoSUS dataAtual) >= (fst faixasIdade), (getIdade humanoSUS dataAtual) <= (snd faixasIdade)]
 
 --item e) Pode ser interessante também gerar uma lista da quantidade de cidadãos por faixas de idade para um dado município ou estado. As faixas de idade inicialmente previstas. O gestor pode escolher todas ou algumas destas faixas para gerar a lista. O gestor pode também, a depender das características de seu município, escolher outras faixas, já que a faixa é um parâmetro da função. Caso o gestor decida, por exemplo, coletar dados para uma idade específica, digamos 25 anos, ele deve informar a faixa (25, 25).
 
@@ -262,14 +261,13 @@ getDataNasc (_, _, _, myNasci, _, _, _, _, _) = myNasci
 
 --Subtrair 2021 pela data de Nascimento
 --Se a data de nascimento estiver antes(ser menor) do dia 27 e do mes 09, a pessoa ja fez aniversario, se não, ela ainda é um ano mais jovem
-getIdade :: DataNasc -> Int
-getIdade myNasci 
-                | myDia <= 27 || myMes <= 9 = 2021 - myAno --dia menor que dia 27, e mes menor que mes 9, faz um calculo normal de idade
-                | otherwise  = 2021 - myAno - 1
+getIdade :: Cidadao -> Data ->Int
+getIdade cidadao dataAtual 
+                | myDia <= diaAtual || myMes <= mesAtual = anoAtual - myAno --dia menor que dia Atual, e mes menor que mes Atual, faz um calculo normal de idade
+                | otherwise  = anoAtual - myAno - 1
                 where
-                    myDia = (first myNasci)
-                    myMes = (second myNasci)
-                    myAno = (third myNasci)
+                    (myDia, myMes, myAno) = (getDataNasc cidadao)
+                    (diaAtual, mesAtual, anoAtual) = dataAtual
 ----Para cadastrar um novo cidadão, inicialmente é checado se o CPF já existe ou não no sistema com a função 
 checkCPFSUS :: CPF -> CadastroSUS -> Bool
 checkCPFSUS myCPF myDataBase = or [myCPF == cpfDataBase| (cpfDataBase, _, _, _, _, _, _, _, _) <- myDataBase] --Se pelo menos um for verdadeiro na lista, já é o bastante, por isso a funcao "or"
@@ -348,7 +346,6 @@ checkMunicipioVacinacao myCPF myDataBase myMunicipio = not ([] ==  [cidadao | ci
 
 --Verificar se usuario ja tomou primeiro dose
 --Primeiro pega a lista que possuia como unico elemento(por isso o head, já que é so um elemento) uma lista que tem tuplas de vacinas e datas
-
 getVacinaData :: CPF -> Vacinados -> Doses
 getVacinaData myCPF myVacinados =  head [dosesTomadas | (cpf, dosesTomadas) <- myVacinados, myCPF == cpf]
 
