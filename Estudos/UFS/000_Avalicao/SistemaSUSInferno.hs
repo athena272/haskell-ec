@@ -217,3 +217,8 @@ aplicaSeguDose myCPF myDateVacina myVacinados
         comeco = take (position - 1) myVacinados
         fim = drop position myVacinados 
         dadoNovaVacina = [(cpf, [(vacina, novaData), (vacina, myDateVacina)]) | (cpf, [(vacina, novaData)]) <- myVacinados, myCPF == cpf]
+
+----------------------Funcoes Auxiliares
+----Para cadastrar um novo cidadao para vacinar, inicialmente é checado se o CPF já existe ou não no sistema com a função 
+checkCPFVacinados :: CPF -> Vacinados -> Bool
+checkCPFVacinados myCPF myVacinados = or [myCPF == cpfMyVacinados | (cpfMyVacinados, _) <- myVacinados]
