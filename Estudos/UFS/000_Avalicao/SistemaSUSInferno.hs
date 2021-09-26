@@ -227,21 +227,28 @@ checkCPFVacinados myCPF myVacinados = or [myCPF == cpfMyVacinados | (cpfMyVacina
 getDosesTomadas :: CPF -> Vacinados -> Int
 getDosesTomadas myCPF myVacinados = length (getVacinaData myCPF myVacinados)
 
+--Verificar se data de aplicacao da primeira dose vem depois da segunda
+dataSeguDoseValida :: CPF -> Data -> Vacinados -> Bool
+dataSeguDoseValida myCPF myDateVacina myVacinados = not ([] ==  [dataNova | (cpf, [(vacina, dataNova)]) <- myVacinados, myCPF == cpf, dataDepois myDateVacina dataNova])
+
+----Atribuir um valor(indixe) para cada cidadao que foi vacinado no "banco de dados" que tem os usuarios vacinados
+posicionarVacinadosLista :: Vacinados -> [(Int, Vacinado)]
+posicionarVacinadosLista myVacinados = zip posicioes myVacinados 
+    where posicioes = [1..(length myVacinados)]
+
+--Encontrar a posicao do cidadao vacinado com base no seu CPF
+findPosVacinado :: CPF -> Vacinados -> Int
+findPosVacinado myCPF myVacinados 
+    | posicao == [] = 0
+    | otherwise = head posicao
+    where posicao = [position | (position, vacinado) <- (posicionarVacinadosLista myVacinados), (fst vacinado) == myCPF]
+
 --Verificar se usuario ja tomou primeiro dose
 --Primeiro pega a lista que possuia como unico elemento(por isso o head, já que é so um elemento) uma lista que tem tuplas de vacinas e datas
 getVacinaData :: CPF -> Vacinados -> Doses
 getVacinaData myCPF myVacinados =  head [dosesTomadas | (cpf, dosesTomadas) <- myVacinados, myCPF == cpf]
 
---Verificar se data de aplicacao da segunda dose vem depois da segunda
-dataSeguDoseValida :: CPF -> Data -> Vacinados -> Bool
-dataSeguDoseValida myCPF myDateVacina myVacinados = not ([] ==  [dataNova | (cpf, [(vacina, dataNova)]) <- myVacinados, myCPF == cpf, dataDepois myDateVacina dataNova])
 
---Encontrar a posicao do cidadao com base no seu CPF
-findPosCidadao :: CPF -> CadastroSUS -> Int
-findPosCidadao myCPF myDataBase
-    |posicao == [] = 0
-    |otherwise =  head posicao
-    where posicao = [ position | (position, cidadao) <- (posicionarCidadaoLista myDataBase), (getCPF cidadao)  == myCPF]
 
 --Verificar se uma data venho depois da outra
 dataDepois :: Data -> Data -> Bool
