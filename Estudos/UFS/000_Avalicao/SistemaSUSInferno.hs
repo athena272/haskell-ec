@@ -313,7 +313,7 @@ getCidadao myCPF myDataBase
 
 -- item k) Quantidade de pessoas no município/estado vacinadas por faixa etária e por dose. Procede-se como nos itens anteriores, mas agora se checa, além da dose e do município, a faixa de idade.
 quantidadeMunIdDose :: Vacinados -> Municipio -> Data -> FaixaIdade -> TipoDose -> CadastroSUS -> Quantidade
-quantidadeMunIdDose myVacinados myMunicipio (inicial, final) myTipoDose myDataBase 
+quantidadeMunIdDose myVacinados myMunicipio dataAtual (inicial, final) myTipoDose myDataBase 
     --Para pessoas que tomaram a primeira dose(mesmo que tenham tomado a segunda dose, ela entraria na contagem, jah que quem tomou a segunda tose, tomou a primeira em algum momento)
     | myTipoDose == 1 = length [cpf | (cpf, _) <- myVacinados, myMunicipio == (getMunicipio (getCidadao cpf myDataBase)), inicial <= (getIdade (getDataNasc (getCidadao cpf myDataBase))), final >= (getIdade (getDataNasc (getCidadao cpf myDataBase)))] 
    --Para pessoas que tomaram a segunda dose

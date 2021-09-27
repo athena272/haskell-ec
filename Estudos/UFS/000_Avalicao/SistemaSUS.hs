@@ -208,7 +208,7 @@ quantidadeMunIdDose myVacinados myMunicipio (inicial, final) myTipoDose myDataBa
 quantidadeEstIdDose :: Vacinados -> Municipio -> FaixaIdade -> TipoDose -> CadastroSUS -> Quantidade
 quantidadeEstIdDose myVacinados myState (inicial, final) myTipoDose myDataBase 
     --Para pessoas que tomaram a primeira dose(mesmo que tenham tomado a segunda dose, ela entraria na contagem, jah que quem tomou a segunda tose, tomou a primeira em algum momento)
-    | myTipoDose == 1 = length [cpf | (cpf, _) <- myVacinados, myState == (getEstado (getCidadao cpf myDataBase)), inicial <= (getIdade (getDataNasc (getCidadao cpf myDataBase))), final >= (getIdade (getDataNasc (getCidadao cpf myDataBase)))] 
+    | myTipoDose == 1 = length [cpf | (cpf, _) <- myVacinados, myState == (getEstado (getCidadao cpf myDataBase)), inicial <= (getIdade (getCidadao cpf myDataBase) dataAtual), final >= (getIdade (getCidadao cpf myDataBase) dataAtual)] 
     --Para pessoas que tomaram a segunda dose
     | myTipoDose == 2 = length [(vacina2, data2) | (cpf, [(vacina1, data1), (vacina2, data2)]) <- myVacinados, myState == (getEstado (getCidadao cpf myDataBase)), inicial <= (getIdade (getDataNasc (getCidadao cpf myDataBase))), final >= (getIdade (getDataNasc (getCidadao cpf myDataBase)))]
     | otherwise = error "Informacoes relevantes ou suficientes NAO foram encontradas"
