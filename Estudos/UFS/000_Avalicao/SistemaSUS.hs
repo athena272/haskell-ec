@@ -1,4 +1,4 @@
-module SistemaSUSInferno where
+module SistemaSUS where
 
 --Tipo mais externo, para cadastro
 type CadastroSUS = [Cidadao]
