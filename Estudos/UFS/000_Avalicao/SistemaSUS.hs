@@ -88,11 +88,11 @@ cidadaosPorEstado myDataBase myState = length [(cpf,nome,gender,nasc,adress,muni
 
 --Retorna a quantidade de cidadaoes por Municipio e Idade
 cidadaosPorMunicipioIdade :: CadastroSUS -> Municipio-> Data ->FaixaIdade -> Quantidade
-cidadaosPorMunicipioIdade myDataBase myMunicipio dataAtual faixasIdade = length [humanoSUS | humanoSUS <- myDataBase, myMunicipio == (getMunicipio humanoSUS), (getIdade humanoSUS dataAtual) >= (fst faixasIdade), (getIdade humanoSUS dataAtual) <= (snd faixasIdade)]
+cidadaosPorMunicipioIdade myDataBase myMunicipio dataAtual faixasIdade = length [humanoSUS | humanoSUS <- myDataBase, myMunicipio == (getMunicipio humanoSUS),(idadeNaFaixa humanoSUS faixasIdade dataAtual)]
 
 --Retorna a quantidade de cidadaoes por Estado
 cidadaosPorEstadoIdade :: CadastroSUS -> Estado -> Data -> FaixaIdade -> Quantidade
-cidadaosPorEstadoIdade myDataBase myState dataAtual faixasIdade = length [humanoSUS | humanoSUS <- myDataBase, myState == (getState humanoSUS), (getIdade humanoSUS dataAtual) >= (fst faixasIdade), (getIdade humanoSUS dataAtual) <= (snd faixasIdade)]
+cidadaosPorEstadoIdade myDataBase myState dataAtual faixasIdade = length [humanoSUS | humanoSUS <- myDataBase, myState == (getState humanoSUS), (idadeNaFaixa humanoSUS faixasIdade dataAtual)]
 
 ----------------------Funcoes Auxiliares
 getMunicipio :: Cidadao -> Municipio
@@ -115,7 +115,7 @@ getIdade cidadao dataAtual
                     (diaAtual, mesAtual, anoAtual) = dataAtual
 
 idadeNaFaixa :: Cidadao -> FaixaIdade -> Data -> Bool
-idadeNaFaixa humanoSUS faixaIdade myData = (getIdade humanoSUS myData >= (fst faixaIdade)) && (getIdade humanoSUS myData <= (snd faixaIdade))
+idadeNaFaixa humanoSUS faixasIdade myData = (getIdade humanoSUS myData >= (fst faixasIdade)) && (getIdade humanoSUS myData <= (snd faixasIdade))
 
 --item e) Pode ser interessante também gerar uma lista da quantidade de cidadãos por faixas de idade para um dado município ou estado. As faixas de idade inicialmente previstas. O gestor pode escolher todas ou algumas destas faixas para gerar a lista. O gestor pode também, a depender das características de seu município, escolher outras faixas, já que a faixa é um parâmetro da função. Caso o gestor decida, por exemplo, coletar dados para uma idade específica, digamos 25 anos, ele deve informar a faixa (25, 25).
 
@@ -316,19 +316,19 @@ getCidadao myCPF myDataBase
 
 -- item k) Quantidade de pessoas no município/estado vacinadas por faixa etária e por dose. Procede-se como nos itens anteriores, mas agora se checa, além da dose e do município, a faixa de idade.
 quantidadeMunIdDose :: Vacinados -> Municipio -> Data -> FaixaIdade -> TipoDose -> CadastroSUS -> Quantidade
-quantidadeMunIdDose myVacinados myMunicipio dataAtual (inicial, final) myTipoDose myDataBase 
+quantidadeMunIdDose myVacinados myMunicipio dataAtual faixasIdade myTipoDose myDataBase 
     --Para pessoas que tomaram a primeira dose(mesmo que tenham tomado a segunda dose, ela entraria na contagem, jah que quem tomou a segunda tose, tomou a primeira em algum momento)
-    | myTipoDose == 1 = length [cpf | (cpf, _) <- myVacinados, myMunicipio == (getMunicipio (getCidadao cpf myDataBase)), inicial <= (getIdade (getCidadao cpf myDataBase) dataAtual), final >= (getIdade (getCidadao cpf myDataBase) dataAtual)] 
+    | myTipoDose == 1 = length [cpf | (cpf, _) <- myVacinados, myMunicipio == (getMunicipio (getCidadao cpf myDataBase)), idadeNaFaixa (getCidadao cpf myDataBase) faixasIdade dataAtual] 
    --Para pessoas que tomaram a segunda dose
-    | myTipoDose == 2 = length [(vacina2, data2) | (cpf, [(vacina1, data1), (vacina2, data2)]) <- myVacinados, myMunicipio == (getMunicipio (getCidadao cpf myDataBase)), inicial <= (getIdade (getCidadao cpf myDataBase) dataAtual), final >= (getIdade (getCidadao cpf myDataBase) dataAtual)]
+    | myTipoDose == 2 = length [(vacina2, data2) | (cpf, [(vacina1, data1), (vacina2, data2)]) <- myVacinados, myMunicipio == (getMunicipio (getCidadao cpf myDataBase)),idadeNaFaixa (getCidadao cpf myDataBase) faixasIdade dataAtual]
     | otherwise = error "Informacoes relevantes ou suficientes NAO foram encontradas"
 
 quantidadeEstIdDose :: Vacinados -> Municipio -> Data ->FaixaIdade -> TipoDose -> CadastroSUS -> Quantidade
-quantidadeEstIdDose myVacinados myState dataAtual (inicial, final) myTipoDose myDataBase 
+quantidadeEstIdDose myVacinados myState dataAtual faixasIdade myTipoDose myDataBase 
     --Para pessoas que tomaram a primeira dose(mesmo que tenham tomado a segunda dose, ela entraria na contagem, jah que quem tomou a segunda tose, tomou a primeira em algum momento)
-    | myTipoDose == 1 = length [cpf | (cpf, _) <- myVacinados, myState == (getState (getCidadao cpf myDataBase)), inicial <= (getIdade (getCidadao cpf myDataBase) dataAtual), final >= (getIdade (getCidadao cpf myDataBase) dataAtual)] 
+    | myTipoDose == 1 = length [cpf | (cpf, _) <- myVacinados, myState == (getState (getCidadao cpf myDataBase)), idadeNaFaixa (getCidadao cpf myDataBase) faixasIdade dataAtual] 
     --Para pessoas que tomaram a segunda dose
-    | myTipoDose == 2 = length [(vacina2, data2) | (cpf, [(vacina1, data1), (vacina2, data2)]) <- myVacinados, myState == (getState (getCidadao cpf myDataBase)), inicial <= (getIdade (getCidadao cpf myDataBase) dataAtual), final >= (getIdade (getCidadao cpf myDataBase) dataAtual)]
+    | myTipoDose == 2 = length [(vacina2, data2) | (cpf, [(vacina1, data1), (vacina2, data2)]) <- myVacinados, myState == (getState (getCidadao cpf myDataBase)),idadeNaFaixa (getCidadao cpf myDataBase) faixasIdade dataAtual]
     | otherwise = error "Informacoes relevantes ou suficientes NAO foram encontradas"
 
 -- item l)Quantidade de pessoas no município/estado vacinadas por tipo de vacina e por dose
