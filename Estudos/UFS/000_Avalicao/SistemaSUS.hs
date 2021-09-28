@@ -361,7 +361,6 @@ findVacina humanoSUS myVacinados
 --Ai eu conto quantas vacinas tem nessa lista
 
 --item n) Considerando os dados do cadastro SUS e do cadastro de vacinados elabore e projete duas outras consultas que podem ser feitas sobre esses dados.
---Estas funções precisam de funções auxiliares para gerar uma lista de quantidades por faixas de idade, para depois gerar a exibição usando as funções do item (f).
 geraListaMunicipioGenero :: CadastroSUS -> Municipio -> [Genero] -> [(Genero, Quantidade)]
 geraListaMunicipioGenero myDataBase myMunicipio listaGenero = [(genero, quantidade) | genero <- listaGenero, quantidade <- [cidadaosPorMunicipioGenero myDataBase myMunicipio genero]] 
     
@@ -380,32 +379,24 @@ cidadaosPorEstadoGenero myDataBase myState myGender = length [humanoSUS | humano
 getGender :: Cidadao -> Genero 
 getGender (_, _, gender, _, _, _, _, _, _) = gender
 
---Primeiro Ponto: Formatação do valor inteiro que representa a quantidade para incluir os espaços à esquerda, para que a justificação à direita com a palavra QUANTIDADE ocorra.
-type QuantidadeFormatada = String
-formataQuant :: Quantidade -> QuantidadeFormatada
-formataQuant qtd = "                  " ++ show qtd
-
 --Segundo Ponto: Formatação de uma linha da faixa de idade. A saída desta função será uma string com o formato de uma linha da tabela anterior.
-type LinhaFormatada = String
-formataUmaLinhaGenero :: (FaixaIdade, Quantidade)-> LinhaFormatada
-formataUmaLinha (listaFaixasIdade, qtd) 
-    |((fst listaFaixasIdade) < 10 || (snd listaFaixasIdade < 10)) = (show (fst listaFaixasIdade)) ++ " - " ++ (show (snd listaFaixasIdade)) ++ " " ++ formataQuant qtd
-    | otherwise = (show (fst listaFaixasIdade)) ++ " - " ++ (show (snd listaFaixasIdade)) ++ formataQuant qtd
+formataUmaLinhaGenero :: (Genero, Quantidade)-> LinhaFormatada
+--Genero esta entre colchetes para converter o char em uma string
+formataUmaLinhaGenero (genero, qtd) = [genero] ++ formataQuant qtd
 
 --Terceiro Ponto: Formatação de todas as linhas das faixas de idade. Esta função usará a função anterior, acrescentará \n ao final de cada linha formatada e concatenará todas as linhas, gerando uma única string.
-type LinhasFormatadas = String
-formataLinhas :: [(FaixaIdade, Quantidade)] -> LinhasFormatadas
-formataLinhas listaFaixasIdadeComQtd = addListaBarraN [formataUmaLinha faixasIdadeComQtd | faixasIdadeComQtd <- listaFaixasIdadeComQtd] 
+formataLinhasGenero :: [(Genero, Quantidade)] -> LinhasFormatadas
+formataLinhasGenero listaGeneroComQtd = addListaBarraN [formataUmaLinhaGenero generoComQtd | generoComQtd <- listaGeneroComQtd] 
 
 --Quarto Ponto: Formatação da linha de totalização
-type TotalFormatado = String
-formataTotal :: [(FaixaIdade,Quantidade)] -> TotalFormatado
-formataTotal listaFaixasIdadeComQtd = "\nTOTAL                    " ++ (show (findTotal listaFaixasIdadeComQtd)) 
+formataTotalGenero :: [(Genero,Quantidade)] -> TotalFormatado
+formataTotalGenero listaGeneroComQtd = "\nTOTAL                    " ++ (show (findTotalGenero listaGeneroComQtd)) 
 --Somar a quantidade de todas as faixas
-findTotal :: [(FaixaIdade,Quantidade)] -> Int
-findTotal listaFaixasIdadeComQtd = sum [qtd |(faixasIdadeComQtd,qtd) <- listaFaixasIdadeComQtd]
+findTotalGenero :: [(Genero,Quantidade)] -> Int
+findTotalGenero listaGeneroComQtd = sum [qtd |(generoComQtd,qtd) <- listaGeneroComQtd]
 
 --item o) Escolha uma das consultas propostas por você no item anterior e idealize como você exibiria um relatório com os dados dessa consulta, com uma formatação adequada, como exercitado no item (f). Projete a função que realiza a exibição do seu relatório.
+
 
 
 --Cadastros pre-definidos para teste no cadastroSUS
