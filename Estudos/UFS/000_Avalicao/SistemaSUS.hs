@@ -361,7 +361,12 @@ findVacina humanoSUS myVacinados
 --Ai eu conto quantas vacinas tem nessa lista
 
 --item n) Considerando os dados do cadastro SUS e do cadastro de vacinados elabore e projete duas outras consultas que podem ser feitas sobre esses dados.
-
+--Estas funções precisam de funções auxiliares para gerar uma lista de quantidades por faixas de idade, para depois gerar a exibição usando as funções do item (f).
+geraListaMunicipioGenero :: CadastroSUS -> Municipio -> Data -> [FaixaIdade] -> [(FaixaIdade, Quantidade)]
+geraListaMunicipioFaixas myDataBase myMunicipio dataAtual listaFaixasIdade = [(faixasIdade, quantidade) | faixasIdade <- listaFaixasIdade, quantidade <- [cidadaosPorMunicipioIdade myDataBase myMunicipio dataAtual faixasIdade]] 
+    
+geraListaEstadoFaixas :: CadastroSUS -> Estado -> Data -> [FaixaIdade] -> [(FaixaIdade, Quantidade)]
+geraListaEstadoFaixas myDataBase myState dataAtual listaFaixasIdade = [(faixasIdade, quantidade) | faixasIdade <- listaFaixasIdade,quantidade <- [cidadaosPorEstadoIdade myDataBase myState dataAtual faixasIdade]]
 
 
 --item o) Escolha uma das consultas propostas por você no item anterior e idealize como você exibiria um relatório com os dados dessa consulta, com uma formatação adequada, como exercitado no item (f). Projete a função que realiza a exibição do seu relatório.
