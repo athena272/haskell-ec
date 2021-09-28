@@ -355,10 +355,19 @@ findVacina humanoSUS myVacinados
 --quantidadeEstAtrasados :: Vacinados -> CadastroSUS -> Estado -> Data -> Quantidade
 --quantidadeEstAtrasados myVacinados myDataBase myState dataAtual = 
 
---diasAtrasados :: Data -> Data ->Quantidade 
---diasAtrasados dataVacina dataAtual = 
+{--
+diasAtrasados :: Data -> Data -> Quantidade 
+diasAtrasados dataVacina dataAtual 
+    --meses iguais 
+    | (mesAtual == mesVac) && (anoAtual == anoVac) = diaAtual - diaVac
 
---Ai eu conto quantas vacinas tem nessa lista
+    where (diaVac, mesVac, anoVac) = dataVacina
+          (diaAtual, mesAtual, anoAtual) = dataAtual  
+--}
+
+---verificar se ano é bissexto
+checkAnoBissexto :: Ano -> Bool
+checkAnoBissexto ano = (ano `mod` 4 == 0 && (ano `mod` 100 /= 0 || ano `mod` 400 == 0))
 
 --item n) Considerando os dados do cadastro SUS e do cadastro de vacinados elabore e projete duas outras consultas que podem ser feitas sobre esses dados.
 geraListaMunicipioGenero :: CadastroSUS -> Municipio -> [Genero] -> [(Genero, Quantidade)]
@@ -390,13 +399,18 @@ formataLinhasGenero listaGeneroComQtd = addListaBarraN [formataUmaLinhaGenero ge
 
 --Quarto Ponto: Formatação da linha de totalização
 formataTotalGenero :: [(Genero,Quantidade)] -> TotalFormatado
-formataTotalGenero listaGeneroComQtd = "\nTOTAL                    " ++ (show (findTotalGenero listaGeneroComQtd)) 
+formataTotalGenero listaGeneroComQtd = "\nTOTAL              " ++ (show (findTotalGenero listaGeneroComQtd)) 
 --Somar a quantidade de todas as faixas
 findTotalGenero :: [(Genero,Quantidade)] -> Int
 findTotalGenero listaGeneroComQtd = sum [qtd |(generoComQtd,qtd) <- listaGeneroComQtd]
 
 --item o) Escolha uma das consultas propostas por você no item anterior e idealize como você exibiria um relatório com os dados dessa consulta, com uma formatação adequada, como exercitado no item (f). Projete a função que realiza a exibição do seu relatório.
+listaMunicipioGenero :: CadastroSUS -> Municipio -> [Genero] -> IO()
+listaMunicipioGenero myDataBase myMunicipio listaGenero = putStrLn ("MUNICIPIO: " ++  myMunicipio ++ "\nGENERO         QUANTIDADE\n" ++ (formataLinhasGenero (geraListaMunicipioGenero myDataBase myMunicipio listaGenero)) ++ (formataTotalGenero (geraListaMunicipioGenero myDataBase myMunicipio listaGenero)))
 
+--Retorna a lista do estado formatada lindamente
+listaEstadoGenero :: CadastroSUS -> Estado -> [Genero] -> IO()
+listaEstadoGenero myDataBase myState listaGenero = putStrLn ("ESTADO: " ++ myState ++ "\nGENERO         QUANTIDADE\n" ++ (formataLinhasGenero (geraListaEstadoGenero myDataBase myState listaGenero)) ++ (formataTotalGenero (geraListaEstadoGenero myDataBase myState listaGenero)))
 
 
 --Cadastros pre-definidos para teste no cadastroSUS
