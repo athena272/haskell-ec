@@ -114,6 +114,9 @@ getIdade cidadao dataAtual
                     (myDia, myMes, myAno) = (getDataNasc cidadao)
                     (diaAtual, mesAtual, anoAtual) = dataAtual
 
+idadeNaFaixa :: Cidadao -> FaixaIdade -> Data -> Bool
+idadeNaFaixa humanoSUS faixaIdade myData = (getIdade humanoSUS myData >= (fst faixasIdade)) && (getIdade humanoSUS myData <= (snd faixasIdade))
+
 --item e) Pode ser interessante também gerar uma lista da quantidade de cidadãos por faixas de idade para um dado município ou estado. As faixas de idade inicialmente previstas. O gestor pode escolher todas ou algumas destas faixas para gerar a lista. O gestor pode também, a depender das características de seu município, escolher outras faixas, já que a faixa é um parâmetro da função. Caso o gestor decida, por exemplo, coletar dados para uma idade específica, digamos 25 anos, ele deve informar a faixa (25, 25).
 
 --Retorna a lista do municipio formatada lindamente
@@ -352,9 +355,12 @@ findVacina humanoSUS myVacinados
 quantidadeEstAtrasados :: Vacinados -> CadastroSUS -> Estado -> Data -> Quantidade
 quantidadeEstAtrasados myVacinados myDataBase myState dataAtual = 
 
+--diasAtrasados :: Data -> Data ->Quantidade 
+--diasAtrasados dataVacina dataAtual = 
 
-
-
+--Ai eu conto quantas vacinas tem nessa lista
+getDosesTomadas :: CPF -> Vacinados -> Int
+getDosesTomadas myCPF myVacinados = length (getVacinaData myCPF myVacinados)
 --item n) Considerando os dados do cadastro SUS e do cadastro de vacinados elabore e projete duas outras consultas que podem ser feitas sobre esses dados.
 
 
