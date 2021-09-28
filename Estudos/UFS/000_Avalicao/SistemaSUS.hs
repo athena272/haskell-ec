@@ -362,12 +362,23 @@ findVacina humanoSUS myVacinados
 
 --item n) Considerando os dados do cadastro SUS e do cadastro de vacinados elabore e projete duas outras consultas que podem ser feitas sobre esses dados.
 --Estas funções precisam de funções auxiliares para gerar uma lista de quantidades por faixas de idade, para depois gerar a exibição usando as funções do item (f).
-geraListaMunicipioGenero :: CadastroSUS -> Municipio -> Data -> [FaixaIdade] -> [(FaixaIdade, Quantidade)]
-geraListaMunicipioFaixas myDataBase myMunicipio dataAtual listaFaixasIdade = [(faixasIdade, quantidade) | faixasIdade <- listaFaixasIdade, quantidade <- [cidadaosPorMunicipioIdade myDataBase myMunicipio dataAtual faixasIdade]] 
+geraListaMunicipioGenero :: CadastroSUS -> Municipio -> [Genero] -> [(Genero, Quantidade)]
+geraListaMunicipioGenero myDataBase myMunicipio listaGenero = [(genero, quantidade) | genero <- listaGenero, quantidade <- [cidadaosPorMunicipioGenero myDataBase myMunicipio genero]] 
     
-geraListaEstadoFaixas :: CadastroSUS -> Estado -> Data -> [FaixaIdade] -> [(FaixaIdade, Quantidade)]
-geraListaEstadoFaixas myDataBase myState dataAtual listaFaixasIdade = [(faixasIdade, quantidade) | faixasIdade <- listaFaixasIdade,quantidade <- [cidadaosPorEstadoIdade myDataBase myState dataAtual faixasIdade]]
+geraListaEstadoGenero :: CadastroSUS -> Estado -> [Genero] -> [(Genero, Quantidade)]
+geraListaEstadoGenero myDataBase myState listaGenero = [(genero, quantidade) | genero <- listaGenero, quantidade <- [cidadaosPorEstadoGenero myDataBase myState genero]]
 
+----------------------Funcoes Auxiliares
+--Retorna a quantidade de cidadaoes por Municipio e Genero
+cidadaosPorMunicipioGenero :: CadastroSUS -> Municipio-> Genero -> Quantidade
+cidadaosPorMunicipioGenero myDataBase myMunicipio myGender = length [humanoSUS | humanoSUS <- myDataBase, myMunicipio == (getMunicipio humanoSUS), myGender == (getGender humanoSUS)]
+
+--Retorna a quantidade de cidadaoes por Estado e Genero
+cidadaosPorEstadoGenero :: CadastroSUS -> Estado -> Genero -> Quantidade
+cidadaosPorEstadoGenero myDataBase myState myGender = length [humanoSUS | humanoSUS <- myDataBase, myState == (getState humanoSUS), myGender == (getGender humanoSUS)]
+
+getGender :: Cidadao -> Genero 
+getGender (_, _, gender, _, _, _, _, _, _) = gender
 
 --item o) Escolha uma das consultas propostas por você no item anterior e idealize como você exibiria um relatório com os dados dessa consulta, com uma formatação adequada, como exercitado no item (f). Projete a função que realiza a exibição do seu relatório.
 
