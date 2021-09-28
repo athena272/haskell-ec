@@ -115,7 +115,7 @@ getIdade cidadao dataAtual
                     (diaAtual, mesAtual, anoAtual) = dataAtual
 
 idadeNaFaixa :: Cidadao -> FaixaIdade -> Data -> Bool
-idadeNaFaixa humanoSUS faixaIdade myData = (getIdade humanoSUS myData >= (fst faixasIdade)) && (getIdade humanoSUS myData <= (snd faixasIdade))
+idadeNaFaixa humanoSUS faixaIdade myData = (getIdade humanoSUS myData >= (fst faixaIdade)) && (getIdade humanoSUS myData <= (snd faixaIdade))
 
 --item e) Pode ser interessante também gerar uma lista da quantidade de cidadãos por faixas de idade para um dado município ou estado. As faixas de idade inicialmente previstas. O gestor pode escolher todas ou algumas destas faixas para gerar a lista. O gestor pode também, a depender das características de seu município, escolher outras faixas, já que a faixa é um parâmetro da função. Caso o gestor decida, por exemplo, coletar dados para uma idade específica, digamos 25 anos, ele deve informar a faixa (25, 25).
 
@@ -352,15 +352,14 @@ findVacina humanoSUS myVacinados
 --item m) Quantidade de pessoas atrasadas na segunda dose no município/estado, dentre os cidadãos que pertencem ao cadastro de vacinados. Considere que a segunda dose da CoronaVac deve ser aplicada 21 dias após a primeira dose e a da Pfizer e AstraZeneca 90 dias após a primeira dose.
 --quantidadeMunAtrasados :: Vacinados -> CadastroSUS -> Municipio -> Quantidade
 
-quantidadeEstAtrasados :: Vacinados -> CadastroSUS -> Estado -> Data -> Quantidade
-quantidadeEstAtrasados myVacinados myDataBase myState dataAtual = 
+--quantidadeEstAtrasados :: Vacinados -> CadastroSUS -> Estado -> Data -> Quantidade
+--quantidadeEstAtrasados myVacinados myDataBase myState dataAtual = 
 
 --diasAtrasados :: Data -> Data ->Quantidade 
 --diasAtrasados dataVacina dataAtual = 
 
 --Ai eu conto quantas vacinas tem nessa lista
-getDosesTomadas :: CPF -> Vacinados -> Int
-getDosesTomadas myCPF myVacinados = length (getVacinaData myCPF myVacinados)
+
 --item n) Considerando os dados do cadastro SUS e do cadastro de vacinados elabore e projete duas outras consultas que podem ser feitas sobre esses dados.
 
 
