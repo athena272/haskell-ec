@@ -380,6 +380,31 @@ cidadaosPorEstadoGenero myDataBase myState myGender = length [humanoSUS | humano
 getGender :: Cidadao -> Genero 
 getGender (_, _, gender, _, _, _, _, _, _) = gender
 
+--Primeiro Ponto: Formatação do valor inteiro que representa a quantidade para incluir os espaços à esquerda, para que a justificação à direita com a palavra QUANTIDADE ocorra.
+type QuantidadeFormatada = String
+formataQuant :: Quantidade -> QuantidadeFormatada
+formataQuant qtd = "                  " ++ show qtd
+
+--Segundo Ponto: Formatação de uma linha da faixa de idade. A saída desta função será uma string com o formato de uma linha da tabela anterior.
+type LinhaFormatada = String
+formataUmaLinhaGenero :: (FaixaIdade, Quantidade)-> LinhaFormatada
+formataUmaLinha (listaFaixasIdade, qtd) 
+    |((fst listaFaixasIdade) < 10 || (snd listaFaixasIdade < 10)) = (show (fst listaFaixasIdade)) ++ " - " ++ (show (snd listaFaixasIdade)) ++ " " ++ formataQuant qtd
+    | otherwise = (show (fst listaFaixasIdade)) ++ " - " ++ (show (snd listaFaixasIdade)) ++ formataQuant qtd
+
+--Terceiro Ponto: Formatação de todas as linhas das faixas de idade. Esta função usará a função anterior, acrescentará \n ao final de cada linha formatada e concatenará todas as linhas, gerando uma única string.
+type LinhasFormatadas = String
+formataLinhas :: [(FaixaIdade, Quantidade)] -> LinhasFormatadas
+formataLinhas listaFaixasIdadeComQtd = addListaBarraN [formataUmaLinha faixasIdadeComQtd | faixasIdadeComQtd <- listaFaixasIdadeComQtd] 
+
+--Quarto Ponto: Formatação da linha de totalização
+type TotalFormatado = String
+formataTotal :: [(FaixaIdade,Quantidade)] -> TotalFormatado
+formataTotal listaFaixasIdadeComQtd = "\nTOTAL                    " ++ (show (findTotal listaFaixasIdadeComQtd)) 
+--Somar a quantidade de todas as faixas
+findTotal :: [(FaixaIdade,Quantidade)] -> Int
+findTotal listaFaixasIdadeComQtd = sum [qtd |(faixasIdadeComQtd,qtd) <- listaFaixasIdadeComQtd]
+
 --item o) Escolha uma das consultas propostas por você no item anterior e idealize como você exibiria um relatório com os dados dessa consulta, com uma formatação adequada, como exercitado no item (f). Projete a função que realiza a exibição do seu relatório.
 
 
