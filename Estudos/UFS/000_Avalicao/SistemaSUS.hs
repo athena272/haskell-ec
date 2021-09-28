@@ -352,10 +352,10 @@ findVacina humanoSUS myVacinados
 --item m) Quantidade de pessoas atrasadas na segunda dose no município/estado, dentre os cidadãos que pertencem ao cadastro de vacinados. Considere que a segunda dose da CoronaVac deve ser aplicada 21 dias após a primeira dose e a da Pfizer e AstraZeneca 90 dias após a primeira dose.
 --quantidadeMunAtrasados :: Vacinados -> CadastroSUS -> Municipio -> Quantidade
 
---quantidadeEstAtrasados :: Vacinados -> CadastroSUS -> Estado -> Data -> Quantidade
---quantidadeEstAtrasados myVacinados myDataBase myState dataAtual = 
+quantidadeEstAtrasados :: Vacinados -> CadastroSUS -> Estado -> Data -> Quantidade
+quantidadeEstAtrasados myVacinados myDataBase myState dataAtual = 
 
-{--
+
 diasAtrasados :: Data -> Data -> Quantidade 
 diasAtrasados dataVacina dataAtual 
     --meses iguais 
@@ -363,7 +363,7 @@ diasAtrasados dataVacina dataAtual
 
     where (diaVac, mesVac, anoVac) = dataVacina
           (diaAtual, mesAtual, anoAtual) = dataAtual  
---}
+
 
 ---verificar se ano é bissexto
 checkAnoBissexto :: Ano -> Bool
