@@ -22,131 +22,7 @@ type Cidadao = (CPF, Nome, Genero, DataNasc, Endereco, Municipio, Estado, Telefo
 --Meus cadastros pre-existentes no banco de dados 
 bancoDeCadastros :: CadastroSUS
 bancoDeCadastros = 
-    [(26716347665, "Paulo Souza", 'M', (11,10,1996),"Rua A, 202","Muribeca", "SE", "999997000", "psouza@gmail.com"),
-    (87717347115, "Ana Reis",'F', (5,4,1970), "Rua B, 304","Aracaju", "SE", "999826004", "areis@gmail.com"),(99999999999, "Guilherme Alves", 'M', (02,07,2002),"Rua C, 405","Salgado", "SE", "999997044", "guilherme@gmail.com"), 
-    (88888888888, "Esmeralda Oliveira", 'F', (09,09,2003),"Rua D, 506","Lagarto", "SE", "999996025", "esmeralda@gmail.com"), 
-    (10101010101, "Fernanda Menezes", 'F', (01,04,2000),"Rua E, 506","Lagarto", "SE", "999996025", "esmeralda@gmail.com"),
-    (24304304037, "Carlos Ferreira", 'M', (1, 6, 2019), "Avenida A, 617", "Aracaju", "SE", "888884567", "Davi@outlok.com.br"),
-    (42618186808, "Gabriel Johnson", 'F', (24, 2, 2015), "Travessa Jerusalem, 194", "Itabaiana", "SE", "676724019", "Jose@outlok.com.br"),
-    (30123318811, "Jose Johnson", 'F', (23, 3, 1995), "Avenida 28 BC, 215", "Aracaju", "SE", "676724019", "Emanuel@Pereira.com.br"),
-    (88369672235, "Inacio Alves", 'F', (25, 3, 1936), "Rua Brasil Martinho Valle, 560", "Aracaju", "SE", "107892190", "Miguel@Pereira.com.br"),
-    (27478099652, "Leonardo Rodrigues", 'M', (25, 10, 1988), "Travessa Tereza Cristina, 348", "Nossa Senhora do Socorro", "SE", "749200312", "Bernardo@Ferreira.com.br"),
-    (72282496478, "Emanuel Pereira", 'F', (20, 4, 1939), "Travessa Jerusalem, 247", "Aracaju", "SE", "749200312", "Gustavo@hotmail.com.br"),
-    (91683896248, "Jose Smith", 'F', (30, 4, 1943), "Rua Brasil Martinho Valle, 365", "Lagarto", "SE", "107892190", "Jose@uol.com.br"),
-    (97916395954, "Jose Pereira", 'F', (20, 7, 1991), "Travessa Jerusalem, 46", "Nossa Senhora do Socorro", "SE", "150712500", "Emanuel@infonet.com.br"),
-    (60523799951, "Ignacio Pereira", 'M', (7, 7, 1977), "Rua Brasil Martinho Valle, 998", "Nossa Senhora do Socorro", "SE", "888884567", "Jose@hotmail.com.br"),
-    (45251664016, "Carlos Smith", 'M', (13, 7, 1964), "Avenida A, 272", "Aracaju", "SE", "676724019", "Gustavo@Pereira.com.br"),
-    (91870465759, "Gustavo Oliveira", 'M', (28, 4, 1944), "Rua A, 204", "Aracaju", "SE", "107892190", "Davi@Ferreira.com.br"),
-    (13508690972, "Ignacio Souza santos", 'M', (10, 9, 1970), "Travessa Jerusalem, 611", "Itabaiana", "SE", "150712500", "Miguel@Pereira.com.br"),(32829450561, "Jose Souza santos", 'M', (22, 6, 1937), "Rua Joana Ribeiro, 540", "Aracaju", "SE", "676724019", "Bernardo@Ferreira.com.br"),
-    (66281994769, "Gabriel Rodrigues", 'M', (20, 3, 1936), "Travessa Tereza Cristina, 354", "Lagarto", "SE", "888884567", "Jose@uol.com.br"),
-    (76976598156, "Gabriel Pereira", 'M', (11, 12, 1944), "Rua Brasil Martinho Valle, 998", "Lagarto", "SE", "888884567", "Gustavo@Alves.com.br"),
-    (91696131497, "Inacio Santos", 'M', (26, 5, 1977), "Avenida 28 BC, 824", "Lagarto", "SE", "107892190", "Davi@Ferreira.com.br"),
-    (73306091843, "Gustavo Johnson", 'M', (14, 10, 1953), "Travessa Tereza Cristina, 358", "Aracaju", "SE", "150712500", "Jose@Pereira.com.br"),
-    (72103643100, "Carlos Rodrigues", 'F', (17, 9, 2016), "Rua Brasil Martinho Valle, 272", "Lagarto", "SE", "820101558", "Jose@outlok.com.br"),
-    (35457034065, "Ignacio Smith", 'F', (4, 3, 1942), "Rua A, 280", "Itabaiana", "SE", "820101558", "Miguel@infonet.com.br"),
-    (84655918512, "Leonardo Santos", 'F', (26, 5, 1942), "Travessa Tereza Cristina, 311", "Lagarto", "SE", "888884567", "Ignacio@Ferreira.com.br"),
-    (66361636097, "Emanuel Pereira", 'F', (14, 1, 1972), "Avenida 28 BC, 912", "Nossa Senhora do Socorro", "SE", "676724019", "Leonardo@Ferreira.com.br"),
-    (56399785622, "Gustavo Silva", 'F', (28, 7, 1974), "Rua Joana Ribeiro, 516", "Lagarto", "SE", "107892190", "Carlos@Pereira.com.br"),
-    (71776925819, "Gabriel Silva", 'F', (26, 2, 2017), "Travessa Jerusalem, 257", "Nossa Senhora do Socorro", "SE", "150712500", "Ignacio@gmail.com.br"),
-    (72077627524, "Gabriel Silva", 'M', (25, 9, 2000), "Rua Brasil Martinho Valle, 74", "Lagarto", "SE", "888884567", "Inacio@Pereira.com.br"),
-    (98188814278, "Jose Silva", 'M', (18, 2, 1935), "Rua Joana Ribeiro, 870", "Nossa Senhora do Socorro", "SE", "150712500", "Jose@uol.com.br"),
-    (2105747717, "Gustavo Alves", 'M', (30, 4, 1955), "Avenida 28 BC, 68", "Itabaiana", "SE", "888884567", "Jose@infonet.com.br"),
-    (5462490372, "Emanuel Oliveira", 'M', (9, 1, 1992), "Travessa Tereza Cristina, 889", "Aracaju", "SE", "820101558", "Gustavo@infonet.com.br"),
-    (9618817308, "Ignacio Alves", 'M', (24, 5, 2003), "Travessa Jerusalem, 33", "Nossa Senhora do Socorro", "SE", "820101558", "Jose@Pereira.com.br"),
-    (25003392400, "Gabriel Rodrigues", 'M', (29, 7, 2012), "Travessa Tereza Cristina, 203", "Aracaju", "SE", "107892190", "Gustavo@Alves.com.br"),
-    (77873720221, "Jose Pereira", 'M', (27, 3, 1951), "Rua Joana Ribeiro, 701", "Itabaiana", "SE", "820101558", "Miguel@outlok.com.br"),
-    (27243025429, "Gustavo Oliveira", 'F', (5, 3, 1936), "Travessa Tereza Cristina, 224", "Itabaiana", "SE", "107892190", "Gabriel@uol.com.br"),
-    (16213902712, "Ignacio Santos", 'F', (5, 6, 1980), "Rua Brasil Martinho Valle, 49", "Aracaju", "SE", "749200312", "Davi@infonet.com.br"),
-    (54204962073, "Gustavo Pereira", 'F', (8, 5, 2005), "Travessa Tereza Cristina, 691", "Lagarto", "SE", "888884567", "Jose@hotmail.com.br"),
-    (33529650641, "Leonardo Santos", 'F', (2, 11, 2018), "Rua Brasil Martinho Valle, 613", "Itabaiana", "SE", "749200312", "Emanuel@Ferreira.com.br"),
-    (67733182165, "Carlos Silva", 'F', (24, 12, 2015), "Avenida 28 BC, 829", "Itabaiana", "SE", "676724019", "Bernardo@Ferreira.com.br"),
-    (92701485891, "Emanuel Smith", 'F', (6, 2, 1948), "Rua Joana Ribeiro, 531", "Aracaju", "SE", "150712500", "Davi@outlok.com.br"),
-    (52993562899, "Gabriel Souza santos", 'F', (27, 10, 1986), "Travessa Jerusalem, 918", "Lagarto", "SE", "107892190", "Inacio@hotmail.com.br"),
-    (64078372212, "Carlos Santos", 'F', (14, 6, 1936), "Rua Brasil Martinho Valle, 740", "Aracaju", "SE", "676724019", "Leonardo@gmail.com.br"),
-    (42526230308, "Emanuel Rodrigues", 'M', (9, 8, 2002), "Rua Joana Ribeiro, 302", "Nossa Senhora do Socorro", "SE", "749200312", "Gustavo@hotmail.com.br"),
-    (94259444688, "Leonardo Ferreira", 'M', (9, 12, 1992), "Rua A, 125", "Itabaiana", "SE", "888884567", "Jose@Pereira.com.br"),
-    (59984593668, "Leonardo Santos", 'M', (14, 8, 1931), "Avenida A, 596", "Nossa Senhora do Socorro", "SE", "107892190", "Leonardo@hotmail.com.br")]
-
-
-bancoTest:: [Cidadao]
-bancoTest = [   (87717347115, "Ana Reis", 'F', (5, 4, 1970), "Rua B, 304", "Aracaju", "SE", "999826004", "pareis@gmail.com"),
-                (26716347665, "Paulo Souza", 'M', (11, 10, 1996), "Rua A, 202", "Muribeca", "SE", "999997000", "souza@gmail.com"),
-                (56987321456, "Flavio Inácio", 'M', (11, 03, 2000), "Rua E Conjunto, 202", "Japaratuba", "SE", "999997000", "flavio@gmail.com"),
-                (87067956846, "Lucas Machado Gomes", 'M', (19, 3, 1956), "Rua Eunicio Teixeira, 202", "Rio Branco", "AC", "991060740", "lucas.gomes@globo.com"),
-                (22423805160, "Gabriel Ducati Teixeira", 'M', (21, 10, 1992), "Rua Condado, 424", "Porto Alegre", "RS", "993127455", "gabriel.teixeira@globo.com"),
-                (59429878824, "Guilherme Gomes Machado", 'M', (9, 11, 1996), "Rua Anita Ferraz, 821", "São Paulo", "SP", "967452650", "guilherme.machado@uol.com.br"),
-                (50459763628, "Carlos Amaral Teixeira", 'M', (9, 7, 1954), "Rua Anita Ferraz, 450", "São Paulo", "SP", "925310918", "carlos.teixeira@yahoo.com"),
-                (08698996604, "Mauro Gomes Ducati", 'M', (15, 5, 1990), "Travessa Ano Novo, 204", "Rio Branco", "AC", "997873863", "mauro.ducati@icloud.com"),
-                (48474464455, "Carlos Machado Teixeira", 'M', (25, 8, 1996), "Quadra CLS 103, 447", "Brasília", "DF", "933117851", "carlos.teixeira@gmail.com"),
-                (84031558830, "Lucas Teixeira Amaral", 'M', (23, 9, 1977), "Rua Anita Cajado, 738", "Salvador", "BA", "945185400", "lucas.amaral@hotmail.com"),
-    (55431499726, "Arthur Machado Ducati", 'M', (10, 2, 1986), "Rua Condado, 422", "Porto Alegre", "RS", "916061385", "arthur.ducati@hotmail.com"),
-    (38730515408, "Matheus Gomes Machado", 'M', (28, 5, 1963), "Praça Anita Garibaldi, 539", "Campinas", "SP", "963430836", "matheus.machado@gmail.com"),
-    (70742814092, "Heitor Machado Ducati", 'M', (17, 2, 1989), "Rua Anita Cajado, 975", "Salvador", "BA", "964861299", "heitor.ducati@gmail.com"),
-    (09195651233, "Heitor Amaral Gomes", 'M', (27, 1, 1994), "Rua Anfibólios, 512", "Belo Horizonte", "MG", "989870737", "heitor.gomes@uol.com.br"),
-    (57613464601, "João Amaral Machado", 'M', (7, 7, 1979), "Travessa Ano Novo, 850", "Rio Branco", "AC", "944700834", "joão.machado@hotmail.com"),
-    (34686118891, "João Ducati Gomes", 'M', (5, 9, 1975), "Praça Anita Garibaldi, 519", "Campinas", "SP", "928864626", "joão.gomes@icloud.com"),
-    (36156451382, "Matheus Gomes Machado", 'M', (6, 2, 1973), "Rua Antenor Gomes de Oliveira, 628", "Maceió", "AL", "958810484", "matheus.machado@uol.com.br"),
-    (98648566002, "Arthur Ducati Gomes", 'M', (23, 3, 1963), "Rua Anita Ferraz, 32", "São Paulo", "SP", "924800296", "arthur.gomes@hotmail.com"),
-    (15876745138, "Pedro Ducati Gomes", 'M', (22, 6, 1954), "Rua Anita Garibald, 120", "Manaus", "AM", "912360027", "pedro.gomes@yahoo.com"),
-    (43764673400, "Heitor Amaral Machado", 'M', (19, 4, 1996), "Quadra CLS 103, 189", "Brasília", "DF", "28981833", "heitor.machado@globo.com"),
-    (34795174806, "Matheus Gomes Machado", 'M', (11, 5, 1972), "Travessa Ângelo Valler, 105", "Piracicaba", "SP", "914441493", "matheus.machado@hotmail.com"),
-    (52592444513, "João Amaral Machado", 'M', (27, 10, 1999), "Travessa Ano Novo, 514", "Rio Branco", "AC", "939465389", "joão.machado@yahoo.com"),
-    (14205128703, "Carlos Gomes Ducati", 'M', (3, 7, 1985), "Rua Anita Cajado, 833", "Salvador", "BA", "935077028", "carlos.ducati@globo.com"),
-    (67556301443, "Davi Machado Teixeira", 'M', (11, 10, 1972), "Quadra CLS 103, 518", "Brasília", "DF", "947901564", "davi.teixeira@gmail.com"),
-    (37297814644, "Arthur Amaral Machado", 'M', (21, 12, 1987), "Quadra CLS 103, 981", "Brasília", "DF", "997570558", "arthur.machado@icloud.com"),
-    (77838071941, "Gabriel Gomes Teixeira", 'M', (19, 6, 1973), "Rua Anita Garibald, 527", "Manaus", "AM", "967345626", "gabriel.teixeira@gmail.com"),
-    (65365757254, "Davi Teixeira Ducati", 'M', (12, 10, 1997), "Rua Anita Cajado, 664", "Salvador", "BA", "938882449", "davi.ducati@yahoo.com"),
-    (03516652853, "Bernardo Teixeira Machado", 'M', (4, 11, 1991), "Quadra CLS 103, 46", "Brasília", "DF", "917032109", "bernardo.machado@hotmail.com"),
-    (96592485809, "Matheus Gomes Ducati", 'M', (18, 4, 1954), "Rua Anfibólios, 942", "Belo Horizonte", "MG", "981246170", "matheus.ducati@uol.com.br"),
-    (26995464290, "Carlos Machado Gomes", 'M', (1, 2, 1983), "Rua Anita Cajado, 235", "Salvador", "BA", "956515460", "carlos.gomes@globo.com"),
-    (10638318653, "Davi Machado Ducati", 'M', (8, 11, 1963), "Travessa Ano Novo, 337", "Rio Branco", "AC", "961876259", "davi.ducati@yahoo.com"),
-    (41448248701, "Bernardo Ducati Amaral", 'M', (26, 11, 1991), "Rua Álvaro Anes, 102", "São Paulo", "SP", "998612095", "bernardo.amaral@gmail.com"),
-    (54106727714, "Pedro Ducati Amaral", 'M', (5, 6, 1977), "Quadra CLS 103, 954", "Brasília", "DF", "931162139", "pedro.amaral@icloud.com"),
-    (63099185086, "Carlos Gomes Machado", 'M', (10, 3, 1991), "Rua Condado, 733", "Porto Alegre", "RS", "916936937", "carlos.machado@yahoo.com"),
-    (75442170860, "Gabriel Ducati Gomes", 'M', (4, 9, 1965), "Praça Anita Garibaldi, 797", "Campinas", "SP", "914168590", "gabriel.gomes@uol.com.br"),
-    (53004578760, "Arthur Amaral Ducati", 'M', (27, 2, 1956), "Travessa Ano Novo, 942", "Rio Branco", "AC", "945675621", "arthur.ducati@icloud.com"),
-    (31330654080, "Pedro Ducati Amaral", 'M', (19, 2, 1983), "Rua Anita Ferraz, 716", "São Paulo", "SP", "915528935", "pedro.amaral@gmail.com"),
-    (24996526831, "Bruno Cardoso", 'M', (30, 11, 1992), "Rua João Borba Maranhão, 699", "Recife", "PE", "925518766", "brunorodriguescardoso@armyspy.com"),
-    (91169654509, "Matheus Rodrigues", 'M', (21, 09, 1971), "Avenida Central, 253", "Limeira", "SP", "994288630", "matheuscostarodrigues@jourrapide.com"),
-    (31665922702, "Caio Barros", 'M', (01, 08, 1938), "Rua dos Crisântemos, 1584", "Rio de Janeiro", "RJ", "999997000", "caiodiasbarros@dayrep.com"),
-    (80506181294, "Antônio Pereira", 'M', (28, 12, 1929), "Rua Romanos, 1196", "Cambé", "PR", "931528696", "antoniosilvapereira@teleworm.us"),
-    (27609161381, "Igor Carvalho", 'M', (17, 05, 1960), "Rua N, 442", "Várzea Grande", "MT", "931082575", "igorsousacarvalho@jourrapide.com"),
-    (23116918562, "Thiago Goncalves", 'M', (06, 02, 1942), "Rua Gerênios, 1688", "Vila Velha", "ES", "965828349", "thiagolimagoncalves@gustr.com"),
-    (95896635168, "Rafael Barros", 'M', (11, 04, 1921), "Vila Novo Paraíso, 16", "Aracaju", "SE", "967566304", "rafaelmartinsbarros@einrot.com"),
-    (68914093220, "Daniel Souza", 'M', (01, 02, 2013), "Rua Francisco da Costa Lins, 1654", "Recife", "PE", "920237199", "danielazevedosouza@armyspy.com"),
-    (50498614034, "Victor Rocha", 'M', (18, 05, 2015), "Rua das Orquídeas, 166", "Pirassununga", "SP", "931895029", "victorpereirarocha@armyspy.com"),
-    (64742387392, "Marcos Alves", 'M', (09, 11, 1929), "Rua Maria de Lourdes Almeida, 1124", "Arapiraca", "AL", "984714774", "marcosrodriguesalves@jourrapide.com"),
-    (37566004247, "Lucas Pinto", 'M', (25, 08, 1919), "Rua Costa e Silva 1983", "Aparecida de Goiânia", "GO", "982608883", "lucasmelopinto@cuvox.de"),
-    (56987321456, "Julian Santos", 'M', (28, 07, 1951), "Rua Cinco, 746", "Sumaré", "SP", "926073288", "julianalmeidasantos@einrot.com"),
-    (88551353098, "Ryan Cardoso", 'M', (21, 08, 2000), "Avenida Doutor Artur Bernardes, 656", "Sorocaba", "SP", "957036975", "ryancastrocardoso@gustr.com"),
-    (67816887744, "Kaua Cardoso", 'M', (12, 02, 1941), "Praça Henry Ford, 1028", "Araçatuba", "SP", "930669632", "kau@superrito.com"),
-    (10307558843, "Julian Melo", 'M', (15, 05, 2009), "Rua São Sérgio, 1179", "Santos", "SP", "954342444", "juliancunhamelo@armyspy.com"),
-    (57975532959, "Martim Cavalcanti", 'M', (21, 12, 1985), "Rua José Horácio, 1701", "Londrina", "PR", "929172319", "martimcunhamelo@superrito.com"),
-    (32254586947, "Luís Melo", 'M', (15, 08, 2000), "Rua BS 15 C, 699", "Goiânia", "GO", "977072073", "luiscunhamelo@superrito.com"),
-    (18697038049, "Daniel Goncalves", 'M', (12, 12, 1964), "Rua dos Macunis, 609", "Campinas", "SP", "937156151", "daniel@gmail.com"),
-    (34290105785, "Renan Fernandes", 'M', (19, 10, 1948), "Rua João Sigrist, 470", "Campinas", "SP", "939719494", "renanmelofernandes@jourrapide.com"),
-    (17286791095, "Caio Barbosa", 'M', (07, 01, 1979), "Rua Doutor Francisco de Souza, 488", "São José dos Campos", "SP", "950412296", "caio@gmail.com"),
-    (84565794675, "Davi Castro", 'M', (13, 11, 1947), "Beco São Geraldo, 480", "Belo Horizonte", "MG", "945832380", "davi@gmail.com"),
-    (60053722701, "Kauan Fernandes", 'M', (18, 07, 2001), "Rua Aluízio Davis, 303", "Belo Horizonte", "MG", "992073911", "kauansousafernandes@superrito.com"),
-    (28251137861, "Guilherme Gomes Teixeira", 'M', (4, 9, 1960), "Quadra CLS 103, 611", "Brasília", "DF", "948421943", "guilherme.teixeira@yahoo.com"),
-    (86096726461, "Matheus Amaral Gomes", 'M', (14, 1, 1954), "Rua Anfibólios, 42", "Belo Horizonte", "MG", "922271249", "Matheus@gmail.com"),
-    (53980790428, "Mauro Machado Teixeira", 'M', (12, 7, 1951), "Travessa Ano Novo, 719", "Rio Branco", "AC", "972901808", "mauro.teixeira@gmail.com"),
-    (56254649322, "Luis Almeida", 'M', (26, 5, 1994), "Rua dos Carijós, 202", "Belo Horizonte", "MG", "670725957", "Almeida@gmail.com"),
-    (60411837446, "Samuel Fernandes", 'M', (1, 5, 1963), "Rua Carlos Augusto Cornelsen, 202", "Curitiba", "PR", "318361413", "Fernandes@gmail.com"),
-    (99959556100, "Kauan Lima", 'M', (25, 5, 1954), "Rua Maria Luísa do Val Penteado, 202", "São Paulo", "SP", "888884567", "Kauan@gmail.com"),
-    (99988877566, "Cleytin da Silva"       , 'M', (31,12,2002), "Rua Josevaldo Neto, 333"        , "Aracaju"       , "SE", "(79) 9 9958 6041", "cleytin_estourado@gmail.com"        ),
-        (88877766478, "Josineide Ferreira"     , 'F', (13,10,1990), "Rua Jose Elencar, 250"          , "Maceio"        , "AL", "(82) 9 9950 6762", "josineide_dos_paredoes@gmail.com"   ),
-        (78965412585, "Raphaela Cardoso"       , 'X', (25,02,1999), "Rua Antonio Valentim, 76"       , "Tobias Barreto", "SE", "(79) 9 8876 0526", "rapha_cardoso@hotmail.com"          ),
-        (78965412885, "Tim Maia "              , 'M', (20,05,1960), "Rua Rosario Batista Nunes, 102" , "Sao Paulo"     , "SP", "(11) 9 9688 5620", "contato_tim_maia@hotmail.com"       ),
-        (11122211511, "Rosimar Ribeiro "       , 'M', (06,06,2002), "Av. Adelia Franco, 03"          , "Olindina"      , "BA", "(75) 9 9958 8041", "rosimar_ribeiro@gmail.com"          ),
-        (11133311512, "Cauan da Silva "        , 'X', (15,08,1995), "Av. Cloves de Barros, 04"       , "Olindina"      , "BA", "(75) 9 9955 6762", "o_tal_do_cauan_estourado@gmail.com" ),
-        (11144411713, "Maria do Rosario"       , 'X', (08,10,1955), "Av. 7 de Junho, 09"             , "Rio de Janeiro", "RJ", "(21) 9 8876 0527", "mariarosario@hotmail.com"           ),
-        (11155511214, "Joaquina Maria "        , 'F', (25,10,1985), "Rua Socrates Cladionor, 199"    , "Manaus"        , "AM", "(92) 9 9688 5627", "contato_joaquinamaria@hotmail.com"  ),
-        (11122211515, "Cladionor da Silva"     , 'X', (02,05,1950), "Av. Adelia Franco, 09"          , "Olindina"      , "BA", "(75) 9 9980 6041", "rosimar_ribeiro@gmail.com"          ),
-        (11133311516, "Flavio Jukes Fernandes" , 'M', (20,08,1990), "Av. Ivo Carregosa, 16"          , "Aracaju"       , "SE", "(79) 9 9950 6782", "contato_jukes@gmail.com"            ),
-        (11144411717, "Anderson Oliveira Lima" , 'X', (30,10,1940), "Rua Ovelarque Ramos, 250"       , "São Domingos"  , "SE", "(79) 9 8876 0026", "anderson_lolzeiro@hotmail.com"      ),
-        (11155511218, "Luan Argolo Silva "     , 'M', (27,09,1999), "Rua Pitagoras , 345"            , "Tobias Barreto", "AM", "(92) 9 9608 5620", "luan.argolo@hgmail.com"             )
-    ]
+    [(26716347665, "Paulo Souza", 'M', (11,10,1996),"Rua A, 202","Muribeca", "SE", "999997000", "psouza@gmail.com"),(87717347115, "Ana Reis",'F', (5,4,1970), "Rua B, 304","Aracaju", "SE", "999826004", "areis@gmail.com"),(99999999999, "Guilherme Alves", 'M', (02,07,2002),"Rua C, 405","Salgado", "SE", "999997044", "guilherme@gmail.com"), (88888888888, "Esmeralda Oliveira", 'F', (09,09,2003),"Rua D, 506","Lagarto", "SE", "999996025", "esmeralda@gmail.com"), (10101010101, "Fernanda Menezes", 'F', (01,04,2000),"Rua E, 506","Lagarto", "SE", "999996025", "esmeralda@gmail.com"),(24304304037, "Carlos Ferreira", 'M', (1, 6, 2019), "Avenida A, 617", "Aracaju", "SE", "888884567", "Davi@outlok.com.br"),(42618186808, "Gabriel Johnson", 'F', (24, 2, 2015), "Travessa Jerusalem, 194", "Itabaiana", "SE", "676724019", "Jose@outlok.com.br"),(30123318811, "Jose Johnson", 'F', (23, 3, 1995), "Avenida 28 BC, 215", "Aracaju", "SE", "676724019", "Emanuel@Pereira.com.br"),(88369672235, "Inacio Alves", 'F', (25, 3, 1936), "Rua Brasil Martinho Valle, 560", "Aracaju", "SE", "107892190", "Miguel@Pereira.com.br"),(27478099652, "Leonardo Rodrigues", 'M', (25, 10, 1988), "Travessa Tereza Cristina, 348", "Nossa Senhora do Socorro", "SE", "749200312", "Bernardo@Ferreira.com.br"),(72282496478, "Emanuel Pereira", 'F', (20, 4, 1939), "Travessa Jerusalem, 247", "Aracaju", "SE", "749200312", "Gustavo@hotmail.com.br"),(91683896248, "Jose Smith", 'F', (30, 4, 1943), "Rua Brasil Martinho Valle, 365", "Lagarto", "SE", "107892190", "Jose@uol.com.br"),(97916395954, "Jose Pereira", 'F', (20, 7, 1991), "Travessa Jerusalem, 46", "Nossa Senhora do Socorro", "SE", "150712500", "Emanuel@infonet.com.br"),(60523799951, "Ignacio Pereira", 'M', (7, 7, 1977), "Rua Brasil Martinho Valle, 998", "Nossa Senhora do Socorro", "SE", "888884567", "Jose@hotmail.com.br"),(45251664016, "Carlos Smith", 'M', (13, 7, 1964), "Avenida A, 272", "Aracaju", "SE", "676724019", "Gustavo@Pereira.com.br"),(91870465759, "Gustavo Oliveira", 'M', (28, 4, 1944), "Rua A, 204", "Aracaju", "SE", "107892190", "Davi@Ferreira.com.br"),(13508690972, "Ignacio Souza santos", 'M', (10, 9, 1970), "Travessa Jerusalem, 611", "Itabaiana", "SE", "150712500", "Miguel@Pereira.com.br"),(32829450561, "Jose Souza santos", 'M', (22, 6, 1937), "Rua Joana Ribeiro, 540", "Aracaju", "SE", "676724019", "Bernardo@Ferreira.com.br"),(66281994769, "Gabriel Rodrigues", 'M', (20, 3, 1936), "Travessa Tereza Cristina, 354", "Lagarto", "SE", "888884567", "Jose@uol.com.br"),(76976598156, "Gabriel Pereira", 'M', (11, 12, 1944), "Rua Brasil Martinho Valle, 998", "Lagarto", "SE", "888884567", "Gustavo@Alves.com.br"),(91696131497, "Inacio Santos", 'M', (26, 5, 1977), "Avenida 28 BC, 824", "Lagarto", "SE", "107892190", "Davi@Ferreira.com.br"),(73306091843, "Gustavo Johnson", 'M', (14, 10, 1953), "Travessa Tereza Cristina, 358", "Aracaju", "SE", "150712500", "Jose@Pereira.com.br"),(72103643100, "Carlos Rodrigues", 'F', (17, 9, 2016), "Rua Brasil Martinho Valle, 272", "Lagarto", "SE", "820101558", "Jose@outlok.com.br"),(35457034065, "Ignacio Smith", 'F', (4, 3, 1942), "Rua A, 280", "Itabaiana", "SE", "820101558", "Miguel@infonet.com.br"),(84655918512, "Leonardo Santos", 'F', (26, 5, 1942), "Travessa Tereza Cristina, 311", "Lagarto", "SE", "888884567", "Ignacio@Ferreira.com.br"),(66361636097, "Emanuel Pereira", 'F', (14, 1, 1972), "Avenida 28 BC, 912", "Nossa Senhora do Socorro", "SE", "676724019", "Leonardo@Ferreira.com.br"),(56399785622, "Gustavo Silva", 'F', (28, 7, 1974), "Rua Joana Ribeiro, 516", "Lagarto", "SE", "107892190", "Carlos@Pereira.com.br"),(71776925819, "Gabriel Silva", 'F', (26, 2, 2017), "Travessa Jerusalem, 257", "Nossa Senhora do Socorro", "SE", "150712500", "Ignacio@gmail.com.br"),(72077627524, "Gabriel Silva", 'M', (25, 9, 2000), "Rua Brasil Martinho Valle, 74", "Lagarto", "SE", "888884567", "Inacio@Pereira.com.br"),(98188814278, "Jose Silva", 'M', (18, 2, 1935), "Rua Joana Ribeiro, 870", "Nossa Senhora do Socorro", "SE", "150712500", "Jose@uol.com.br"),(2105747717, "Gustavo Alves", 'M', (30, 4, 1955), "Avenida 28 BC, 68", "Itabaiana", "SE", "888884567", "Jose@infonet.com.br"),(5462490372, "Emanuel Oliveira", 'M', (9, 1, 1992), "Travessa Tereza Cristina, 889", "Aracaju", "SE", "820101558", "Gustavo@infonet.com.br"),(9618817308, "Ignacio Alves", 'M', (24, 5, 2003), "Travessa Jerusalem, 33", "Nossa Senhora do Socorro", "SE", "820101558", "Jose@Pereira.com.br"),(25003392400, "Gabriel Rodrigues", 'M', (29, 7, 2012), "Travessa Tereza Cristina, 203", "Aracaju", "SE", "107892190", "Gustavo@Alves.com.br"),(77873720221, "Jose Pereira", 'M', (27, 3, 1951), "Rua Joana Ribeiro, 701", "Itabaiana", "SE", "820101558", "Miguel@outlok.com.br"),(27243025429, "Gustavo Oliveira", 'F', (5, 3, 1936), "Travessa Tereza Cristina, 224", "Itabaiana", "SE", "107892190", "Gabriel@uol.com.br"),(16213902712, "Ignacio Santos", 'F', (5, 6, 1980), "Rua Brasil Martinho Valle, 49", "Aracaju", "SE", "749200312", "Davi@infonet.com.br"),(54204962073, "Gustavo Pereira", 'F', (8, 5, 2005), "Travessa Tereza Cristina, 691", "Lagarto", "SE", "888884567", "Jose@hotmail.com.br"),(33529650641, "Leonardo Santos", 'F', (2, 11, 2018), "Rua Brasil Martinho Valle, 613", "Itabaiana", "SE", "749200312", "Emanuel@Ferreira.com.br"),(67733182165, "Carlos Silva", 'F', (24, 12, 2015), "Avenida 28 BC, 829", "Itabaiana", "SE", "676724019", "Bernardo@Ferreira.com.br"),(92701485891, "Emanuel Smith", 'F', (6, 2, 1948), "Rua Joana Ribeiro, 531", "Aracaju", "SE", "150712500", "Davi@outlok.com.br"),(52993562899, "Gabriel Souza santos", 'F', (27, 10, 1986), "Travessa Jerusalem, 918", "Lagarto", "SE", "107892190", "Inacio@hotmail.com.br"),(64078372212, "Carlos Santos", 'F', (14, 6, 1936), "Rua Brasil Martinho Valle, 740", "Aracaju", "SE", "676724019", "Leonardo@gmail.com.br"),(42526230308, "Emanuel Rodrigues", 'M', (9, 8, 2002), "Rua Joana Ribeiro, 302", "Nossa Senhora do Socorro", "SE", "749200312", "Gustavo@hotmail.com.br"),(94259444688, "Leonardo Ferreira", 'M', (9, 12, 1992), "Rua A, 125", "Itabaiana", "SE", "888884567", "Jose@Pereira.com.br"),(59984593668, "Leonardo Santos", 'M', (14, 8, 1931), "Avenida A, 596", "Nossa Senhora do Socorro", "SE", "107892190", "Leonardo@hotmail.com.br")]
 
 -- item a) Cadastramento de um cidadão no sistema.  Para cadastrar um novo cidadão, inicialmente é checado se o CPF já existe ou não no sistema com a função 
 addCadastroSUS :: Cidadao -> CadastroSUS -> CadastroSUS
@@ -307,28 +183,6 @@ type Vacinado = (CPF, Doses)
 
 bancoDeVacinados :: Vacinados --CPF, [(Vacina, Data)]
 bancoDeVacinados = [(26716347665, [("AstraZeneca", (02, 07, 2021)), ("AstraZeneca", (01, 08, 2021))]), (88888888888, [("Pfizer", (09, 09, 2021))]), (10101010101, [("CoronaVac", (01, 01, 2021)), ("CoronaVac", (01, 02, 2021))]),(87717347115, [("CoronaVac", (01, 01, 2021)), ("CoronaVac", (01, 02, 2021))]), (99999999999, [("Janssen", (01, 08, 2021)), ("Janssen", (01, 08, 2021))])]
-
-bancoTestVac :: Vacinados
-bancoTestVac =
-    [( 18697038049, [ ("Janssen",     (10,02,2021)), ("Janssen",   (10,02,2021) )] ),
-    ( 34290105785, [ ("Pfizer",      (10,08,2021)) ] ),
-    ( 17286791095, [ ("CoronaVac",   (10,02,2021)) ] ), 
-    ( 84565794675, [ ("Pfizer",     (05,03,2021)), ("Pfizer",    (05,06,2021)  )]),
-    ( 60053722701, [ ("CoronaVac",  (10,02,2021)), ("CoronaVac", (10,03,2021)  )]),
-    ( 28251137861, [ ("Pfizer",     (05,03,2021)), ("Pfizer",    (05,06,2021)  )]),                      
-    ( 86096726461, [ ("CoronaVac",  (10,02,2021)), ("CoronaVac", (10,03,2021)  )]),
-    ( 53980790428, [ ("Pfizer",      (10,08,2021)) ] ),
-    ( 56254649322, [ ("CoronaVac",   (10,02,2021)) ] ),    
-    ( 60411837446, [ ("CoronaVac",   (10,02,2021)) ] ),    
-    ( 99959556100, [ ("AstraZeneca", (10,02,2021)) ] ),
-    ( 99988877566, [ ("Pfizer",      (10,08,2021)) ] ),                                 
-    ( 88877766478, [ ("AstraZeneca", (10,02,2021)) ] ),                                 
-    ( 78965412585, [ ("Pfizer",      (10,02,2021)) ] ),                                 
-    ( 11144411717, [ ("AstraZeneca", (10,02,2021)) ] ),                                 
-    ( 11122211511, [ ("CoronaVac",   (10,02,2021)) ] ),                                 
-    ( 78965412885, [ ("Janssen",     (10,02,2021)), ("Janssen",   (10,02,2021) )]),     
-    ( 11122211515, [ ("Pfizer",     (05,03,2021)), ("Pfizer",    (05,06,2021)  )]),    
-    ( 11133311516, [ ("CoronaVac",  (10,02,2021)), ("CoronaVac", (10,03,2021)  )])  ]
 
 --item g)Para realizar esta aplicação, procede-se da forma descrita a seguir e algumas funções auxiliares são necessárias. Inicialmente é verificado se o cidadão já tomou uma dose de vacina. Em caso afirmativo, usando error, exibe uma mensagem de que a primeira dose já foi aplicada. Caso contrário, é verificado se o usuário está cadastrado no sistema SUS. Se não estiver cadastrado, exibe uma mensagem de erro sinalizando o problema. Se estiver, checa se a idade é consistente com a faixa de idade de vacinação corrente. Se não for, exibe uma mensagem de erro sinalizando o problema. Se for, checa se o município é coerente com o município do cadastro SUS. Se não for, exibe uma mensagem de erro para ele atualizar os dados do SUS, pois só é permitida vacinação para residentes no município. Se for, adiciona o usuário no cadastro de vacinados. No momento da adição serão informados os dados constantes em Vacinado. Quando a vacina for Janssen, a tupla Dose deve vir duplicada na lista Doses, sinalizando que o paciente foi completamente imunizada
 aplicaPrimDose:: CPF -> CadastroSUS -> FaixaIdade -> Municipio -> Data -> Vacina -> Data -> Vacinados -> Vacinados
@@ -549,9 +403,9 @@ vacinaEstarAtrasada myCidadao myVacinados dataAtual
 
 diasAtrasados :: Data -> Data -> Quantidade 
 diasAtrasados dataVacina dataAtual 
-    --meses iguais 
+    --Anos iguais e meses iguais 
     | (mesAtual == mesVac) && (anoAtual == anoVac) = diaAtual - diaVac
-    --Meses diferentes
+    --Anos iguais e meses diferentes
         --Ano bissexto
     |  (checkAnoBissexto anoAtual) && (anoAtual == anoVac) = diasFimMesVacBissexto + diasEntreMesesAnoBissexto + diaAtual
         --Ano comum
@@ -565,6 +419,7 @@ diasAtrasados dataVacina dataAtual
     | not (checkAnoBissexto anoVac) && (checkAnoBissexto anoAtual) = diasFimAnoComum + (diasAnoToAno anoVac anoAtual) + diasComecoAnoComum
         --O ano da vacina eh bissexto e ano atual eh comum
     | (checkAnoBissexto anoVac) && not (checkAnoBissexto anoAtual) = diasFimAnoBissexto + (diasAnoToAno anoVac anoAtual) + diasComecoAnoBissexto
+    --Se de erro, tratamento
     | otherwise = error "Informacoes relevantes ou suficientes NAO foram encontradas"
 
     where 
@@ -639,11 +494,3 @@ listaMunicipioGenero myDataBase myMunicipio listaGenero = putStrLn ("MUNICIPIO: 
 --Retorna a lista do estado formatada lindamente
 listaEstadoGenero :: CadastroSUS -> Estado -> [Genero] -> IO()
 listaEstadoGenero myDataBase myState listaGenero = putStrLn ("ESTADO: " ++ myState ++ "\nGENERO         QUANTIDADE\n" ++ (formataLinhasGenero (geraListaEstadoGenero myDataBase myState listaGenero)) ++ (formataTotalGenero (geraListaEstadoGenero myDataBase myState listaGenero)))
-
-
---Cadastros pre-definidos para teste no cadastroSUS
-maria :: Cidadao
-maria = (53471688765, "Maria Silva", 'F', (21,12,1984),"Rua A, 202","Gloria", "SE", "999880300", "msilva@gmail.com")
-
-marcos :: Cidadao
-marcos = (53499988765, "Marcos Santos", 'M', (25,10,2000),"Rua D, 202","Aracaju", "SE", "999880501","msilva@gmail.com")
