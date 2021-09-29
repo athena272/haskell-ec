@@ -91,17 +91,17 @@ bancoTest = [
     (60411837446, "Samuel Fernandes", 'M', (1, 5, 1963), "Rua Carlos Augusto Cornelsen, 202", "Curitiba", "PR", "318361413", "Fernandes@gmail.com"),
     (99959556100, "Kauan Lima", 'M', (25, 5, 1954), "Rua Maria Luísa do Val Penteado, 202", "São Paulo", "SP", "888884567", "Kauan@gmail.com"),
     (99988877566, "Cleytin da Silva"       , 'M', (31,12,2002), "Rua Josevaldo Neto, 333"        , "Aracaju"       , "SE", "(79) 9 9958 6041", "cleytin_estourado@gmail.com"        ),
-        (88877766478, "Josineide Ferreira"     , 'F', (13,10,1990), "Rua Jose Elencar, 250"          , "Maceio"        , "AL", "(82) 9 9950 6762", "josineide_dos_paredoes@gmail.com"   ),
-        (78965412585, "Raphaela Cardoso"       , 'X', (25,02,1999), "Rua Antonio Valentim, 76"       , "Tobias Barreto", "SE", "(79) 9 8876 0526", "rapha_cardoso@hotmail.com"          ),
-        (78965412885, "Tim Maia "              , 'M', (20,05,1960), "Rua Rosario Batista Nunes, 102" , "Sao Paulo"     , "SP", "(11) 9 9688 5620", "contato_tim_maia@hotmail.com"       ),
-        (11122211511, "Rosimar Ribeiro "       , 'M', (06,06,2002), "Av. Adelia Franco, 03"          , "Olindina"      , "BA", "(75) 9 9958 8041", "rosimar_ribeiro@gmail.com"          ),
-        (11133311512, "Cauan da Silva "        , 'X', (15,08,1995), "Av. Cloves de Barros, 04"       , "Olindina"      , "BA", "(75) 9 9955 6762", "o_tal_do_cauan_estourado@gmail.com" ),
-        (11144411713, "Maria do Rosario"       , 'X', (08,10,1955), "Av. 7 de Junho, 09"             , "Rio de Janeiro", "RJ", "(21) 9 8876 0527", "mariarosario@hotmail.com"           ),
-        (11155511214, "Joaquina Maria "        , 'F', (25,10,1985), "Rua Socrates Cladionor, 199"    , "Manaus"        , "AM", "(92) 9 9688 5627", "contato_joaquinamaria@hotmail.com"  ),
-        (11122211515, "Cladionor da Silva"     , 'X', (02,05,1950), "Av. Adelia Franco, 09"          , "Olindina"      , "BA", "(75) 9 9980 6041", "rosimar_ribeiro@gmail.com"          ),
-        (11133311516, "Flavio Jukes Fernandes" , 'M', (20,08,1990), "Av. Ivo Carregosa, 16"          , "Aracaju"       , "SE", "(79) 9 9950 6782", "contato_jukes@gmail.com"            ),
-        (11144411717, "Anderson Oliveira Lima" , 'X', (30,10,1940), "Rua Ovelarque Ramos, 250"       , "São Domingos"  , "SE", "(79) 9 8876 0026", "anderson_lolzeiro@hotmail.com"      ),
-        (11155511218, "Luan Argolo Silva "     , 'M', (27,09,1999), "Rua Pitagoras , 345"            , "Tobias Barreto", "AM", "(92) 9 9608 5620", "luan.argolo@hgmail.com"             )
+    (88877766478, "Josineide Ferreira"     , 'F', (13,10,1990), "Rua Jose Elencar, 250"          , "Maceio"        , "AL", "(82) 9 9950 6762", "josineide_dos_paredoes@gmail.com"   ),
+    (78965412585, "Raphaela Cardoso"       , 'X', (25,02,1999), "Rua Antonio Valentim, 76"       , "Tobias Barreto", "SE", "(79) 9 8876 0526", "rapha_cardoso@hotmail.com"          ),
+    (78965412885, "Tim Maia "              , 'M', (20,05,1960), "Rua Rosario Batista Nunes, 102" , "Sao Paulo"     , "SP", "(11) 9 9688 5620", "contato_tim_maia@hotmail.com"       ),
+    (11122211511, "Rosimar Ribeiro "       , 'M', (06,06,2002), "Av. Adelia Franco, 03"          , "Olindina"      , "BA", "(75) 9 9958 8041", "rosimar_ribeiro@gmail.com"          ),
+    (11133311512, "Cauan da Silva "        , 'X', (15,08,1995), "Av. Cloves de Barros, 04"       , "Olindina"      , "BA", "(75) 9 9955 6762", "o_tal_do_cauan_estourado@gmail.com" ),
+    (11144411713, "Maria do Rosario"       , 'X', (08,10,1955), "Av. 7 de Junho, 09"             , "Rio de Janeiro", "RJ", "(21) 9 8876 0527", "mariarosario@hotmail.com"           ),
+    (11155511214, "Joaquina Maria "        , 'F', (25,10,1985), "Rua Socrates Cladionor, 199"    , "Manaus"        , "AM", "(92) 9 9688 5627", "contato_joaquinamaria@hotmail.com"  ),
+    (11122211515, "Cladionor da Silva"     , 'X', (02,05,1950), "Av. Adelia Franco, 09"          , "Olindina"      , "BA", "(75) 9 9980 6041", "rosimar_ribeiro@gmail.com"          ),
+    (11133311516, "Flavio Jukes Fernandes" , 'M', (20,08,1990), "Av. Ivo Carregosa, 16"          , "Aracaju"       , "SE", "(79) 9 9950 6782", "contato_jukes@gmail.com"            ),
+    (11144411717, "Anderson Oliveira Lima" , 'X', (30,10,1940), "Rua Ovelarque Ramos, 250"       , "São Domingos"  , "SE", "(79) 9 8876 0026", "anderson_lolzeiro@hotmail.com"      ),
+    (11155511218, "Luan Argolo Silva "     , 'M', (27,09,1999), "Rua Pitagoras , 345"            , "Tobias Barreto", "AM", "(92) 9 9608 5620", "luan.argolo@hgmail.com"             )
     ]
 
 -- item a) Cadastramento de um cidadão no sistema.  Para cadastrar um novo cidadão, inicialmente é checado se o CPF já existe ou não no sistema com a função 
