@@ -464,9 +464,9 @@ quantidadeDoseMun myVacinados myTipoDose myMunicipio myDataBase
 quantidadeDoseEst :: Vacinados -> TipoDose -> Estado -> CadastroSUS -> Quantidade 
 quantidadeDoseEst myVacinados myTipoDose myState myDataBase
       --Para pessoas que tomaram a primeira dose(mesmo que tenham tomado a segunda dose, ela entraria na contagem, jah que quem tomou a segunda tose, tomou a primeira em algum momento)
-      | myTipoDose == 1 = length [cpf | (cpf, _) <- myVacinados, myState == (getState (getCidadao cpf myDataBase))]
+      | (myTipoDose == 1) = length [cpf | (cpf, _) <- myVacinados, myState == (getState (getCidadao cpf myDataBase))]
        --Para pessoas que tomaram a segunda dose
-      | myTipoDose == 2 = length [(vacina2, data2) | (cpf, [(vacina1, data1), (vacina2, data2)]) <- myVacinados, myState == (getState (getCidadao cpf myDataBase))]
+      | (myTipoDose == 2) = length [(vacina2, data2) | (cpf, [(vacina1, data1), (vacina2, data2)]) <- myVacinados, myState == (getState (getCidadao cpf myDataBase))]
       --Se colocar um tipo de dose diferente, da um erro
       | otherwise = error "Informacoes relevantes ou suficientes NAO foram encontradas"
 
@@ -481,18 +481,18 @@ getCidadao myCPF myDataBase
 quantidadeMunIdDose :: Vacinados -> Municipio -> Data -> FaixaIdade -> TipoDose -> CadastroSUS -> Quantidade
 quantidadeMunIdDose myVacinados myMunicipio dataAtual faixasIdade myTipoDose myDataBase 
     --Para pessoas que tomaram a primeira dose(mesmo que tenham tomado a segunda dose, ela entraria na contagem, jah que quem tomou a segunda tose, tomou a primeira em algum momento)
-    | myTipoDose == 1 = length [cpf | (cpf, _) <- myVacinados, myMunicipio == (getMunicipio (getCidadao cpf myDataBase)), idadeNaFaixa (getCidadao cpf myDataBase) faixasIdade dataAtual] 
+    | (myTipoDose == 1) = length [cpf | (cpf, _) <- myVacinados, myMunicipio == (getMunicipio (getCidadao cpf myDataBase)), idadeNaFaixa (getCidadao cpf myDataBase) faixasIdade dataAtual] 
    --Para pessoas que tomaram a segunda dose
-    | myTipoDose == 2 = length [(vacina2, data2) | (cpf, [(vacina1, data1), (vacina2, data2)]) <- myVacinados, myMunicipio == (getMunicipio (getCidadao cpf myDataBase)),idadeNaFaixa (getCidadao cpf myDataBase) faixasIdade dataAtual]
+    | (myTipoDose == 2) = length [(vacina2, data2) | (cpf, [(vacina1, data1), (vacina2, data2)]) <- myVacinados, myMunicipio == (getMunicipio (getCidadao cpf myDataBase)),idadeNaFaixa (getCidadao cpf myDataBase) faixasIdade dataAtual]
     --Se colocar um tipo de dose diferente, da um erro
     | otherwise = error "Informacoes relevantes ou suficientes NAO foram encontradas"
 
 quantidadeEstIdDose :: Vacinados -> Municipio -> Data ->FaixaIdade -> TipoDose -> CadastroSUS -> Quantidade
 quantidadeEstIdDose myVacinados myState dataAtual faixasIdade myTipoDose myDataBase 
     --Para pessoas que tomaram a primeira dose(mesmo que tenham tomado a segunda dose, ela entraria na contagem, jah que quem tomou a segunda tose, tomou a primeira em algum momento)
-    | myTipoDose == 1 = length [cpf | (cpf, _) <- myVacinados, myState == (getState (getCidadao cpf myDataBase)), idadeNaFaixa (getCidadao cpf myDataBase) faixasIdade dataAtual] 
+    | (myTipoDose == 1) = length [cpf | (cpf, _) <- myVacinados, myState == (getState (getCidadao cpf myDataBase)), idadeNaFaixa (getCidadao cpf myDataBase) faixasIdade dataAtual] 
     --Para pessoas que tomaram a segunda dose
-    | myTipoDose == 2 = length [(vacina2, data2) | (cpf, [(vacina1, data1), (vacina2, data2)]) <- myVacinados, myState == (getState (getCidadao cpf myDataBase)),idadeNaFaixa (getCidadao cpf myDataBase) faixasIdade dataAtual]
+    | (myTipoDose == 2) = length [(vacina2, data2) | (cpf, [(vacina1, data1), (vacina2, data2)]) <- myVacinados, myState == (getState (getCidadao cpf myDataBase)),idadeNaFaixa (getCidadao cpf myDataBase) faixasIdade dataAtual]
     --Se colocar um tipo de dose diferente, da um erro
     | otherwise = error "Informacoes relevantes ou suficientes NAO foram encontradas"
 
