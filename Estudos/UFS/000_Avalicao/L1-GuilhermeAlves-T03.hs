@@ -390,6 +390,11 @@ checkCPFVacinados myCPF myVacinados = or [myCPF == cpfMyVacinados | (cpfMyVacina
 getDosesTomadas :: CPF -> Vacinados -> Int
 getDosesTomadas myCPF myVacinados = length (getVacinaData myCPF myVacinados)
 
+--Verificar se usuario ja tomou primeiro dose
+--Primeiro pega a lista que possuia como unico elemento(por isso o head, já que é so um elemento) uma lista que tem tuplas de vacinas e datas
+getVacinaData :: CPF -> Vacinados -> Doses
+getVacinaData myCPF myVacinados =  head [dosesTomadas | (cpf, dosesTomadas) <- myVacinados, myCPF == cpf]
+
 --Verificar se data de aplicacao da primeira dose vem depois da segunda
 dataSeguDoseValida :: CPF -> Data -> Vacinados -> Bool
 dataSeguDoseValida myCPF myDateVacina myVacinados = not ([] ==  [dataNova | (cpf, [(vacina, dataNova)]) <- myVacinados, myCPF == cpf, dataDepois myDateVacina dataNova])
@@ -406,10 +411,6 @@ findPosVacinado myCPF myVacinados
     | otherwise = head posicao
     where posicao = [position | (position, vacinado) <- (posicionarVacinadosLista myVacinados), (fst vacinado) == myCPF]
 
---Verificar se usuario ja tomou primeiro dose
---Primeiro pega a lista que possuia como unico elemento(por isso o head, já que é so um elemento) uma lista que tem tuplas de vacinas e datas
-getVacinaData :: CPF -> Vacinados -> Doses
-getVacinaData myCPF myVacinados =  head [dosesTomadas | (cpf, dosesTomadas) <- myVacinados, myCPF == cpf]
 
 --Verificar se uma data venho depois da outra
 dataDepois :: Data -> Data -> Bool
