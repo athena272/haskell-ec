@@ -1,5 +1,4 @@
---GUILHERME ROSÁRIO ALVES
---202100022784
+module SistemaSUS where
 
 --Tipo mais externo, para cadastro
 type CadastroSUS = [Cidadao]
