@@ -536,7 +536,7 @@ diasAnoToAno anoVac anoAtual = qtDiasAnoBissexto + qtDiasAnoComum
 checkAnoBissexto :: Ano -> Bool
 checkAnoBissexto ano = (ano `mod` 4 == 0 && (ano `mod` 100 /= 0 || ano `mod` 400 == 0))
 
---Pegar a data da vacina
+--Pegar a data da vacina pelo cidadao
 getVacinaData' :: Cidadao -> Vacinados -> Data
 getVacinaData' myCidadao myVacinados =  head [dataDose | (cpf, dosesTomadas) <- myVacinados, (vacina, dataDose) <- dosesTomadas,(getCPFSUS myCidadao) == cpf]
 
@@ -565,6 +565,7 @@ diasAtrasados dataVacina dataAtual
     | not (checkAnoBissexto anoVac) && (checkAnoBissexto anoAtual) = diasFimAnoComum + (diasAnoToAno anoVac anoAtual) + diasComecoAnoComum
         --O ano da vacina eh bissexto e ano atual eh comum
     | (checkAnoBissexto anoVac) && not (checkAnoBissexto anoAtual) = diasFimAnoBissexto + (diasAnoToAno anoVac anoAtual) + diasComecoAnoBissexto
+    | otherwise = error "Informacoes relevantes ou suficientes NAO foram encontradas"
 
     where 
         (diaVac, mesVac, anoVac) = dataVacina
