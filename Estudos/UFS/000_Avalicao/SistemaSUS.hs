@@ -457,15 +457,17 @@ findVacina humanoSUS myVacinados
 --quantidadeEstAtrasados :: Vacinados -> CadastroSUS -> Estado -> Data -> Quantidade
 --quantidadeEstAtrasados myVacinados myDataBase myState dataAtual = 
 
-{--
+
 diasAtrasados :: Data -> Data -> Quantidade 
 diasAtrasados dataVacina dataAtual 
     --meses iguais 
     | (mesAtual == mesVac) && (anoAtual == anoVac) = diaAtual - diaVac
+    --Meses diferentes
+        --Ano bissexto
+    |  (checkAnoBissexto anoAtual) && (anoAtual == anoVac) = 
 
     where (diaVac, mesVac, anoVac) = dataVacina
           (diaAtual, mesAtual, anoAtual) = dataAtual  
---}
 
 ---verificar se ano é bissexto
 checkAnoBissexto :: Ano -> Bool
