@@ -458,6 +458,7 @@ quantidadeDoseMun myVacinados myTipoDose myMunicipio myDataBase
       | myTipoDose == 1 = length [cpf | (cpf, _) <- myVacinados, myMunicipio == (getMunicipio (getCidadao cpf myDataBase))]
       --Para pessoas que tomaram a segunda dose
       | myTipoDose == 2 = length [(vacina2, data2) | (cpf, [(vacina1, data1), (vacina2, data2)]) <- myVacinados, myMunicipio == (getMunicipio (getCidadao cpf myDataBase))]
+      --Se colocar um tipo de dose diferente, da um erro
       | otherwise = error "Informacoes relevantes ou suficientes NAO foram encontradas"
 
 quantidadeDoseEst :: Vacinados -> TipoDose -> Estado -> CadastroSUS -> Quantidade 
@@ -466,6 +467,7 @@ quantidadeDoseEst myVacinados myTipoDose myState myDataBase
       | myTipoDose == 1 = length [cpf | (cpf, _) <- myVacinados, myState == (getState (getCidadao cpf myDataBase))]
        --Para pessoas que tomaram a segunda dose
       | myTipoDose == 2 = length [(vacina2, data2) | (cpf, [(vacina1, data1), (vacina2, data2)]) <- myVacinados, myState == (getState (getCidadao cpf myDataBase))]
+      --Se colocar um tipo de dose diferente, da um erro
       | otherwise = error "Informacoes relevantes ou suficientes NAO foram encontradas"
 
 ----------------------Funcoes Auxiliares
