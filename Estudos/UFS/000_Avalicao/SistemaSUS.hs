@@ -464,7 +464,9 @@ diasAtrasados dataVacina dataAtual
     | (mesAtual == mesVac) && (anoAtual == anoVac) = diaAtual - diaVac
     --Meses diferentes
         --Ano bissexto
-    |  (checkAnoBissexto anoAtual) && (anoAtual == anoVac) = 
+    |  (checkAnoBissexto anoAtual) && (anoAtual == anoVac) = qtdEntreMes + qtdEntreDuas 
+        --Ano comum
+    | not (checkAnoBissexto anoAtual)  && (anoAtual == anoVac) =    
 
     where (diaVac, mesVac, anoVac) = dataVacina
           (diaAtual, mesAtual, anoAtual) = dataAtual  
