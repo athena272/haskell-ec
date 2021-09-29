@@ -187,7 +187,7 @@ getDataNasc :: Cidadao -> DataNasc
 getDataNasc (_, _, _, myNasci, _, _, _, _, _) = myNasci 
 
 --Subtrair DataAtual pela Data de Nascimento
---Se a data de nascimento estiver antes(ser menor) do dia 27 e do mes 09, a pessoa ja fez aniversario, se não, ela ainda é um ano mais jovem
+--Se a data de nascimento estiver antes(ser menor) do dia atual e do mes atual, a pessoa ja fez aniversario, se não, ela ainda é um ano mais jovem
 getIdade :: Cidadao -> Data ->Int
 getIdade cidadao dataAtual 
                 | (myMes < mesAtual) || (myMes == mesAtual) && (myDia < diaAtual) =  anoAtual - myAno - 1 --dia menor que dia Atual, e mes menor que mes Atual, faz um calculo normal de idade
