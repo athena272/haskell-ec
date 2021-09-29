@@ -196,6 +196,7 @@ getIdade cidadao dataAtual
                     (myDia, myMes, myAno) = (getDataNasc cidadao)
                     (diaAtual, mesAtual, anoAtual) = dataAtual
 
+--Verifica se um cidado esta na faixa de idade passada
 idadeNaFaixa :: Cidadao -> FaixaIdade -> Data -> Bool
 idadeNaFaixa humanoSUS faixasIdade myData = (getIdade humanoSUS myData >= (fst faixasIdade)) && (getIdade humanoSUS myData <= (snd faixasIdade))
 
@@ -208,13 +209,13 @@ listaMunicipioFaixas myDataBase myMunicipio dataAtual listaFaixasIdade = putStrL
 --Retorna a lista do estado formatada lindamente
 listaEstadoFaixas :: CadastroSUS -> Estado -> Data -> [FaixaIdade] -> IO()
 listaEstadoFaixas myDataBase myState dataAtual listaFaixasIdade = putStrLn ("ESTADO: " ++ myState ++ "\nFAIXA IDADES        QUANTIDADE\n" ++ (formataLinhas (geraListaEstadoFaixas myDataBase myState dataAtual listaFaixasIdade)) ++ (formataTotal (geraListaEstadoFaixas myDataBase myState dataAtual listaFaixasIdade)))
+
 --Estas funções precisam de funções auxiliares para gerar uma lista de quantidades por faixas de idade, para depois gerar a exibição usando as funções do item (f).
 geraListaMunicipioFaixas :: CadastroSUS -> Municipio -> Data -> [FaixaIdade] -> [(FaixaIdade, Quantidade)]
 geraListaMunicipioFaixas myDataBase myMunicipio dataAtual listaFaixasIdade = [(faixasIdade, quantidade) | faixasIdade <- listaFaixasIdade, quantidade <- [cidadaosPorMunicipioIdade myDataBase myMunicipio dataAtual faixasIdade]] 
     
 geraListaEstadoFaixas :: CadastroSUS -> Estado -> Data -> [FaixaIdade] -> [(FaixaIdade, Quantidade)]
 geraListaEstadoFaixas myDataBase myState dataAtual listaFaixasIdade = [(faixasIdade, quantidade) | faixasIdade <- listaFaixasIdade,quantidade <- [cidadaosPorEstadoIdade myDataBase myState dataAtual faixasIdade]]
-
 --item f)A lista do município ou estado deve obedecer à formatação, descrita a seguir. O cabeçalho segue o formato abaixo, onde nome é o nome do município ou estado informado na função
 --Além do cadastro no sistema SUS, haverá um cadastro dos cidadãos vacinados. Este cadastro está definido a seguir
 --Primeiro Ponto: Formatação do valor inteiro que representa a quantidade para incluir os espaços à esquerda, para que a justificação à direita com a palavra QUANTIDADE ocorra.
