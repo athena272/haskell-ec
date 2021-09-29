@@ -455,9 +455,9 @@ atualizaVacina myCPF myTipoDose myVacina myVacinados
 quantidadeDoseMun :: Vacinados -> TipoDose -> Estado -> CadastroSUS -> Quantidade 
 quantidadeDoseMun myVacinados myTipoDose myMunicipio myDataBase
       --Para pessoas que tomaram a primeira dose(mesmo que tenham tomado a segunda dose, ela entraria na contagem, jah que quem tomou a segunda tose, tomou a primeira em algum momento)
-      | myTipoDose == 1 = length [cpf | (cpf, _) <- myVacinados, myMunicipio == (getMunicipio (getCidadao cpf myDataBase))]
+      | (myTipoDose == 1) = length [cpf | (cpf, _) <- myVacinados, myMunicipio == (getMunicipio (getCidadao cpf myDataBase))]
       --Para pessoas que tomaram a segunda dose
-      | myTipoDose == 2 = length [(vacina2, data2) | (cpf, [(vacina1, data1), (vacina2, data2)]) <- myVacinados, myMunicipio == (getMunicipio (getCidadao cpf myDataBase))]
+      | (myTipoDose == 2) = length [(vacina2, data2) | (cpf, [(vacina1, data1), (vacina2, data2)]) <- myVacinados, myMunicipio == (getMunicipio (getCidadao cpf myDataBase))]
       --Se colocar um tipo de dose diferente, da um erro
       | otherwise = error "Informacoes relevantes ou suficientes NAO foram encontradas"
 
