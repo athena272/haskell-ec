@@ -471,6 +471,9 @@ diasAtrasados dataVacina dataAtual
     where (diaVac, mesVac, anoVac) = dataVacina
           (diaAtual, mesAtual, anoAtual) = dataAtual  
 
+    diaMesesAnoBissexto = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+    diaMesesAnoNormal
+
 ---verificar se ano é bissexto
 checkAnoBissexto :: Ano -> Bool
 checkAnoBissexto ano = (ano `mod` 4 == 0 && (ano `mod` 100 /= 0 || ano `mod` 400 == 0))
