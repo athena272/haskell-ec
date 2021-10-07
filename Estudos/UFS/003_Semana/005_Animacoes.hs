@@ -1,4 +1,5 @@
- {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE OverloadedStrings #-}
+import CodeWorld
  
 main = animationOf meuNomeGirando
 
