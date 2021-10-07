@@ -3,11 +3,10 @@ import CodeWorld.Sketches
 
 main = drawingOf (coordinatePlane & bairro)
 
-
 --Construindo uma casa
 casa :: Color -> Color -> Color -> Bool -> Picture 
 casa corCasa corPorta corCarro comChamine = colored orange (teto) & porta & janela & parede & chamine & translated (-2) (-0.5) (car)
-    where teto = colored orange (solidPolygon [(0,3), (-3, 1), (3,1)])
+    where teto = colored orange (solidPolygon [(0,2.5), (-1.5, 1.5), (1.5,1.5)])
           porta = translated 0 (-1) (colored corPorta (solidRectangle 0.8 1))
           janela = translated 0 0.7 (colored grey (solidCircle 0.3))
           car = dilated 0.4 (colored corCarro (sketchedCar))
