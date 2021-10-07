@@ -1,7 +1,7 @@
 import CodeWorld
 import CodeWorld.Sketches
 
-main = drawingOf bairro
+main = drawingOf (coordinatePlane & bairro)
 
 
 --Construindo uma casa
