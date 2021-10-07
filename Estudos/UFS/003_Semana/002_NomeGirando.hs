@@ -1,8 +1,9 @@
+{-#LANGUAGE OverloadedStrings #-}
 import CodeWorld
 
-main = drawingOf (nomeGirando)
+main = animationOf (nomeGirando)
 
-nome = (lettering "Athena")
+nome = (lettering "ATHENA")
 
 nomeGirando :: Double -> Picture
-nomeGirando tempo = dislated(2 + 0.5 * tempo) (rotated (pi/9 * t) nome)
+nomeGirando tempo = dilated(2 + 0.5 * tempo) (rotated (pi/9 * tempo) nome)
