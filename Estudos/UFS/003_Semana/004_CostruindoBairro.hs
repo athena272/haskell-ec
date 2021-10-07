@@ -19,4 +19,5 @@ casa corCasa corPorta corCarro comChamine = colored orange (teto) & porta & jane
 rua :: Color -> Color -> Color -> Bool -> Color -> Color -> Color -> Bool -> Picture
 rua corCasa1 corPorta1 corCarro1 chamine1 corCasa2 corPorta2 corCarro2 chamine2 = (casa corCasa1 corPorta1 corCarro1 chamine1) & translated (-5) 0 (casa corCasa2 corPorta2 corCarro2 chamine2) 
 
+--Construindo um bairro
 bairro = rua red black yellow True yellow brown blue False & translated 0 5 (rua pink blue purple False blue orange blue True)
