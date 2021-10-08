@@ -1,6 +1,6 @@
 import CodeWorld
 
-main = putStrLn (show )
+main = putStrLn (show (doIntersect ((10, 0), (0, 10)) ((0, 0), (10, 10))))
 
 type Ponto = (Double, Double)
 type Segmento = (Ponto, Ponto)
