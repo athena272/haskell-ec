@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 import CodeWorld
  
-main = animationOf meuNomeGirando
+main = animationOf (meuNomeGirando)
 
 meuNome = dilated 2 (lettering "ATHENA")
 
