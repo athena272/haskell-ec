@@ -60,6 +60,6 @@ makeListPoints :: Poligono -> [(Ponto, Ponto)]
 makeListPoints listaPoints = [(point1, point2) | point1 <- listaPoints, point2 <- listaPoints, point1 /= point2]
 
 --Verify if a poly and a poly intersect between bothes
-polygonIntersectpolygon :: Poligono -> Poligono -> Bool
-polygonIntersectpolygon poly1 poly2 = or [doIntersect (fst segmentPoly1) (snd segmentPoly1) (fst segmentPoly2) (snd segmentPoly2) | segmentPoly1 <- (makeListPoints poly1), segmentPoly2 <- (makeListPoints poly2)]
+polygonIntersectPolygon :: Poligono -> Poligono -> Bool
+polygonIntersectPolygon poly1 poly2 = or [doIntersect (fst segmentPoly1) (snd segmentPoly1) (fst segmentPoly2) (snd segmentPoly2) | segmentPoly1 <- (makeListPoints poly1), segmentPoly2 <- (makeListPoints poly2)]
 
