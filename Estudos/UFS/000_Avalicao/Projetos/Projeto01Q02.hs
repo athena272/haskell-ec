@@ -57,5 +57,5 @@ segmentPolygnIntersect :: Ponto -> Ponto -> Poligono -> [Bool]
 segmentPolygnIntersect p1 q1 poly = [doIntersect p1 q1 (fst segmentPoly) (snd segmentPoly) | segmentPoly <- (makeListPoints poly)] 
 
 makeListPoints :: Poligono -> [(Ponto, Ponto)]
-makeListPoints listaPoints = [(point1, point2) | point1 <- listaPoints, point2 <- listaPoints]
+makeListPoints listaPoints = [(point1, point2) | point1 <- listaPoints, point2 <- listaPoints, point1 /= point2]
 
