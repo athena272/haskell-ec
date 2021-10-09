@@ -1,6 +1,6 @@
 --import CodeWorld
 
---main = putStrLn (show (segmentPolygnIntersect (10, 4) (3, 2) [(0, 0), (3, 3), (1, 5)]))
+--main = putStrLn (show (segmentpolygonIntersect (10, 4) (3, 2) [(0, 0), (3, 3), (1, 5)]))
 
 type Ponto = (Double, Double)
 
@@ -52,9 +52,9 @@ doIntersect p1 q1 p2 q2
 
 type Poligono = [Ponto]
 
---Verify if a segment and a polygn intersect
-segmentPolygnIntersect :: Ponto -> Ponto -> Poligono -> Bool
-segmentPolygnIntersect p1 q1 poly = or [doIntersect p1 q1 (fst segmentPoly) (snd segmentPoly) | segmentPoly <- (makeListPoints poly)] 
+--Verify if a segment and a polygon intersect
+segmentpolygonIntersect :: Ponto -> Ponto -> Poligono -> Bool
+segmentpolygonIntersect p1 q1 poly = or [doIntersect p1 q1 (fst segmentPoly) (snd segmentPoly) | segmentPoly <- (makeListPoints poly)] 
 
 makeListPoints :: Poligono -> [(Ponto, Ponto)]
 makeListPoints listaPoints = [(point1, point2) | point1 <- listaPoints, point2 <- listaPoints, point1 /= point2]
