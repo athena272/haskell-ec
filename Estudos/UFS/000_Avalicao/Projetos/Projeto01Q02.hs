@@ -54,4 +54,4 @@ type Poligono = [(Ponto, Ponto)]
 
 --Verify if a segment and a polygn intersect
 segmentPolygnIntersect :: Ponto -> Ponto -> Poligono -> Bool
-segmentPolygnIntersect p1 q1 poly = or [doIntersect p1 q1 (fst segmentPoly) (snd segmentPoly) | segmentoPoly <- poly] 
+segmentPolygnIntersect p1 q1 poly = or [doIntersect p1 q1 (fst segmentPoly) (snd segmentPoly) | segmentPoly <- poly] 
