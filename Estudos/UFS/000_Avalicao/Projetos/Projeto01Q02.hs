@@ -1,6 +1,6 @@
 import CodeWorld
 
-main = putStrLn (show (doIntersect (10, 0) (0, 10) (0, 0) (10, 10)))
+main = putStrLn (show (segmentPolygnIntersect (0, 0) (0, 4) [(0, 0), (2, 3), (1, 5)]))
 
 type Ponto = (Double, Double)
 
@@ -50,8 +50,12 @@ doIntersect p1 q1 p2 q2
           ori3 = orientation p2 q2 p1
           ori4 = orientation p2 q2 q1 
 
-type Poligono = [(Ponto, Ponto)]
+type Poligono = [Ponto]
 
 --Verify if a segment and a polygn intersect
-segmentPolygnIntersect :: Ponto -> Ponto -> Poligono -> Bool
-segmentPolygnIntersect p1 q1 poly = or [doIntersect p1 q1 (fst segmentPoly) (snd segmentPoly) | segmentPoly <- poly] 
+segmentPolygnIntersect :: Ponto -> Ponto -> Poligono -> [Bool]
+segmentPolygnIntersect p1 q1 poly = [doIntersect p1 q1 (fst segmentPoly) (snd segmentPoly) | segmentPoly <- (makeListPoints poly)] 
+
+makeListPoints :: Poligono -> [(Ponto, Ponto)]
+makeListPoints listaPoints = [(point1, point2) | point1 <- listaPoints, point2 <- listaPoints]
+
