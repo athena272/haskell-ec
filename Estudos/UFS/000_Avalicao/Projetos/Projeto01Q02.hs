@@ -53,8 +53,8 @@ doIntersect p1 q1 p2 q2
 type Poligono = [Ponto]
 
 --Verify if a segment and a polygn intersect
-segmentPolygnIntersect :: Ponto -> Ponto -> Poligono -> [Bool]
-segmentPolygnIntersect p1 q1 poly = [doIntersect p1 q1 (fst segmentPoly) (snd segmentPoly) | segmentPoly <- (makeListPoints poly)] 
+segmentPolygnIntersect :: Ponto -> Ponto -> Poligono -> Bool
+segmentPolygnIntersect p1 q1 poly = or [doIntersect p1 q1 (fst segmentPoly) (snd segmentPoly) | segmentPoly <- (makeListPoints poly)] 
 
 makeListPoints :: Poligono -> [(Ponto, Ponto)]
 makeListPoints listaPoints = [(point1, point2) | point1 <- listaPoints, point2 <- listaPoints, point1 /= point2]
