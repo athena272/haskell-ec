@@ -51,3 +51,8 @@ doIntersect (p1, q1) (p2, q2)
           ori3 = orientation p2 q2 p1
           ori4 = orientation p2 q2 q1 
 
+type Poligono = [Segmento]
+
+--Verify if a segment and a polygn intersect
+segmentPolygnIntersect :: Segmento -> Poligono -> Bool
+segmentPolygnIntersect (p1, q1) poly = or [doIntersect (p1, q1) segPoly | segPoly <- poly] 
