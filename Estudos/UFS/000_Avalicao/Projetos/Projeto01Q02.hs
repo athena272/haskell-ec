@@ -1,9 +1,8 @@
 import CodeWorld
 
-main = putStrLn (show (doIntersect ((10, 0), (0, 10)) ((0, 0), (10, 10))))
+main = putStrLn (show (doIntersect (10, 0) (0, 10) (0, 0) (10, 10)))
 
 type Ponto = (Double, Double)
-type Segmento = (Ponto, Ponto)
 
 maxTupla :: (Double, Double) -> Double
 maxTupla (x, y) 
@@ -35,8 +34,8 @@ orientation (xp, yp) (xq, yq) (xr, yr)
 
 -- The main function that returns true if line segment 'p1q1'
 -- and 'p2q2' intersect.
-doIntersect :: Segmento -> Segmento -> Bool
-doIntersect (p1, q1) (p2, q2)
+doIntersect :: Ponto -> Ponto -> Ponto -> Ponto -> Bool
+doIntersect p1 q1 p2 q2
     --General Case
     | (ori1 /= ori2) && (ori3 /= ori4) = True 
     --Special Case
@@ -51,8 +50,6 @@ doIntersect (p1, q1) (p2, q2)
           ori3 = orientation p2 q2 p1
           ori4 = orientation p2 q2 q1 
 
-type Poligono = [Segmento]
-
 --Verify if a segment and a polygn intersect
-segmentPolygnIntersect :: Segmento -> Poligono -> Bool
+segmentPolygnIntersect :: Ponto -> Ponto -> Poligono -> Bool
 segmentPolygnIntersect (p1, q1) poly = or [doIntersect (p1, q1) segPoly | segPoly <- poly] 
