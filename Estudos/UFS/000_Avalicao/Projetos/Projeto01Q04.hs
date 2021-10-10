@@ -69,7 +69,12 @@ polygonIntersectPolygon poly1 poly2 = or [doIntersect (fst segmentPoly1) (snd se
 
 --Calculate polygon area
 polygonArea :: Polygon -> Double
-polygonArea poly =  (1/2) *  sum [(xi * yimais1 -  ximais1 * yi) | ]
+polygonArea poly =  (1/2) *  sum [(xi * yimais1 -  ximais1 * yi) | i <- [0..(length poly - 1)]]
+
+------Indexa lista, atribui uma posiçao para elemento
+posicionarElem :: [String] -> [(Int, String)]
+posicionarElem listaPalavras = zip posicioes listaPalavras 
+    where posicioes = [1..(length listaPalavras)]
 
 --Questao de somatoria
 somatoria :: Float -> Float -> Float 
