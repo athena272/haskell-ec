@@ -56,6 +56,8 @@ type Poligono = [Ponto]
 segmentPolygonIntersect :: Ponto -> Ponto -> Poligono -> Bool
 segmentPolygonIntersect p1 q1 poly = or [doIntersect p1 q1 (fst segmentPoly) (snd segmentPoly) | segmentPoly <- (makeListPoints poly)] 
 
+segmentPolygonIntersect' p1 q1 poly = [(p1, q1, (fst segmentPoly), (snd segmentPoly)) | segmentPoly <- (makeListPoints poly)] 
+
 makeListPoints :: Poligono -> [(Ponto, Ponto)]
 makeListPoints listaPoints = [(point1, point2) | point1 <- listaPoints, point2 <- listaPoints, point1 /= point2]
 
@@ -63,3 +65,4 @@ makeListPoints listaPoints = [(point1, point2) | point1 <- listaPoints, point2 <
 polygonIntersectPolygon :: Poligono -> Poligono -> Bool
 polygonIntersectPolygon poly1 poly2 = or [doIntersect (fst segmentPoly1) (snd segmentPoly1) (fst segmentPoly2) (snd segmentPoly2) | segmentPoly1 <- (makeListPoints poly1), segmentPoly2 <- (makeListPoints poly2)]
 
+polygonIntersectPolygon' poly1 poly2 = [(segmentPoly1, segmentPoly2) | segmentPoly1 <- (makeListPoints poly1), segmentPoly2 <- (makeListPoints poly2)]
