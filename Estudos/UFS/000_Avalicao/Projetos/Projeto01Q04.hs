@@ -68,3 +68,9 @@ polygonIntersectPolygon poly1 poly2 = or [doIntersect (fst segmentPoly1) (snd se
 --polygonIntersectPolygon' poly1 poly2 = [(segmentPoly1, segmentPoly2) | segmentPoly1 <- (makeListPoints poly1), segmentPoly2 <- (makeListPoints poly2)]
 
 --Calculate polygon area
+polygonArea :: Polygon -> Double
+polygonArea poly =  (1/2) *  sum [(xi * yimais1 -  ximais1 * yi) | ]
+
+--Questao de somatoria
+somatoria :: Float -> Float -> Float 
+somatoria limInf limSup = sum [sin (2 * pi / a) | a <- [limInf..limSup]]

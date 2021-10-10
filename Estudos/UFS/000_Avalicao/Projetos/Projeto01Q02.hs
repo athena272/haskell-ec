@@ -1,6 +1,6 @@
 --import CodeWorld
 
---main = putStrLn (show (segmentPolygonIntersect (10, 4) (3, 2) [(0, 0), (3, 3), (1, 5)]))
+--main = putStrLn (show (segmentPolygonIntersect (1, 1) (1 ,5) [(0,0),(3,3),(1,5)]))
 
 type Ponto = (Double, Double)
 
