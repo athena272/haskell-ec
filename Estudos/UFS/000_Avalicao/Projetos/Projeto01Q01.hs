@@ -4,20 +4,10 @@
 
 type Ponto = (Double, Double)
 
-maxTupla :: (Double, Double) -> Double
-maxTupla (x, y) 
-    | x > y = x
-    | otherwise = y
-
-minTupla :: (Double, Double) -> Double
-minTupla (x, y)
-    | x < y = x
-    | otherwise = y
-
 --Given three collinear points p, q, r, the function checks if point q lies on line segment 'pr'
 onSegment :: Ponto -> Ponto -> Ponto -> Bool
 onSegment (xp, yp) (xq, yq) (xr, yr) 
-    | (xq <= maxTupla (xp, xr)) && (xq >= minTupla (xp, xr)) && (yq <= maxTupla (yp, yr)) && (yq >= minTupla (yp, yr)) = True
+    | (xq <= max xp xr) && (xq >= min xp xr) && (yq <= max yp yr) && (yq >= min yp yr) = True
     | otherwise = False
 
 --To find orientation of ordered triplet (p, q, r).
