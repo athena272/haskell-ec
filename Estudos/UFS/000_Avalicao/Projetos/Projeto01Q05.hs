@@ -32,10 +32,25 @@ findElemPos position poly
 --centroid coordinate calculations
 --Cx
 centroidX :: Poligono -> Double 
-centroidX poly = (1/6 * polygonArea poly) * 
-     summation = sum [(xi * snd (findElemPos (i+1) poly ) - fst (findElemPos (i+1) poly ) * yi) | (i, (xi, yi)) <- (positionElem poly), i < (length poly - 1)]
-    lastCouple = (ultimoX * primeiroY - primeiroX * ultimoY)
+centroidX poly = (1/(6 * polygonArea poly)) * (summation)
+    where
+    summation = sum [(xi + fst (findElemPos (i+1) poly )) * (xi * snd (findElemPos (i+1) poly ) - fst (findElemPos (i+1) poly ) * yi) | (i, (xi, yi)) <- (positionElem poly), i < (length poly - 1)]
+    lastCouple = (ultimoX + primeiroX) * (ultimoX * primeiroY - primeiroX * ultimoY)
     ultimoX = fst (findElemPos (length poly - 1) poly) 
     primeiroY = snd (findElemPos 0 poly)
     primeiroX = fst (findElemPos 0 poly)
     ultimoY = snd (findElemPos (length poly - 1) poly)
+
+--Cy
+centroidY :: Poligono -> Double 
+centroidY poly = (1/(6 * polygonArea poly)) * (summation)
+    where
+    summation = sum [(yi + snd (findElemPos (i+1) poly )) * (xi * snd (findElemPos (i+1) poly ) - fst (findElemPos (i+1) poly ) * yi) | (i, (xi, yi)) <- (positionElem poly), i < (length poly - 1)]
+    lastCouple = (ultimoY + primeiroY) * (ultimoX * primeiroY - primeiroX * ultimoY)
+    ultimoX = fst (findElemPos (length poly - 1) poly) 
+    primeiroY = snd (findElemPos 0 poly)
+    primeiroX = fst (findElemPos 0 poly)
+    ultimoY = snd (findElemPos (length poly - 1) poly)
+
+centroidCouple :: Poligono -> (Double, Double)
+centroidCouple poly = (centroidX poly, centroidY poly)
