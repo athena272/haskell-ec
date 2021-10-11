@@ -2,6 +2,10 @@
 
 --main = putStrLn (show (polygonIntersectPolygon [(3,3),(6,3),(6,5),(3,5)]  [(0,0),(3,3),(1,5)]))
 
+type Ponto = (Double, Double)
+
+type Poligono = [Ponto]
+
 --Calculate polygon area
 polygonArea :: Poligono -> Double
 polygonArea poly =  (1/2) * (summation + lastCouple)
