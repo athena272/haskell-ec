@@ -22,7 +22,7 @@ positionElem :: Poligono -> [(Int, (Double, Double))]
 positionElem listCoordinates = zip positions listCoordinates 
     where positions = [0..(length listCoordinates) - 1]
 
---Encontrar a posicao do cidadao vacinado com base no seu CPF
+--Find a Coordinate couple using an index
 findElemPos :: Int -> Poligono -> Ponto
 findElemPos position poly 
     | element == [] = error "Element not find"
