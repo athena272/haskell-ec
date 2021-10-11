@@ -64,22 +64,28 @@ polygonIntersectPolygon :: Poligono -> Poligono -> Bool
 polygonIntersectPolygon poly1 poly2 = or [doIntersect (fst segmentPoly1) (snd segmentPoly1) (fst segmentPoly2) (snd segmentPoly2) | segmentPoly1 <- (makeListPoints poly1), segmentPoly2 <- (makeListPoints poly2)]
 
 --Find the intersection of two lines
-type Line = (Point, Point)
- 
-type Point = (Float, Float)
- 
-intersection :: Line -> Line -> Either String Point
-intersection ab pq =
-  case determinant of
-    0 -> Left "(Parallel lines – no intersection)"
-    _ ->
-      let [abD, pqD] = (\(a, b) -> diff ([fst, snd] <*> [a, b])) <$> [ab, pq]
-          [ix, iy] =
-            [\(ab, pq) -> diff [abD, ab, pqD, pq] / determinant] <*>
-            [(abDX, pqDX), (abDY, pqDY)]
-      in Right (ix, iy)
-  where
-    delta f x = f (fst x) - f (snd x)
-    diff [a, b, c, d] = a * d - b * c
-    [abDX, pqDX, abDY, pqDY] = [delta fst, delta snd] <*> [ab, pq]
-    determinant = diff [abDX, abDY, pqDX, pqDY]
+
+type Interseccao = Ponto
+
+pointIntersection :: Ponto -> Ponto -> Ponto -> Ponto -> Interseccao 
+pointIntersection (xA, yA) (xB, yB) (xC, yC) (xD, yD)
+    --Se a equacao da reta for zero e as retas nao se intersectam, elas sao paralelas
+    | equationLine == 0 && not (doIntersect (xA, yA) (xB, yB) (xC, yC) (xD, yD))  = error " The lines don't have a Point of Intersection"
+    | otherwise = (xFinal, yFinal) 
+    where
+        --Vector AB (a1x + b1y = c1) 
+        a1 = yB - yA
+        b1 = xA - xB
+        c1 = a1 * (xA) + b1 * (yA) 
+        --Vector CD (a2x + b2y = c2)
+        a2 = yD - yC
+        b2 = xC - xD
+        c2 = a2 * (xC) + b2 * (yC) 
+        --Solve the equation of the line
+        equationLine = a1 * b2 - a2 * b1
+        --Get the point of intersection 
+        xFinal = (b2 * c1 - b1 * c2) / equationLine
+        yFinal = (a1 * c2 - a2 * c1) / equationLine
+        --Get value maximus
+        maxValue = fromIntegral (maxBound :: Int)
+
