@@ -1,6 +1,6 @@
 --import CodeWorld
 
---main = putStrLn (show (doIntersect (10, 0) (0, 10) (0, 0) (10, 10)))
+--main = putStrLn (show (polygonIntersectPolygon [(3,3),(6,3),(6,5),(3,5)]  [(0,0),(3,3),(1,5)]))
 
 type Ponto = (Double, Double)
 
@@ -50,3 +50,36 @@ doIntersect p1 q1 p2 q2
           ori3 = orientation p2 q2 p1
           ori4 = orientation p2 q2 q1 
 
+type Poligono = [Ponto]
+
+--Verify if a segment and a polygon intersect
+segmentPolygonIntersect :: Ponto -> Ponto -> Poligono -> Bool
+segmentPolygonIntersect p1 q1 poly = or [doIntersect p1 q1 (fst segmentPoly) (snd segmentPoly) | segmentPoly <- (makeListPoints poly)] 
+
+makeListPoints :: Poligono -> [(Ponto, Ponto)]
+makeListPoints listaPoints = [(point1, point2) | point1 <- listaPoints, point2 <- listaPoints, point1 /= point2]
+
+--Verify if a poly and a poly intersect between bothes
+polygonIntersectPolygon :: Poligono -> Poligono -> Bool
+polygonIntersectPolygon poly1 poly2 = or [doIntersect (fst segmentPoly1) (snd segmentPoly1) (fst segmentPoly2) (snd segmentPoly2) | segmentPoly1 <- (makeListPoints poly1), segmentPoly2 <- (makeListPoints poly2)]
+
+--Find the intersection of two lines
+type Line = (Point, Point)
+ 
+type Point = (Float, Float)
+ 
+intersection :: Line -> Line -> Either String Point
+intersection ab pq =
+  case determinant of
+    0 -> Left "(Parallel lines – no intersection)"
+    _ ->
+      let [abD, pqD] = (\(a, b) -> diff ([fst, snd] <*> [a, b])) <$> [ab, pq]
+          [ix, iy] =
+            [\(ab, pq) -> diff [abD, ab, pqD, pq] / determinant] <*>
+            [(abDX, pqDX), (abDY, pqDY)]
+      in Right (ix, iy)
+  where
+    delta f x = f (fst x) - f (snd x)
+    diff [a, b, c, d] = a * d - b * c
+    [abDX, pqDX, abDY, pqDY] = [delta fst, delta snd] <*> [ab, pq]
+    determinant = diff [abDX, abDY, pqDX, pqDY]
