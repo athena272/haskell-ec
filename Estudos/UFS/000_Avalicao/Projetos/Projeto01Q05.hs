@@ -30,4 +30,12 @@ findElemPos position poly
     where element = [(xi, yi) | (i, (xi, yi)) <- (positionElem poly), i == position]
 
 --centroid coordinate calculations
-
+--Cx
+centroidX :: Poligono -> Double 
+centroidX poly = (1/6 * polygonArea poly) * 
+     summation = sum [(xi * snd (findElemPos (i+1) poly ) - fst (findElemPos (i+1) poly ) * yi) | (i, (xi, yi)) <- (positionElem poly), i < (length poly - 1)]
+    lastCouple = (ultimoX * primeiroY - primeiroX * ultimoY)
+    ultimoX = fst (findElemPos (length poly - 1) poly) 
+    primeiroY = snd (findElemPos 0 poly)
+    primeiroX = fst (findElemPos 0 poly)
+    ultimoY = snd (findElemPos (length poly - 1) poly)
