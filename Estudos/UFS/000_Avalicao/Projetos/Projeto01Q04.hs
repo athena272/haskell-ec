@@ -2,80 +2,25 @@
 
 --main = putStrLn (show (polygonIntersectPolygon [(3,3),(6,3),(6,5),(3,5)]  [(0,0),(3,3),(1,5)]))
 
-type Ponto = (Double, Double)
-
-maxTupla :: (Double, Double) -> Double
-maxTupla (x, y) 
-    | x > y = x
-    | otherwise = y
-
-minTupla :: (Double, Double) -> Double
-minTupla (x, y)
-    | x < y = x
-    | otherwise = y
-
---Given three collinear points p, q, r, the function checks if point q lies on line segment 'pr'
-onSegment :: Ponto -> Ponto -> Ponto -> Bool
-onSegment (xp, yp) (xq, yq) (xr, yr) 
-    | (xq <= maxTupla (xp, xr)) && (xq >= minTupla (xp, xr)) && (yq <= maxTupla (yp, yr)) && (yq >= minTupla (yp, yr)) = True
-    | otherwise = False
-
---To find orientation of ordered triplet (p, q, r).
--- The function returns following values
--- 0 --> p, q and r are collinear
--- 1 --> Clockwise
--- 2 --> Counterclockwise
-orientation :: Ponto -> Ponto -> Ponto -> Int
-orientation (xp, yp) (xq, yq) (xr, yr) 
-    | val == 0 = 0
-    | val > 0 = 1
-    | otherwise = 2
-    where val = (yq - yp) * (xr - xq) - (xq - xp) * (yr - yq)
-
--- The main function that returns true if line segment 'p1q1'
--- and 'p2q2' intersect.
-doIntersect :: Ponto -> Ponto -> Ponto -> Ponto -> Bool
-doIntersect p1 q1 p2 q2
-    --General Case
-    | (ori1 /= ori2) && (ori3 /= ori4) = True 
-    --Special Case
-    | (ori1 == 0) && onSegment p1 p2 q2 = True -- p1, q1 and p2 are collinear and p2 lies on segment p1q1
-    | (ori2 == 0) && onSegment p1 q2 q1 = True -- p1, q1 and q2 are collinear and q2 lies on segment p1q1
-    | (ori3 == 0) && onSegment p2 p1 q2 = True -- p2, q2 and p1 are collinear and p1 lies on segment p2q2
-    | (ori4 == 0) && onSegment p2 q1 q2 = True -- p2, q2 and q1 are collinear and q1 lies on segment p2q2
-    | otherwise = False -- Doesn't fall in any of the above cases
-    --Definicao de variaveis
-    where ori1 = orientation p1 q1 p2
-          ori2 = orientation p1 q1 q2
-          ori3 = orientation p2 q2 p1
-          ori4 = orientation p2 q2 q1 
-
-type Poligono = [Ponto]
-
---Verify if a segment and a polygon intersect
-segmentPolygonIntersect :: Ponto -> Ponto -> Poligono -> Bool
-segmentPolygonIntersect p1 q1 poly = or [doIntersect p1 q1 (fst segmentPoly) (snd segmentPoly) | segmentPoly <- (makeListPoints poly)] 
-
---segmentPolygonIntersect' p1 q1 poly = [(p1, q1, (fst segmentPoly), (snd segmentPoly)) | segmentPoly <- (makeListPoints poly)] 
-
-makeListPoints :: Poligono -> [(Ponto, Ponto)]
-makeListPoints listaPoints = [(point1, point2) | point1 <- listaPoints, point2 <- listaPoints, point1 /= point2]
-
---Verify if a poly and a poly intersect between bothes
-polygonIntersectPolygon :: Poligono -> Poligono -> Bool
-polygonIntersectPolygon poly1 poly2 = or [doIntersect (fst segmentPoly1) (snd segmentPoly1) (fst segmentPoly2) (snd segmentPoly2) | segmentPoly1 <- (makeListPoints poly1), segmentPoly2 <- (makeListPoints poly2)]
-
---polygonIntersectPolygon' poly1 poly2 = [(segmentPoly1, segmentPoly2) | segmentPoly1 <- (makeListPoints poly1), segmentPoly2 <- (makeListPoints poly2)]
-
 --Calculate polygon area
-polygonArea :: Polygon -> Double
-polygonArea poly =  (1/2) *  sum [(xi * yimais1 -  ximais1 * yi) | i <- [0..(length poly - 1)]]
+polygonArea :: Poligono -> Double
+polygonArea poly =  (1/2) * (summation + lastCouple)
+    where 
+    summation = sum [(xi * snd (findElemPos (i+1) poly ) - fst (findElemPos (i+1) poly ) * yi) | (i, (xi, yi)) <- (positionElem poly), i < (length poly - 1)]
+    lastCouple = (ultimoX * primeiroY - primeiroX * ultimoY)
+    ultimoX = fst (findElemPos (length poly - 1) poly) 
+    primeiroY = snd (findElemPos 0 poly)
+    primeiroX = fst (findElemPos 0 poly)
+    ultimoY = snd (findElemPos (length poly - 1) poly)
 
-------Indexa lista, atribui uma posiçao para elemento
-posicionarElem :: [String] -> [(Int, String)]
-posicionarElem listaPalavras = zip posicioes listaPalavras 
-    where posicioes = [1..(length listaPalavras)]
+------Index list, assign a position to element 
+positionElem :: Poligono -> [(Int, (Double, Double))]
+positionElem listCoordinates = zip positions listCoordinates 
+    where positions = [0..(length listCoordinates) - 1]
 
---Questao de somatoria
-somatoria :: Float -> Float -> Float 
-somatoria limInf limSup = sum [sin (2 * pi / a) | a <- [limInf..limSup]]
+--Encontrar a posicao do cidadao vacinado com base no seu CPF
+findElemPos :: Int -> Poligono -> Ponto
+findElemPos position poly 
+    | element == [] = error "Element not find"
+    | otherwise = head element
+    where element = [(xi, yi) | (i, (xi, yi)) <- (positionElem poly), i == position]
