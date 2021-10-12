@@ -29,7 +29,7 @@ doIntersect p1 q1 p2 q2
     --General Case
     | ori1 /= ori2 && ori3 /= ori4 = True 
     --Special Case
-    | ori1 == 0 && onSegment p1 p2 q2 = True -- p1, q1 and p2 are collinear and p2 lies on segment p1q1
+    | ori1 == 0 && onSegment p1 p2 q1 = True -- p1, q1 and p2 are collinear and p2 lies on segment p1q1
     | ori2 == 0 && onSegment p1 q2 q1 = True -- p1, q1 and q2 are collinear and q2 lies on segment p1q1
     | ori3 == 0 && onSegment p2 p1 q2 = True -- p2, q2 and p1 are collinear and p1 lies on segment p2q2
     | ori4 == 0 && onSegment p2 q1 q2 = True -- p2, q2 and q1 are collinear and q1 lies on segment p2q2
