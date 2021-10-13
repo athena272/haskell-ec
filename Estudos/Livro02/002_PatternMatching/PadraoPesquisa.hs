@@ -102,7 +102,7 @@ listaImpares (x:xs)
 primeiraOcorrencia :: Char -> String -> Int
 primeiraOcorrencia letra palavra  
     | not (letra `elem` palavra) = -1
-    | otherwise = primeiraOcorrencia letra palavra
+    | otherwise = primeiraOcorrencia letra palavra + 1
 
 --Victor
 primeiravez :: Char -> [Char] -> Int
@@ -118,3 +118,11 @@ elemNumRe1 _ [] = 0
 elemNumRe1 n (x:xs)
     | n == x = 0
     | otherwise = 1 + elemNumRe1 n xs
+
+--Giovanny
+occoreEm :: Char -> String -> Int
+ocorreEm c [ ]      = 0
+ocorreEm c (x:xs)
+    | c == x      = 0
+    | otherwise = 1 + ocorreEm c xs
+
