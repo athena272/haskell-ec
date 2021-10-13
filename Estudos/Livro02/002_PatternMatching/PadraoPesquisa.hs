@@ -119,7 +119,7 @@ elemNumRe1 n (x:xs)
     | n == x = 0
     | otherwise = 1 + elemNumRe1 n xs
 
---Giovanny
+--Giovanny1
 occoreEm :: Char -> String -> Int
 ocorreEm c [ ]      = 0
 ocorreEm c (x:xs)
