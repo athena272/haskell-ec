@@ -126,3 +126,12 @@ ocorreEm c (x:xs)
     | c == x      = 0
     | otherwise = 1 + ocorreEm c xs
 
+--Giovanny2
+ocorre :: Char -> String -> Int
+ocorre c st 
+   |  pos == length st = -1
+   | otherwise            = pos
+  where 
+     pos = ocorreEm c xs
+
+
