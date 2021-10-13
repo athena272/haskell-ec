@@ -95,8 +95,8 @@ mult3Lista (primeiroElem:restoLista) = 3 * primeiroElem : mult3Lista restoLista
 listaImpares :: [Int] -> [Int]
 listaImpares [] = []
 listaImpares (x:xs)
-  | odd x           = x : (listaimpares xs)
-  | otherwise    = listaimpares xs
+  | odd x           = x : (listaImpares xs)
+  | otherwise    = listaImpares xs
 
 --Guilherme
 primeiraOcorrencia :: Char -> String -> Int
@@ -111,3 +111,10 @@ primeiravez a (b:bs)
  | notElem a (b:bs)  = -1
  | a /= b   = 1 + primeiravez a bs
  | otherwise = primeiravez a bs
+
+ --Vitinho 
+elemNumRe1 :: Char -> String -> Int
+elemNumRe1 _ [] = 0
+elemNumRe1 n (x:xs)
+    | n == x = 0
+    | otherwise = 1 + elemNumRe1 n xs
