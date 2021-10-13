@@ -67,3 +67,15 @@ sum' (primeiroElem:restoLista) = primeiroElem + sum' restoLista
 firstLetra :: String -> String 
 firstLetra "" = "String vazia, ops!"
 firstLetra all@(x:xs) = "A primeira letra de " ++ all ++ " ser " ++ [x] 
+
+somafatorial :: Int -> Int
+somafatorial 0 = 1
+somafatorial n = somafatorial (n - 1) + (factorial' n)
+
+somaRecursiva :: Int -> Int -> Int
+somaRecursiva 0 v2 = v2
+somaRecursiva v1 v2 = succ (somaRecursiva (v1 - 1) v2)
+
+multRecursiva :: Int -> Int -> Int
+multRecursiva 0 v2 = 0
+multRecursiva v1 v2 = multRecursiva (v1 - 1) v2 + v2
