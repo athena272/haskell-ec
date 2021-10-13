@@ -79,3 +79,27 @@ somaRecursiva v1 v2 = succ (somaRecursiva (v1 - 1) v2)
 multRecursiva :: Int -> Int -> Int
 multRecursiva 0 v2 = 0
 multRecursiva v1 v2 = multRecursiva (v1 - 1) v2 + v2
+
+raizRecursiva :: Int -> Int
+raizRecursiva 0 = 0
+raizRecursiva n 
+    | (raizinha + 1) ^ 2 == n = raizinha + 1
+    | otherwise = raizRecursiva (n - 1)    
+    where 
+        raizinha = raizRecursiva (n -1)
+
+mult3Lista :: (Num a) => [a] -> [a]
+mult3Lista [] = []
+mult3Lista (primeiroElem:restoLista) = 3 * primeiroElem : mult3Lista restoLista       
+
+listaimpares :: [Int] -> [Int]
+listaimpares [] = []
+listaimpares (x:xs)
+  | odd x           = x : (listaimpares xs)
+  | otherwise    = listaimpares xs
+
+primeiraOcorrencia :: Char -> String -> Int
+primeiraOcorrencia letra palavra   
+    | not (letra `elem` palavra) = -1 
+    | otherwise = pos
+    where pos = [letra ==]
