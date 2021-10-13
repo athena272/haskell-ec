@@ -70,7 +70,7 @@ type Interseccao = Ponto
 pointIntersection :: Ponto -> Ponto -> Ponto -> Ponto -> Interseccao 
 pointIntersection (xA, yA) (xB, yB) (xC, yC) (xD, yD)
     --Se a equacao da reta for zero e as retas nao se intersectam, elas sao paralelas
-    | equationLine == 0 && not (doIntersect (xA, yA) (xB, yB) (xC, yC) (xD, yD))  = error " The lines don't have a Point of Intersection"
+    | equationLine == 0 || not (doIntersect (xA, yA) (xB, yB) (xC, yC) (xD, yD))  = error " The lines don't have a Point of Intersection(Are Parallel or Dont' Intersect)"
     | otherwise = (xFinal, yFinal) 
     where
         --Vector AB (a1x + b1y = c1) 
@@ -86,6 +86,5 @@ pointIntersection (xA, yA) (xB, yB) (xC, yC) (xD, yD)
         --Get the point of intersection 
         xFinal = (b2 * c1 - b1 * c2) / equationLine
         yFinal = (a1 * c2 - a2 * c1) / equationLine
-        --Get value maximus
-        maxValue = fromIntegral (maxBound :: Int)
+        
 
