@@ -98,8 +98,16 @@ listaImpares (x:xs)
   | odd x           = x : (listaimpares xs)
   | otherwise    = listaimpares xs
 
+--Guilherme
 primeiraOcorrencia :: Char -> String -> Int
-primeiraOcorrencia letra palavra   
-    | not (letra `elem` palavra) = -1 
-    | otherwise = pos
-    where pos = [letra ==]
+primeiraOcorrencia letra palavra  
+    | not (letra `elem` palavra) = -1
+    | otherwise = primeiraOcorrencia letra palavra
+
+--Victor
+primeiravez :: Char -> [Char] -> Int
+primeiravez _ [] = 0
+primeiravez a (b:bs)
+ | notElem a (b:bs)  = -1
+ | a /= b   = 1 + primeiravez a bs
+ | otherwise = primeiravez a bs
