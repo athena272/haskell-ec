@@ -92,9 +92,9 @@ mult3Lista :: (Num a) => [a] -> [a]
 mult3Lista [] = []
 mult3Lista (primeiroElem:restoLista) = 3 * primeiroElem : mult3Lista restoLista       
 
-listaimpares :: [Int] -> [Int]
-listaimpares [] = []
-listaimpares (x:xs)
+listaImpares :: [Int] -> [Int]
+listaImpares [] = []
+listaImpares (x:xs)
   | odd x           = x : (listaimpares xs)
   | otherwise    = listaimpares xs
 
