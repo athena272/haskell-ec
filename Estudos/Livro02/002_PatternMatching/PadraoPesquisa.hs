@@ -127,8 +127,8 @@ ocorreEm c (x:xs)
     | otherwise = 1 + ocorreEm c xs
 
 --Giovanny2
-ocorre :: Char -> String -> Int
-ocorre c st 
+ocorre2 :: Char -> String -> Int
+ocorre2 c st 
    |  pos == length st = -1
    | otherwise            = pos
   where 
