@@ -41,4 +41,44 @@ doIntersect p1 q1 p2 q2
 
 
 
+--2. Defina uma função para verificar se um segmento se intersecta com um polígono convexo não sólido, ou seja, se o segmento dado intersecta algum lado do polígono.
 
+type Poligono = [Ponto]
+
+--Verify if a segment and a polygon intersect
+segmentPolygonIntersect :: Ponto -> Ponto -> Poligono -> Bool
+segmentPolygonIntersect p1 q1 poly = or [doIntersect p1 q1 (fst segmentPoly) (snd segmentPoly) | segmentPoly <- (makeListPoints poly)] 
+
+makeListPoints :: Poligono -> [(Ponto, Ponto)]
+makeListPoints listaPoints = [(point1, point2) | point1 <- listaPoints, point2 <- listaPoints, point1 /= point2]
+
+--3. Defina uma função para verificar se dois polígonos não sólidos se intersectam.
+
+--Verify if a poly and a poly intersect between bothes
+polygonIntersectPolygon :: Poligono -> Poligono -> Bool
+polygonIntersectPolygon poly1 poly2 = or [doIntersect (fst segmentPoly1) (snd segmentPoly1) (fst segmentPoly2) (snd segmentPoly2) | segmentPoly1 <- (makeListPoints poly1), segmentPoly2 <- (makeListPoints poly2)]
+
+--4. Defina uma função para calcular a área de um polígono convexo formado pelos vértices 
+
+--Calculate polygon area
+polygonArea :: Poligono -> Double
+polygonArea poly =  (1/2) * (summation + lastCouple)
+    where 
+    summation = sum [(xi * snd (findElemPos (i+1) poly ) - fst (findElemPos (i+1) poly ) * yi) | (i, (xi, yi)) <- (positionElem poly), i < (length poly - 1)]
+    lastCouple = (ultimoX * primeiroY - primeiroX * ultimoY)
+    ultimoX = fst (findElemPos (length poly - 1) poly) 
+    primeiroY = snd (findElemPos 0 poly)
+    primeiroX = fst (findElemPos 0 poly)
+    ultimoY = snd (findElemPos (length poly - 1) poly)
+
+------Index list, assign a position to element 
+positionElem :: Poligono -> [(Int, (Double, Double))]
+positionElem listCoordinates = zip positions listCoordinates 
+    where positions = [0..(length listCoordinates) - 1]
+
+--Find a Coordinate couple using an index
+findElemPos :: Int -> Poligono -> Ponto
+findElemPos position poly 
+    | element == [] = error "Element not find"
+    | otherwise = head element
+    where element = [(xi, yi) | (i, (xi, yi)) <- (positionElem poly), i == position]
