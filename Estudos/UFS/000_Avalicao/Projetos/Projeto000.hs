@@ -111,3 +111,27 @@ centroidY poly = (1/(6 * polygonArea poly)) * (summation + lastCouple)
 --Final Centroid
 centroidCouple :: Poligono -> (Double, Double)
 centroidCouple poly = (centroidX poly, centroidY poly)
+
+--7.  Defina uma função que, caso dois segmentos se intersectem, retorne o ponto de interseção
+
+type Interseccao = Ponto
+
+pointIntersection :: Ponto -> Ponto -> Ponto -> Ponto -> Interseccao 
+pointIntersection (xA, yA) (xB, yB) (xC, yC) (xD, yD)
+    --Se a equacao da reta for zero e as retas nao se intersectam, elas sao paralelas
+    | equationLine == 0 || not (doIntersect (xA, yA) (xB, yB) (xC, yC) (xD, yD))  = error " The lines don't have a Point of Intersection(Are Parallel or Dont' Intersect)"
+    | otherwise = (xFinal, yFinal) 
+    where
+        --Vector AB (a1x + b1y = c1) 
+        a1 = yB - yA
+        b1 = xA - xB
+        c1 = a1 * (xA) + b1 * (yA) 
+        --Vector CD (a2x + b2y = c2)
+        a2 = yD - yC
+        b2 = xC - xD
+        c2 = a2 * (xC) + b2 * (yC) 
+        --Solve the equation of the line
+        equationLine = a1 * b2 - a2 * b1
+        --Get the point of intersection 
+        xFinal = (b2 * c1 - b1 * c2) / equationLine
+        yFinal = (a1 * c2 - a2 * c1) / equationLine
