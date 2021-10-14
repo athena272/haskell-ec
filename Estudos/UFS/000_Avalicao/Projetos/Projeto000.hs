@@ -43,13 +43,23 @@ doIntersect p1 q1 p2 q2
 
 type Poligono = [Ponto]
 
+indexList :: Points -> [(Int, Point)]
+indexList listPoint = zip id listPoint 
+                where
+                        id = [0..length listPoint]
+
+interseccPoligon :: Point -> Point -> Points -> Bool 
+interseccPoligon s1 s2 polig = or [ interseccSegments s1 s2 r1 r2   | (r1, r2)<- parPoints ]        
+                where
+                        listPoints = indexList (polig ++ [head polig])
+                        parPoints = [ (coord01, coord02)  |   (id01, coord01) <- listPoints, (id02, coord02) <- listPoints, coord01 /= coord02, id02 == 1 + id01 ]
+
 --Verify if a segment and a polygon intersect
 segmentPolygonIntersect :: Ponto -> Ponto -> Poligono -> Bool
 segmentPolygonIntersect p1 q1 poly = or [doIntersect p1 q1 (fst segmentPoly) (snd segmentPoly) | segmentPoly <- (makeListPoints poly)] 
 
 makeListPoints :: Poligono -> [(Ponto, Ponto)]
-makeListPoints polyg = [(point1, point2) | point1 <- polygToEnd, point2 <- polygToEnd, point1 /= point2, (fst point1 == fst point2 || snd point1 == snd point2 || fst point1 == snd point2 || snd point1 == fst point2) ]
-    where polygToEnd =  polyg ++ [head polyg]
+makeListPoints listaPoints = [(point1, point2) | point1 <- listaPoints, point2 <- listaPoints, point1 /= point2]
 
 --3. Defina uma função para verificar se dois polígonos não sólidos se intersectam.
 
