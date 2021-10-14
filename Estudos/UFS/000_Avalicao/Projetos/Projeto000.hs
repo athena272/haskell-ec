@@ -1,8 +1,6 @@
---import CodeWorld
-
---main = putStrLn (show (doIntersect (10, 0) (0, 10) (0, 0) (10, 10)))
-
 type Ponto = (Double, Double)
+
+--
 
 --Given three collinear points p, q, r, the function checks if point q lies on line segment 'pr'
 onSegment :: Ponto -> Ponto -> Ponto -> Bool
