@@ -82,3 +82,32 @@ findElemPos position poly
     | element == [] = error "Element not find"
     | otherwise = head element
     where element = [(xi, yi) | (i, (xi, yi)) <- (positionElem poly), i == position]
+
+--5. Defina uma função para calcular o centróide (centro de massa) de um polígono convexo.
+
+--centroid coordinate calculations
+--Cx
+centroidX :: Poligono -> Double 
+centroidX poly = (1/(6 * polygonArea poly)) * (summation + lastCouple)
+    where
+    summation = sum [(xi + fst (findElemPos (i+1) poly )) * (xi * snd (findElemPos (i+1) poly ) - fst (findElemPos (i+1) poly ) * yi) | (i, (xi, yi)) <- (positionElem poly), i < (length poly - 1)]
+    lastCouple = (ultimoX + primeiroX) * (ultimoX * primeiroY - primeiroX * ultimoY)
+    ultimoX = fst (findElemPos (length poly - 1) poly) 
+    primeiroY = snd (findElemPos 0 poly)
+    primeiroX = fst (findElemPos 0 poly)
+    ultimoY = snd (findElemPos (length poly - 1) poly)
+
+--Cy
+centroidY :: Poligono -> Double 
+centroidY poly = (1/(6 * polygonArea poly)) * (summation + lastCouple) 
+    where
+    summation = sum [(yi + snd (findElemPos (i+1) poly )) * (xi * snd (findElemPos (i+1) poly ) - fst (findElemPos (i+1) poly ) * yi) | (i, (xi, yi)) <- (positionElem poly), i < (length poly - 1)]
+    lastCouple = (ultimoY + primeiroY) * (ultimoX * primeiroY - primeiroX * ultimoY)
+    ultimoX = fst (findElemPos (length poly - 1) poly) 
+    primeiroY = snd (findElemPos 0 poly)
+    primeiroX = fst (findElemPos 0 poly)
+    ultimoY = snd (findElemPos (length poly - 1) poly)
+
+--Final Centroid
+centroidCouple :: Poligono -> (Double, Double)
+centroidCouple poly = (centroidX poly, centroidY poly)
