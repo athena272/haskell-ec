@@ -1,6 +1,6 @@
 type Ponto = (Double, Double)
 
---
+--1. Baseando-se em um dos métodos descritos acima, defina uma função que, dadosdois segmentos, verifique se ambos se intersectam.
 
 --Given three collinear points p, q, r, the function checks if point q lies on line segment 'pr'
 onSegment :: Ponto -> Ponto -> Ponto -> Bool
@@ -39,9 +39,6 @@ doIntersect p1 q1 p2 q2
         ori3 = orientation p2 q2 p1
         ori4 = orientation p2 q2 q1 
 
-areaPolyConvexo :: [(Double, Double)] -> Double
-areaPolyConvexo [] = 0
-areaPolyConvexo xs  = sum (map calculo lista) / 2
-    where 
-        calculo ((x0, y0), (x1, y1)) = x0 * y1 - x1 * y0
-        lista = zip xs (tail xs)
+
+
+
