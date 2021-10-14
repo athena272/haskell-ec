@@ -44,19 +44,18 @@ doIntersect p1 q1 p2 q2
 type Poligono = [Ponto]
 
 --Verify if a segment and a polygon intersect
---segmentPolygonIntersect :: Ponto -> Ponto -> Poligono -> Bool
---segmentPolygonIntersect p1 q1 poly = or [doIntersect p1 q1 (fst segmentPoly) (snd segmentPoly) | segmentPoly <- (makeListPoints poly)] 
+segmentPolygonIntersect :: Ponto -> Ponto -> Poligono -> Bool
+segmentPolygonIntersect p1 q1 poly = or [doIntersect p1 q1 (fst segmentPoly) (snd segmentPoly) | segmentPoly <- (makeListPoints poly)] 
 
-makeListPoints :: Poligono -> [(Double, Double)]
---makeListPoints listaPoints = [(point1, point2) | point1 <- listaPoints, point2 <- listaPoints, point1 /= point2]
-makeListPoints listaPoints = [(point1, point2) | (i, (point1, _)) <- (positionElem listaPoints), (i, (_, point2)) <- (positionElem listaPoints), point1 /= point2]
-
+makeListPoints :: Poligono -> [(Ponto, Ponto)]
+makeListPoints polyg = [(point1, point2) | point1 <- polygToEnd, point2 <- polygToEnd, point1 /= point2, (fst point1 == fst point2 || snd point1 == snd point2 || fst point1 == snd point2 || snd point1 == fst point2) ]
+    where polygToEnd =  polyg ++ [head polyg]
 
 --3. Defina uma função para verificar se dois polígonos não sólidos se intersectam.
 
 --Verify if a poly and a poly intersect between bothes
---polygonIntersectPolygon :: Poligono -> Poligono -> Bool
---polygonIntersectPolygon poly1 poly2 = or [doIntersect (fst segmentPoly1) (snd segmentPoly1) (fst segmentPoly2) (snd segmentPoly2) | segmentPoly1 <- (makeListPoints poly1), segmentPoly2 <- (makeListPoints poly2)]
+polygonIntersectPolygon :: Poligono -> Poligono -> Bool
+polygonIntersectPolygon poly1 poly2 = or [doIntersect (fst segmentPoly1) (snd segmentPoly1) (fst segmentPoly2) (snd segmentPoly2) | segmentPoly1 <- (makeListPoints poly1), segmentPoly2 <- (makeListPoints poly2)]
 
 --4. Defina uma função para calcular a área de um polígono convexo formado pelos vértices 
 
