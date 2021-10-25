@@ -27,8 +27,8 @@ bancoDeCadastros =
 atualizaEnderecoSUS :: CPF -> CadastroSUS -> Endereco -> CadastroSUS
 atualizaEnderecoSUS myCPF [] newAdress = error "Cidadao nao esta no banco de cadastro"
 atualizaEnderecoSUS myCPF (humanoSUS:restoList)  newAdress
-    | (getCPFSUS humanoSUS == myCPF) = updateAdress humanoSUS newAdress
-    | otherwise = atualizaEnderecoSUS myCPF xs newAdress
+    | (getCPFSUS humanoSUS == myCPF) = updateAdress humanoSUS newAdress : restoList
+    | otherwise = atualizaEnderecoSUS myCPF restoList newAdress
     
 ----------------------Funcoes Auxiliares
 getCPFSUS :: Cidadao -> CPF
@@ -41,5 +41,8 @@ updateAdress (cpf,nome,gender,nasc,adress,muni,state,tel,email) newAdress = (cpf
 removeSUS :: CPF -> CadastroSUS -> CadastroSUS
 removeSUS myCPF [] = error "Cidadao nao esta no banco de cadastro" --verificar se o CPF da pessoa morta existe
 removeSUS myCPF (humanoSUS:restoList) 
+{--
+removeSUS myCPF (humanoSUS:restoList) 
     | (getCPFSUS humanoSUS == myCPF) 
     | otherwise = 
+--}
