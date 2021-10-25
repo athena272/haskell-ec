@@ -27,12 +27,19 @@ bancoDeCadastros =
 atualizaEnderecoSUS :: CPF -> CadastroSUS -> Endereco -> CadastroSUS
 atualizaEnderecoSUS myCPF [] newAdress = error "Cidadao nao esta no banco de cadastro"
 atualizaEnderecoSUS myCPF (humanoSUS:restoList)  newAdress
-    | (getCPFSUS humanoSUS == myCPF) = addNewAdress humanoSUS newAdress
+    | (getCPFSUS humanoSUS == myCPF) = updateAdress humanoSUS newAdress
     | otherwise = atualizaEnderecoSUS myCPF xs newAdress
     
 ----------------------Funcoes Auxiliares
 getCPFSUS :: Cidadao -> CPF
 getCPFSUS (myCPF, _, _, _, _, _, _, _, _) = myCPF
 
-addNewAdress :: Cidadao -> Endereco -> Cidadao 
-addNewAdress (cpf,nome,gender,nasc,adress,muni,state,tel,email) newAdress = (cpf,nome,gender,nasc,newAdress,muni,state,tel,email)
+updateAdress :: Cidadao -> Endereco -> Cidadao 
+updateAdress (cpf,nome,gender,nasc,adress,muni,state,tel,email) newAdress = (cpf,nome,gender,nasc,newAdress,muni,state,tel,email)
+
+--item b) Quando um cidadão falece, a família tem que notificar o fato em um posto de saúde, para que ele seja retirado do cadastro corrente do SUS. Como há uma verificação do atestado de óbito, isto só pode ser feito no posto. O sistema precisará da função abaixo. Se o CPF existir no cadastro corrente do SUS, o registro do cidadão deve ser completamente excluído, gerando um novo cadastro sem os dados deste cidadão. Se o CPF não existir, uma mensagem de erro, usando error, sinalizando que o cidadão não pertence ao cadastro deve ser exibida.
+removeSUS :: CPF -> CadastroSUS -> CadastroSUS
+removeSUS myCPF [] = error "Cidadao nao esta no banco de cadastro" --verificar se o CPF da pessoa morta existe
+removeSUS myCPF (humanoSUS:restoList) 
+    | (getCPFSUS humanoSUS == myCPF) 
+    | otherwise = 
