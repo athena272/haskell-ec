@@ -28,7 +28,7 @@ atualizaEnderecoSUS :: CPF -> CadastroSUS -> Endereco -> CadastroSUS
 atualizaEnderecoSUS myCPF [] newAdress = error "Cidadao nao esta no banco de cadastro"
 atualizaEnderecoSUS myCPF (humanoSUS:restoList)  newAdress
     | (getCPFSUS humanoSUS == myCPF) = updateAdress humanoSUS newAdress : restoList
-    | otherwise = atualizaEnderecoSUS myCPF restoList newAdress
+    | otherwise = humanoSUS : atualizaEnderecoSUS myCPF restoList newAdress
     
 ----------------------Funcoes Auxiliares
 getCPFSUS :: Cidadao -> CPF
@@ -41,8 +41,10 @@ updateAdress (cpf,nome,gender,nasc,adress,muni,state,tel,email) newAdress = (cpf
 removeSUS :: CPF -> CadastroSUS -> CadastroSUS
 removeSUS myCPF [] = error "Cidadao nao esta no banco de cadastro" --verificar se o CPF da pessoa morta existe
 removeSUS myCPF (humanoSUS:restoList) 
-{--
-removeSUS myCPF (humanoSUS:restoList) 
-    | (getCPFSUS humanoSUS == myCPF) 
-    | otherwise = 
---}
+    | (getCPFSUS humanoSUS == myCPF) = restoList
+    | otherwise = humanoSUS : removeSUS myCPF restoList
+
+--item c) Estas funções precisam de funções auxiliares para gerar uma lista de quantidades por faixas de idade, para depois gerar a exibição usando as funções 
+geraListaMunicipioFaixas :: CadastroSUS -> Municipio -> Data -> [FaixaIdade] -> [(FaixaIdade, Quantidade)]
+geraListaMunicipioFaixas (humanoSUS:restoList) myMunicipio dataAtual listaFaixasIdade
+
