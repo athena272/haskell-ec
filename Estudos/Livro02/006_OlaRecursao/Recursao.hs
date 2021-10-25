@@ -34,3 +34,9 @@ myZip :: [Int] -> [Int] -> [(Int, Int)]
 myZip [] _ = []
 myZip _ [] = []
 myZip (x:xs) (y:ys) = (x, y) : myZip xs ys
+
+myElem :: (Eq a) => a -> [a] -> Bool 
+myElem a [] = False
+myElem a (x:xs) 
+    | a == x = True
+    | otherwise = a `myElem` xs
