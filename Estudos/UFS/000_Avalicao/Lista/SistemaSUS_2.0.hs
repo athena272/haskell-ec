@@ -76,6 +76,7 @@ getMunicipio (_, _, _, _, _, myMunicipio, _, _, _) = myMunicipio
 getDataNasc :: Cidadao -> DataNasc
 getDataNasc (_, _, _, myNasci, _, _, _, _, _) = myNasci 
 
+--Calcula a idade do cidadao
 getIdade :: Cidadao -> Data ->Int
 getIdade cidadao dataAtual 
                 | (myMes < mesAtual) || (myMes == mesAtual) && (myDia < diaAtual) =  anoAtual - myAno - 1 --dia menor que dia Atual, e mes menor que mes Atual, faz um calculo normal de idade
