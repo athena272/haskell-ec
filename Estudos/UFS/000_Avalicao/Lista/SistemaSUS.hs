@@ -516,6 +516,7 @@ diasAtrasados dataVacina dataAtual
     | not(checkAnoBissexto anoVac) && not (checkAnoBissexto anoAtual) = diasFimAnoComum + (diasAnoToAno anoVac anoAtual) + diasComecoAnoComum
         --Ambos anos bissextos
     | (checkAnoBissexto anoVac) && not (checkAnoBissexto anoAtual) = diasFimAnoBissexto +(diasAnoToAno anoVac anoAtual) + diasFimAnoBissexto
+    
         --O ano da vacina eh comum e ano atual eh bissexto
     | not (checkAnoBissexto anoVac) && (checkAnoBissexto anoAtual) = diasFimAnoComum + (diasAnoToAno anoVac anoAtual) + diasComecoAnoComum
         --O ano da vacina eh bissexto e ano atual eh comum
