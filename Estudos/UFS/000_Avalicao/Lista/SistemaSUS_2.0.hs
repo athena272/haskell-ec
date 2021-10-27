@@ -63,6 +63,7 @@ geraListaMunicipioFaixas myDataBase myMunicipio dataAtual [] = []
 geraListaMunicipioFaixas myDataBase myMunicipio dataAtual (faixa:restoList) = (faixa, length (qtdListaFaixas myDataBase myMunicipio faixa dataAtual)) : geraListaMunicipioFaixas myDataBase myMunicipio dataAtual restoList
 
 ----------------------Funcoes Auxiliares
+--Gera uma lista de cidadaos com determinda faixa
 qtdListaFaixas :: Cadastro -> Municipio -> FaixaIdade -> Data-> [Cidadao]
 qtdListaFaixas [] myMunicipio faixaIdade dataAtual = []
 qtdListaFaixas (humanoSUS:restoList) myMunicipio faixaIdade dataAtual
