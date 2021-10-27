@@ -18,6 +18,19 @@ type Telefone = String
 type Email = String 
 type Cidadao = (CPF, Nome, Genero, DataNasc, Endereco, Municipio, Estado, Telefone, Email)
 
+type IdadeInicial = Int
+type IdadeFinal = Int
+type FaixaIdade = (IdadeInicial, IdadeFinal)
+type Quantidade = Int
+
+type Vacinados = [Vacinado]
+--Cada item desse cadastro, Vacinado, é da forma
+type Vacina = String
+type TipoDose = Int
+type Dose = (Vacina, Data)
+type Doses = [Dose]
+type Vacinado = (CPF, Doses)
+
 --Meus cadastros pre-existentes no banco de dados 
 bancoDeCadastros :: CadastroSUS
 bancoDeCadastros = 
@@ -26,9 +39,9 @@ bancoDeCadastros =
 --Questao 1, item a)O cidadão pode querer modificar algum desses dados, por exemplo, o número de telefone ou endereço. Para isto, precisamos de funções de atualização dos dados no cadastro, passando os novos dados. Para simplificar o sistema, vamos supor apenas as funções de atualização do endereço e do telefone, já que as demais atualizações seguiriam o mesmo princípio. No processo de atualização, o cadastro SUS informado será copiado para um novo cadastro SUS. Neste novo cadastro, os registros de outros cidadãos permanecerão inalterados e somente os dados do cidadão que está sendo atualizado sofrerão modificações.
 atualizaEnderecoSUS :: CPF -> CadastroSUS -> Endereco -> CadastroSUS
 atualizaEnderecoSUS myCPF [] newAdress = error "Cidadao nao esta no banco de cadastro" --Caso a lista acabe por ser vazia, dar erro
-atualizaEnderecoSUS myCPF (humanoSUS:restoList)  newAdress --Caso ela tenha pessoas cadastras
-    | (getCPFSUS humanoSUS == myCPF) = updateAdress humanoSUS newAdress : restoList
-    | otherwise = humanoSUS : atualizaEnderecoSUS myCPF restoList newAdress
+atualizaEnderecoSUS myCPF (humanoSUS:restoList)  newAdress --Caso ela tenha pessoas cadastradas
+    | (getCPFSUS humanoSUS == myCPF) = updateAdress humanoSUS newAdress : restoList --Se o CPF da pessoa esta no banco, atualiza o Endereço dela
+    | otherwise = humanoSUS : atualizaEnderecoSUS myCPF restoList newAdress --Senao, continua a procurar por ele
     
 ----------------------Funcoes Auxiliares
 getCPFSUS :: Cidadao -> CPF
@@ -47,5 +60,29 @@ removeSUS myCPF (humanoSUS:restoList)
 --Questao 1, item c)
 geraListaMunicipioFaixas :: CadastroSUS -> Municipio -> Data -> [FaixaIdade] -> [(FaixaIdade, Quantidade)]
 geraListaMunicipioFaixas myDataBase myMunicipio dataAtual [] = []
-geraListaMunicipioFaixas myDataBase myMunicipio dataAtual (y:ys) = []
+geraListaMunicipioFaixas myDataBase myMunicipio dataAtual (faixa:restoList) = (faixa, length (qtdListaFaixas myDataBase myMunicipio faixa dataAtual)) : geraListaMunicipioFaixas myDataBase myMunicipio dataAtual restoList
 
+----------------------Funcoes Auxiliares
+qtdListaFaixas :: Cadastro -> Municipio -> FaixaIdade -> Data-> [Cidadao]
+qtdListaFaixas [] myMunicipio faixaIdade dataAtual = []
+qtdListaFaixas (humanoSUS:restoList) myMunicipio faixaIdade dataAtual
+ | (getMunicipio humanoSUS == myMunicipio) && (idadeNaFaixa humanoSUS faixaIdade dataAtual) = humanoSUS : qtdListaFaixas restoList myMunicipio  faixaIdade dataAtual
+ | otherwise =  qtdListaFaixas restoList myMunicipio  faixaIdade dataAtual
+
+getMunicipio :: Cidadao -> Municipio
+getMunicipio (_, _, _, _, _, myMunicipio, _, _, _) = myMunicipio
+
+getDataNasc :: Cidadao -> DataNasc
+getDataNasc (_, _, _, myNasci, _, _, _, _, _) = myNasci 
+
+getIdade :: Cidadao -> Data ->Int
+getIdade cidadao dataAtual 
+                | (myMes < mesAtual) || (myMes == mesAtual) && (myDia < diaAtual) =  anoAtual - myAno - 1 --dia menor que dia Atual, e mes menor que mes Atual, faz um calculo normal de idade
+                | otherwise  = anoAtual - myAno 
+                where
+                    (myDia, myMes, myAno) = (getDataNasc cidadao)
+                    (diaAtual, mesAtual, anoAtual) = dataAtual
+
+--Verifica se um cidado esta na faixa de idade passada
+idadeNaFaixa :: Cidadao -> FaixaIdade -> Data -> Bool
+idadeNaFaixa humanoSUS faixasIdade myData = (getIdade humanoSUS myData >= (fst faixasIdade)) && (getIdade humanoSUS myData <= (snd faixasIdade))
