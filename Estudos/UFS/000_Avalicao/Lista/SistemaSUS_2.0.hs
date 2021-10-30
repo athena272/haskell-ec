@@ -47,7 +47,7 @@ atualizaEnderecoSUS myCPF (humanoSUS:restoList)  newAdress --Caso ela tenha pess
 getCPFSUS :: Cidadao -> CPF
 getCPFSUS (myCPF, _, _, _, _, _, _, _, _) = myCPF
 
-updateAdress :: Cidadao -> Endereco -> Cidadao 
+updateAdress :: Cidadao -> Endereco -> Cidadao --atualiza o enndereço do SUS
 updateAdress (cpf,nome,gender,nasc,adress,muni,state,tel,email) newAdress = (cpf,nome,gender,nasc,newAdress,muni,state,tel,email)
 
 --Questao 1, item b) Quando um cidadão falece, a família tem que notificar o fato em um posto de saúde, para que ele seja retirado do cadastro corrente do SUS. Como há uma verificação do atestado de óbito, isto só pode ser feito no posto. O sistema precisará da função abaixo. Se o CPF existir no cadastro corrente do SUS, o registro do cidadão deve ser completamente excluído, gerando um novo cadastro sem os dados deste cidadão. Se o CPF não existir, uma mensagem de erro, usando error, sinalizando que o cidadão não pertence ao cadastro deve ser exibida.
@@ -113,24 +113,18 @@ bancoDeVacinados = [( 18697038049, [ ("Janssen",     (10,02,2021)), ("Janssen", 
 
 aplicaPrimDose:: CPF -> CadastroSUS -> FaixaIdade -> Municipio -> Data -> Vacina -> Data -> Vacinados -> Vacinados
 aplicaPrimDose myCPF [] faixasIdade myMunicipio dataAtual myVacina myDateVacina myVacinados = []
- 
-
--- aplicaPrimDose :: CPF -> Cadastro -> FaixaIdade -> Municipio -> Vacina -> Data -> Vacinados -> Vacinados
--- aplicaPrimDose card [] (inicial, final) municipio vacina dataHoje lista = []
--- aplicaPrimDose card (x:xs) (inicial, final) municipio vacina dataHoje lista 
---  | not (takeCpfvacinados card lista) = if (takeCpf x) == card then 
---                                           if (aniversario (recebeIdade x) dataHoje) >= inicial && 
---                                              (aniversario (recebeIdade x) dataHoje) <= final then 
---                                                if takeMuni x == municipio then
---                                                  if vacina ==  "Janssen" then  
---                                                    (takeCpf x, [(vacina, dataHoje), (vacina, dataHoje)]):lista 
---                                                    else (takeCpf x, [(vacina, dataHoje)]):lista
---                                                 else aplicaPrimDose card xs (inicial, final) municipio vacina dataHoje lista  
---                                              else aplicaPrimDose card xs (inicial, final) municipio vacina dataHoje lista 
---                                          else aplicaPrimDose card xs (inicial, final) municipio vacina dataHoje lista  
---   | otherwise = error "Tá errado meu rei"
+aplicaPrimDose myCPF (humanoSUS:restoList) faixasIdade myMunicipio dataAtual myVacina myDateVacina myVacinados
+  | not (checkCPFSUS myCPF (humanoSUS:restoList)) = [] --Pessoa nao esta no banco de cadastros
+  | not (idadeNaFaixa humanoSUS faixasIdade dataAtual) = [] --Pessoa sem data atual
+  | otherwise = error "Deu certo!!!"
 
 ----------------------Funcoes Auxiliares
+checkCPFSUS :: CPF -> CadastroSUS -> Bool
+checkCPFSUS myCPF [] = False
+checkCPFSUS myCPF (humanoSUS:restoList)
+    | getCPFSUS humanoSUS == myCPF = True
+    | otherwise = checkCPFSUS myCPF restoList
+
 getCPFVacina :: CPF -> Vacinados -> Bool
 getCPFVacina myCPF [] = False
 getCPFVacina myCPF (humanoVac:restoList)
