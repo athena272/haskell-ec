@@ -44,7 +44,7 @@ atualizaEnderecoSUS myCPF (humanoSUS:restoList)  newAdress --Caso ela tenha pess
     | otherwise = humanoSUS : atualizaEnderecoSUS myCPF restoList newAdress --Senao, continua a procurar por ele
     
 ----------------------Funcoes Auxiliares
-getCPFSUS :: Cidadao -> CPF
+getCPFSUS :: Cidadao -> CPF --Pega o CPF de um cidadao no Cadastro do SUS
 getCPFSUS (myCPF, _, _, _, _, _, _, _, _) = myCPF
 
 updateAdress :: Cidadao -> Endereco -> Cidadao --atualiza o enndereço do SUS
