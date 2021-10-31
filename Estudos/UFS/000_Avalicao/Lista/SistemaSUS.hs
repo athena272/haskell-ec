@@ -407,7 +407,7 @@ atualizaVacina myCPF myTipoDose myVacina myVacinados
         dadoAtualizadoDuasDozes  = [(cpf, [(myVacina, data1), (myVacina, data2)]) | (cpf, [(vacina1, data1), (vacina2, data2)]) <- myVacinados, cpf == myCPF]   
 
 -- item j) Quantidade de pessoas no município/estado vacinadas com uma dada dose. Para isso, para cada cidadão no cadastro de vacinados, é verificado se ele já tomou a dose informada no argumento da função. Em caso afirmativo, verifica-se se ele pertence ao município/estado informado, acessando-se o cadastro do SUS, e em caso afirmativo, o cidadão é considerado para o cômputo. 
-quantidadeDoseMun :: Vacinados -> TipoDose -> Estado -> CadastroSUS -> Quantidade 
+quantidadeDoseMun :: Vacinados -> TipoDose -> Municipio -> CadastroSUS -> Quantidade 
 quantidadeDoseMun myVacinados myTipoDose myMunicipio myDataBase
       --Para pessoas que tomaram a primeira dose(mesmo que tenham tomado a segunda dose, ela entraria na contagem, jah que quem tomou a segunda tose, tomou a primeira em algum momento)
       | (myTipoDose == 1) = length [cpf | (cpf, _) <- myVacinados, myMunicipio == (getMunicipio (getCidadao cpf myDataBase))]
