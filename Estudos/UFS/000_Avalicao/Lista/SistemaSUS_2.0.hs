@@ -18,19 +18,6 @@ type Telefone = String
 type Email = String 
 type Cidadao = (CPF, Nome, Genero, DataNasc, Endereco, Municipio, Estado, Telefone, Email)
 
-type IdadeInicial = Int
-type IdadeFinal = Int
-type FaixaIdade = (IdadeInicial, IdadeFinal)
-type Quantidade = Int
-
-type Vacinados = [Vacinado]
---Cada item desse cadastro, Vacinado, é da forma
-type Vacina = String
-type TipoDose = Int
-type Dose = (Vacina, Data)
-type Doses = [Dose]
-type Vacinado = (CPF, Doses)
-
 --Meus cadastros pre-existentes no banco de dados 
 bancoDeCadastros :: CadastroSUS
 bancoDeCadastros = 
@@ -38,12 +25,19 @@ bancoDeCadastros =
 
 --Questao 1, item a)O cidadão pode querer modificar algum desses dados, por exemplo, o número de telefone ou endereço. Para isto, precisamos de funções de atualização dos dados no cadastro, passando os novos dados. Para simplificar o sistema, vamos supor apenas as funções de atualização do endereço e do telefone, já que as demais atualizações seguiriam o mesmo princípio. No processo de atualização, o cadastro SUS informado será copiado para um novo cadastro SUS. Neste novo cadastro, os registros de outros cidadãos permanecerão inalterados e somente os dados do cidadão que está sendo atualizado sofrerão modificações.
 atualizaEnderecoSUS :: CPF -> CadastroSUS -> Endereco -> CadastroSUS
-atualizaEnderecoSUS myCPF [] newAdress = [] --Caso a lista acabe por ser vazia, dar erro
+atualizaEnderecoSUS myCPF [] newAdress = [] --Caso a lista venha vazia por ser vazia, dar erro
 atualizaEnderecoSUS myCPF (humanoSUS:restoList)  newAdress --Caso ela tenha pessoas cadastradas
+    | not (checkCPFSUS myCPF (humanoSUS:restoList)) = error "Esse cidadao nao existe nesse banco" --A pessoa nao esta no banco
     | (getCPFSUS humanoSUS == myCPF) = updateAdress humanoSUS newAdress : restoList --Se o CPF da pessoa esta no banco, atualiza o Endereço dela
     | otherwise = humanoSUS : atualizaEnderecoSUS myCPF restoList newAdress --Senao, continua a procurar por ele
     
 ----------------------Funcoes Auxiliares
+checkCPFSUS :: CPF -> CadastroSUS -> Bool
+checkCPFSUS myCPF [] = False
+checkCPFSUS myCPF (humanoSUS:restoList)
+    | getCPFSUS humanoSUS == myCPF = True
+    | otherwise = checkCPFSUS myCPF restoList
+    
 getCPFSUS :: Cidadao -> CPF --Pega o CPF de um cidadao no Cadastro do SUS
 getCPFSUS (myCPF, _, _, _, _, _, _, _, _) = myCPF
 
@@ -54,8 +48,15 @@ updateAdress (cpf,nome,gender,nasc,adress,muni,state,tel,email) newAdress = (cpf
 removeSUS :: CPF -> CadastroSUS -> CadastroSUS
 removeSUS myCPF [] = [] --verificar se o CPF da pessoa morta existe
 removeSUS myCPF (humanoSUS:restoList) 
+    | not (checkCPFSUS myCPF (humanoSUS:restoList)) = error "Esse cidadao nao existe nesse banco" --A pessoa nao esta no banco
     | (getCPFSUS humanoSUS == myCPF) = restoList
     | otherwise = humanoSUS : removeSUS myCPF restoList
+
+------Types para faixaIdade
+type IdadeInicial = Int
+type IdadeFinal = Int
+type FaixaIdade = (IdadeInicial, IdadeFinal)
+type Quantidade = Int
 
 --Questao 1, item c)
 geraListaMunicipioFaixas :: CadastroSUS -> Municipio -> Data -> [FaixaIdade] -> [(FaixaIdade, Quantidade)]
@@ -89,20 +90,33 @@ getIdade cidadao dataAtual
 idadeNaFaixa :: Cidadao -> FaixaIdade -> Data -> Bool
 idadeNaFaixa humanoSUS faixasIdade myData = (getIdade humanoSUS myData >= (fst faixasIdade)) && (getIdade humanoSUS myData <= (snd faixasIdade))
 
---Questao 1, item d
+------Types para vacinacao
+type Vacinados = [Vacinado]
+--Cada item desse cadastro, Vacinado, é da forma
+type Vacina = String
+type TipoDose = Int
+type Dose = (Vacina, Data)
+type Doses = [Dose]
+type Vacinado = (CPF, Doses)
+type Vacinas = [Vacina]
+
+vacinasTypes :: Vacinas 
+vacinasTypes = ["AstraZeneca", "CoronaVac", "Pfizer"]
+
+--Questao 1, item d)
 bancoDeVacinados :: Vacinados --CPF, [(Vacina, Data)]
-bancoDeVacinados = [( 18697038049, [ ("Janssen",     (10,02,2021)), ("Janssen",   (10,02,2021) )] ),
-    ( 34290105785, [ ("Pfizer",      (10,08,2021)) ] ),
-    ( 17286791095, [ ("CoronaVac",   (10,02,2021)) ] ), 
-    ( 84565794675, [ ("Pfizer",     (05,03,2021)), ("Pfizer",    (05,06,2021)  )]),
-    ( 60053722701, [ ("CoronaVac",  (10,02,2021)), ("CoronaVac", (10,03,2021)  )]),
-    ( 28251137861, [ ("Pfizer",     (05,03,2021)), ("Pfizer",    (05,06,2021)  )]),                      
-    ( 86096726461, [ ("CoronaVac",  (10,02,2021)), ("CoronaVac", (10,03,2021)  )]),
-    ( 53980790428, [ ("Pfizer",      (10,08,2021)) ] ),
-    ( 56254649322, [ ("CoronaVac",   (10,02,2021)) ] ),    
-    ( 60411837446, [ ("CoronaVac",   (10,02,2021)) ] ),    
-    ( 99959556100, [ ("AstraZeneca", (10,02,2021)) ] ),
-    ( 99988877566, [ ("Pfizer",      (10,08,2021)) ] ),                                 
+bancoDeVacinados = [( 26716347665, [ ("Janssen",     (10,02,2021)), ("Janssen",   (10,02,2021) )] ),
+    ( 87717347115, [ ("Pfizer",      (10,08,2021)) ] ),
+    ( 99999999999, [ ("CoronaVac",   (10,02,2021)) ] ), 
+    ( 88888888888, [ ("Pfizer",     (05,03,2021)), ("Pfizer",    (05,06,2021)  )]),
+    ( 10101010101, [ ("CoronaVac",  (10,02,2021)), ("CoronaVac", (10,03,2021)  )]),
+    ( 24304304037, [ ("Pfizer",     (05,03,2021)), ("Pfizer",    (05,06,2021)  )]),                      
+    ( 42618186808, [ ("CoronaVac",  (10,02,2021)), ("CoronaVac", (10,03,2021)  )]),
+    ( 30123318811, [ ("Pfizer",      (10,08,2021)) ] ),
+    ( 88369672235, [ ("CoronaVac",   (10,02,2021)) ] ),    
+    ( 27478099652, [ ("CoronaVac",   (10,02,2021)) ] ),    
+    ( 72282496478, [ ("AstraZeneca", (10,02,2021)) ] ),
+    ( 91683896248, [ ("Pfizer",      (10,08,2021)) ] ),                                 
     ( 88877766478, [ ("AstraZeneca", (10,02,2021)) ] ),                                 
     ( 78965412585, [ ("Pfizer",      (10,02,2021)) ] ),                                 
     ( 11144411717, [ ("AstraZeneca", (10,02,2021)) ] ),                                 
@@ -114,19 +128,111 @@ bancoDeVacinados = [( 18697038049, [ ("Janssen",     (10,02,2021)), ("Janssen", 
 aplicaPrimDose:: CPF -> CadastroSUS -> FaixaIdade -> Municipio -> Data -> Vacina -> Data -> Vacinados -> Vacinados
 aplicaPrimDose myCPF [] faixasIdade myMunicipio dataAtual myVacina myDateVacina myVacinados = []
 aplicaPrimDose myCPF (humanoSUS:restoList) faixasIdade myMunicipio dataAtual myVacina myDateVacina myVacinados
-  | not (checkCPFSUS myCPF (humanoSUS:restoList)) = [] --Pessoa nao esta no banco de cadastros
-  | not (idadeNaFaixa humanoSUS faixasIdade dataAtual) = [] --Pessoa sem data atual
-  | otherwise = error "Deu certo!!!"
+    | (receberPrimDose myCPF (humanoSUS:restoList) faixasIdade dataAtual myVacina myDateVacina myVacinados) && (getMunicipio humanoSUS == myMunicipio) =
+        if (myVacina == "Janssen") then
+            (myCPF, [(myVacina, myDateVacina), (myVacina, myDateVacina)]) : myVacinados
+        else
+            (myCPF, [(myVacina, myDateVacina)]) : myVacinados
+
+    | otherwise = aplicaPrimDose myCPF restoList faixasIdade myMunicipio dataAtual myVacina myDateVacina myVacinados 
 
 ----------------------Funcoes Auxiliares
-checkCPFSUS :: CPF -> CadastroSUS -> Bool
-checkCPFSUS myCPF [] = False
-checkCPFSUS myCPF (humanoSUS:restoList)
-    | getCPFSUS humanoSUS == myCPF = True
-    | otherwise = checkCPFSUS myCPF restoList
+--Pessoa tem que estar no banco de cadastros
+--Pessoa nao foi vacinada ainda
+--Pessoa tem que estar na faixa de Idade adequada
+receberPrimDose :: CPF -> CadastroSUS -> FaixaIdade -> Data -> Vacina -> Data -> Vacinados -> Bool
+receberPrimDose myCPF [] faixasIdade dataAtual myVacina myDateVacina myVacinados = False
+receberPrimDose myCPF (humanoSUS:restoList) faixasIdade dataAtual myVacina myDateVacina myVacinados 
+   | (checkCPFSUS myCPF (humanoSUS:restoList)) && not (getCPFVacina myCPF myVacinados) && (idadeNaFaixa humanoSUS faixasIdade dataAtual) = True
+   | otherwise = receberPrimDose  myCPF restoList faixasIdade dataAtual myVacina myDateVacina myVacinados
 
 getCPFVacina :: CPF -> Vacinados -> Bool
 getCPFVacina myCPF [] = False
 getCPFVacina myCPF (humanoVac:restoList)
   | fst humanoVac == myCPF = True
   | otherwise = getCPFVacina myCPF restoList
+
+--Questao 1, item e)
+quantidadeDoseMun :: Vacinados -> TipoDose -> Municipio -> CadastroSUS -> Quantidade 
+quantidadeDoseMun myVacinados myTipoDose myMunicipio myDataBase = length (getCidadaoDoseMun myVacinados myTipoDose myMunicipio myDataBase)
+
+----------------------Funcoes Auxiliares
+getCidadaoDoseMun :: Vacinados -> TipoDose -> Municipio -> CadastroSUS -> Vacinados 
+getCidadaoDoseMun [] myTipoDose myMunicipio myDataBase = []
+getCidadaoDoseMun (vacinado:restoList1) myTipoDose myMunicipio (humanoSUS:restoList2)
+    | (length (snd vacinado) >= myTipoDose) && (getMunicipio  humanoSUS == myMunicipio) = vacinado : getCidadaoDoseMun restoList1 myTipoDose myMunicipio restoList2
+    | otherwise = getCidadaoDoseMun restoList1 myTipoDose myMunicipio restoList2
+
+--Questao 1, item f)
+quantidadeEstIdDose :: Vacinados -> TipoDose -> Estado -> Data -> FaixaIdade -> CadastroSUS -> Quantidade
+quantidadeEstIdDose myVacinados myState dataAtual faixasIdade myTipoDose myDataBase = length (getCidadaoDoseEst myVacinados myState dataAtual faixasIdade myTipoDose myDataBase)
+
+----------------------Funcoes Auxiliares
+getCidadaoDoseEst :: Vacinados -> TipoDose -> Estado -> Data -> FaixaIdade -> CadastroSUS -> Vacinados 
+getCidadaoDoseEst [] myTipoDose myState dataAtual faixasIdade myDataBase = []
+getCidadaoDoseEst (vacinado:restoList1) myTipoDose myState dataAtual faixasIdade (humanoSUS:restoList2)
+    | (length (snd vacinado) >= myTipoDose) && (getState humanoSUS == myState) && (idadeNaFaixa humanoSUS faixasIdade dataAtual) = vacinado : getCidadaoDoseEst restoList1 myTipoDose myState dataAtual faixasIdade restoList2
+    | otherwise = getCidadaoDoseEst restoList1 myTipoDose myState dataAtual faixasIdade restoList2
+
+getState :: Cidadao -> Estado
+getState (_, _, _, _, _, _, myState, _, _) = myState
+
+--Questao 1, item g)
+quantidadeEstVacDose :: Vacinados -> Estado -> Vacina -> TipoDose -> CadastroSUS -> Quantidade
+quantidadeEstVacDose myVacinados myState myVacina myTipoDose myDataBase = length (getEstVacDose myVacinados myState myVacina myTipoDose myDataBase)
+
+----------------------Funcoes Auxiliares
+getEstVacDose :: Vacinados -> Estado -> Vacina -> TipoDose -> CadastroSUS -> Vacinados 
+getEstVacDose [] myState myVacina myTipoDose myDataBase = []
+getEstVacDose (vacinado:restoList1) myState myVacina myTipoDose (humanoSUS:restoList2)
+    | (vacinaType == myVacina) && (length (snd vacinado) >= myTipoDose) && (getState humanoSUS == myState) = vacinado : getEstVacDose restoList1 myState myVacina myTipoDose restoList2
+    | otherwise = getEstVacDose restoList1 myState myVacina myTipoDose restoList2
+    where 
+        vacinaType = (fst (head (snd vacinado)))
+
+--Novos Types para questão 02
+type Populacao = Int
+type PopMun = (Municipio, [(FaixaIdade, Populacao)])
+type PopEstado = (Estado, [PopMun])
+type PopPais = [PopEstado]
+
+-----[PopEstado]
+---------[(Estado,[PopMun])]
+------------[(Estado,[(Municipio,[(FaixaIdade, POpulação)])])]
+bancoPais :: PopPais
+bancoPais = [("A",[("Cidade A",[((0,10), 100),((11,20), 100),((21,30), 100),((31,40), 100),((41,50), 100),((51,60), 100),((61,70), 100),((71,80), 100),((81,90), 100),((91,100), 100),((101,110), 100),((111,120), 100),((121,130), 0)]),
+              ("Cidade B",[((0,10), 100),((11,20), 100),((21,30), 100),((31,40), 100),((41,50), 100),((51,60), 100),((61,70), 100),((71,80), 100),((81,90), 100),((91,100), 100),((101,110), 100),((111,120), 100),((121,130), 1)]),
+              ("Cidade C",[((0,10), 100),((11,20), 100),((21,30), 100),((31,40), 100),((41,50), 100),((51,60), 100),((61,70), 100),((71,80), 100),((81,90), 100),((91,100), 100),((101,110), 100),((111,120), 100),((121,130), 0)]),
+              ("Cidade D",[((0,10), 100),((11,20), 100),((21,30), 100),((31,40), 100),((41,50), 100),((51,60), 100),((61,70), 100),((71,80), 100),((81,90), 100),((91,100), 100),((101,110), 100),((111,120), 100),((121,130), 1)]),
+              ("Cidade E",[((0,10), 100),((11,20), 100),((21,30), 100),((31,40), 100),((41,50), 100),((51,60), 100),((61,70), 100),((71,80), 100),((81,90), 100),((91,100), 100),((101,110), 100),((111,120), 100),((121,130), 0)])]),
+        ("B",[("Cidade AB",[((0,10), 100),((11,20), 100),((21,30), 100),((31,40), 100),((41,50), 100),((51,60), 100),((61,70), 100),((71,80), 100),((81,90), 100),((91,100), 100),((101,110), 100),((111,120), 100),((121,130), 1)]),
+              ("Cidade BC",[((0,10), 100),((11,20), 100),((21,30), 100),((31,40), 100),((41,50), 100),((51,60), 100),((61,70), 100),((71,80), 100),((81,90), 100),((91,100), 100),((101,110), 100),((111,120), 100),((121,130), 0)]),
+              ("Cidade CD",[((0,10), 100),((11,20), 100),((21,30), 100),((31,40), 100),((41,50), 100),((51,60), 100),((61,70), 100),((71,80), 100),((81,90), 100),((91,100), 100),((101,110), 100),((111,120), 100),((121,130), 1)]),
+              ("Cidade DE",[((0,10), 100),((11,20), 100),((21,30), 100),((31,40), 100),((41,50), 100),((51,60), 100),((61,70), 100),((71,80), 100),((81,90), 100),((91,100), 100),((101,110), 100),((111,120), 100),((121,130), 0)]),
+              ("Cidade EF",[((0,10), 100),((11,20), 100),((21,30), 100),((31,40), 100),((41,50), 100),((51,60), 100),((61,70), 100),((71,80), 100),((81,90), 100),((91,100), 100),((101,110), 100),((111,120), 100),((121,130), 1)])]),
+        ("C",[("Cidade ABC",[((0,10), 100),((11,20), 100),((21,30), 100),((31,40), 100),((41,50), 100),((51,60), 100),((61,70), 100),((71,80), 100),((81,90), 100),((91,100), 100),((101,110), 100),((111,120), 100),((121,130), 0)]),
+              ("Cidade BCD",[((0,10), 100),((11,20), 100),((21,30), 100),((31,40), 100),((41,50), 100),((51,60), 100),((61,70), 100),((71,80), 100),((81,90), 100),((91,100), 100),((101,110), 100),((111,120), 100),((121,130), 1)]),
+              ("Cidade CDE",[((0,10), 100),((11,20), 100),((21,30), 100),((31,40), 100),((41,50), 100),((51,60), 100),((61,70), 100),((71,80), 100),((81,90), 100),((91,100), 100),((101,110), 100),((111,120), 100),((121,130), 0)]),
+              ("Cidade DEF",[((0,10), 100),((11,20), 100),((21,30), 100),((31,40), 100),((41,50), 100),((51,60), 100),((61,70), 100),((71,80), 100),((81,90), 100),((91,100), 100),((101,110), 100),((111,120), 100),((121,130), 1)]),
+              ("Cidade EFG",[((0,10), 100),((11,20), 100),((21,30), 100),((31,40), 100),((41,50), 100),((51,60), 100),((61,70), 100),((71,80), 100),((81,90), 100),((91,100), 100),((101,110), 100),((111,120), 100),((121,130), 0)])])]
+
+--Questao 2
+qtdParaVacinar ::  CadastroSUS -> Int -> Municipio -> Int -> Data -> (Int,Int)
+qtdParaVacinar myDataBase lastAge myMunicipio qtdVacinas dataAtual = 
+    (maiorIdade, menorIdade)
+    where
+        maiorIdade =
+        menorIdade = 
+
+----------------------Funcoes Auxiliares
+controlaQtdVacinas :: CadastroSUS -> Int -> Municipio -> Int -> Data -> [Int]
+controlaQtdVacinas [] lastAge myMunicipio qtdVacinas dataAtual = []
+controlaQtdVacinas (humanoSUS:restoList) 0 myMunicipio qtdVacinas dataAtual = []
+controlaQtdVacinas (humanoSUS:restoList) ultimaIdade myMunicipio qtdVacinas dataAtual 
+    | 
+
+findMenorIdade :: CadastroSUS -> Int -> Data -> Municipio -> CadastroSUS
+findMenorIdade [] lastAge dataAtual myMunicipio = []
+findMenorIdade (humanoSUS:restoList) lastAge dataAtual myMunicipio
+    | getIdade 
+
