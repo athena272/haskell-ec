@@ -219,9 +219,7 @@ geraListaEstadoFaixas myDataBase myState dataAtual listaFaixasIdade = [(faixasId
 --item f)A lista do município ou estado deve obedecer à formatação, descrita a seguir. O cabeçalho segue o formato abaixo, onde nome é o nome do município ou estado informado na função
 --Além do cadastro no sistema SUS, haverá um cadastro dos cidadãos vacinados. Este cadastro está definido a seguir
 --Primeiro Ponto: Formatação do valor inteiro que representa a quantidade para incluir os espaços à esquerda, para que a justificação à direita com a palavra QUANTIDADE ocorra.
-type QuantidadeFormatada = String
-formataQuant :: Quantidade -> QuantidadeFormatada
-formataQuant qtd = "                  " ++ show qtd
+formataQuant
 
 --Segundo Ponto: Formatação de uma linha da faixa de idade. A saída desta função será uma string com o formato de uma linha da tabela anterior.
 type LinhaFormatada = String
