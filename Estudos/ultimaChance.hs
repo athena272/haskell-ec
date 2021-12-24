@@ -1,0 +1,16 @@
+type Nome = String
+type CPF = Int
+type Telefone = String
+data Data = Data {myDay :: Int, MyMonth :: Int, myYear :: Int}
+data Cliente = Cliente {myCPF :: CPF, myName :: Nome, myTelefone :: Telefone} 
+type Clientes =[Cliente]
+type Codigo = Int
+type NomeItem = String
+type Fornecedor = String
+type Fornecedores = [Fornecedor]
+type Preco = Int
+data Produto = Produto {myCod :: Codigo, myItem :: NomeItem, myFornecedor  :: Fornecedor, myPreco :: Preco}
+type Catalogo = [Produto]
+type Quantidade = Int
+type ItemVenda = (Codigo, Quantidade)
+type Vendas = [(CPF, Data,[ItemVenda])]
