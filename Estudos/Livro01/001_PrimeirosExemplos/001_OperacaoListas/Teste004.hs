@@ -13,3 +13,6 @@ somarListaBool a b = (++) a b --maneira infixa
 somarListaChar :: [Char] -> [Char] -> [Char]
 somarListaChar i j = (++) i j --maneira infixa
 --somarListaChar i j = (++) i j --maneira comum
+
+somar :: Int -> Int
+somar x = x + 1
